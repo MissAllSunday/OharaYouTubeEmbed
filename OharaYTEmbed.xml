@@ -1,0 +1,22 @@
+<?xml version="1.0" ?>
+<!DOCTYPE modification SYSTEM "http://www.simplemachines.org/xml/modification">
+
+<modification xmlns="http://www.simplemachines.org/xml/modification" xmlns:smf="http://www.simplemachines.org/">
+	<id>Suki:ohara_youtube_embed</id>
+	<version>1.0</version>
+
+	<file name="$sourcedir/Who.php">
+	<operation>
+			<search position="replace"><![CDATA[		'mods' => array(]]></search>
+			<add><![CDATA[		'mods' => array(
+			OYTE_Who(),]]></add>
+		</operation>
+	</file>
+
+	<file name="$sourcedir/Post.php">
+	<operation>
+			<search position="replace"><![CDATA[<img>]]></search>
+			<add><![CDATA[<img><iframe>]]></add>
+		</operation>
+	</file>
+</modification>

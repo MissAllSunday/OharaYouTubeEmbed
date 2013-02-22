@@ -1,0 +1,33 @@
+<?xml version="1.0" ?>
+<!DOCTYPE package-info SYSTEM "http://www.simplemachines.org/xml/package-info">
+
+<package-info xmlns="http://www.simplemachines.org/xml/package-info" xmlns:smf="http://www.simplemachines.org/">
+
+	<name>Ohara YouTube Embed</name>
+	<id>Suki:ohara_youtube_embed</id>
+	<version>1.0</version>
+	<type>modification</type>
+
+<install for="2.0 - 2.0.99">
+		<readme parsebbc="true">readme.txt</readme>
+		<code>database.php</code>
+		<modification>OharaYTEmbed.xml</modification>
+		<require-file name="OharaYTEmbed.php" destination="$sourcedir">The file that handles everything</require-file>
+		<require-dir name="languages" destination="$themedir">The folder with the translations</require-dir>
+		<require-file name="youtube.gif" destination="$imagesdir/bbc" />
+		<redirect url="index.php?action=admin;area=modsettings;sa=general" timeout="10000">redirect.txt</redirect>
+	</install>
+
+	<uninstall for="2.0 - 2.0.99">
+		<code>database.php</code>
+		<modification reverse="true">OharaYTEmbed.xml</modification>
+		<remove-file name="$sourcedir/OharaYTEmbed.php" />
+		<remove-file name="$languagedir/OharaYTEmbed.english.php" />
+		<remove-file name="$languagedir/OharaYTEmbed.english-utf8.php" />
+		<remove-file name="$languagefir/OharaYTEmbed.spanish_es" />
+		<remove-file name="$languagefir/OharaYTEmbed.spanish_es_utf8" />
+		<remove-file name="$languagefir/OharaYTEmbed.spanish_latin_utf8" />
+		<remove-file name="$languagefir/OharaYTEmbed.spanish_latin" />
+		<remove-file name="$imagesdir/bbc/youtube.gif" />
+	</uninstall>
+</package-info>
