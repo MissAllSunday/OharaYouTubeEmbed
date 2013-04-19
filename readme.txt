@@ -2,7 +2,7 @@
 [b]Author:[/b] [url=http://missallsunday.com]Miss All Sunday[/url][/center]
 
 [color=red][b][size=16pt]Attention:[/size][/b][/color]
-On install make sure to mark the "Install On Other Themes" checkbox.
+On install make sure to mark the "[b]Install in Other Themes[/b]" checkbox.
 
 
 [color=purple][b][size=12pt]Description[/size][/b][/color]

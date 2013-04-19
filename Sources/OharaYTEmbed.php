@@ -64,7 +64,7 @@ if (!defined('SMF'))
 	}
 
 	 /* The bbc button */
-	function OYTE_bbc_add_button($buttons)
+	function OYTE_bbc_add_button(&$buttons)
 	{
 		global $txt, $modSettings;
 
