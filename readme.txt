@@ -56,5 +56,3 @@ And many more valid youtube urls.
 
 [b]1.0 - Sep 25, 2011,[/b]
 -Initial Release
-
-

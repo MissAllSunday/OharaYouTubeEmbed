@@ -47,4 +47,3 @@ $hooks = array(
 
 foreach ($hooks as $hook => $function)
 	add_integration_function($hook, $function);
-

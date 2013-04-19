@@ -3,8 +3,8 @@
 /**
  * @package Ohara Youtube Embed mod
  * @version 1.1
- * @author Jessica González <missallsunday@simplemachines.org>
- * @copyright Copyright (C) 2011, 2012, 2013, Jessica González
+ * @author Jessica Gonz&aacute;lez <missallsunday@simplemachines.org>
+ * @copyright Copyright (C) 2011, 2012, 2013, Jessica Gonz&aacute;lez
  * @license http://www.mozilla.org/MPL/MPL-1.1.html
  */
 
@@ -37,9 +37,9 @@ global $txt;
 $txt['OYTE_master'] = 'Activar el mod Ohara Youtube Embed';
 $txt['OYTE_master_sub'] = 'Esta es la configuración principal, necasita estar activada para que el mod funcione correctamente.';
 $txt['OYTE_video_width'] = 'Ancho del video:';
-$txt['OYTE_video_width_sub'] = 'Si se deja vacio se usará el valor por deault: 420.';
+$txt['OYTE_video_width_sub'] = 'Si se deja vacio se usar&aacute; el valor por deault: 420.';
 $txt['OYTE_video_height'] = 'Alura del video:';
-$txt['OYTE_video_height_sub'] = 'Si se deja vacio se usará el valor por defecto: 315';
+$txt['OYTE_video_height_sub'] = 'Si se deja vacio se usar&aacute; el valor por defecto: 315';
 $txt['OYTE_desc'] = 'Inserta un video desde youtube';
-$txt['OYTE_unvalid_link'] = 'No es una dirección de video válida: %s';
+$txt['OYTE_unvalid_link'] = 'No es una dirección de video v&aacute;lida: %s';
 $txt['OYTE_title'] = 'Ohara Youtube Embed mod';
