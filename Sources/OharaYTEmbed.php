@@ -140,12 +140,13 @@ if (!defined('SMF'))
 	}
 
 	/* DUH! WINNING! */
-	function OYTE_Who()
-	{
-		$MAS = '<a href="http://missallsunday.com" title="Free SMF Mods">Ohara YouTube Embed mod &copy Suki</a>';
+	function OYTE_care(&$dummy)
+{
+	global $context;
 
-		return $MAS;
-	}
+	if (isset($context['current_action']) && $context['current_action'] == 'credits')
+		$context['copyrights']['mods'][] = '<a href="http://missallsunday.com" target="_blank" title="Free SMF mods">Ohara YouTube Embed mod &copy Suki</a>';
+}
 
 	/* Slowly repeating
 	...Sunday morning */
