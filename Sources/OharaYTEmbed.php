@@ -45,7 +45,9 @@ if (!defined('SMF'))
 		$codes[] = array(
 			'tag' => 'youtube',
 			'type' => 'unparsed_content',
-			'content' => '$1',
+			'content' => '<div style="text-align:center;margin:auto;padding:5px;" class="youtube $1">
+				<iframe width="'. (empty($modSettings['OYTE_video_width']) ? '420' : $modSettings['OYTE_video_width']) .'" height="'. (empty($modSettings['OYTE_video_height']) ? '315' : $modSettings['OYTE_video_height']) .'" src="http://www.youtube.com/embed/$1" frameborder="0"></iframe>
+			</div>',
 			'validate' => create_function('&$tag, &$data, $disabled', '
 				global $txt;
 
@@ -53,10 +55,8 @@ if (!defined('SMF'))
 					$data = $txt[\'OYTE_unvalid_link\'];
 
 				else
-				{
-					$data = trim(strtr($data, array(\'<br />\' => \'\')));
-					$data = OYTE_Main($data);
-				}
+					$data = OYTE_Main(trim(strtr($data, array(\'<br />\' => \'\'))));
+
 			'),
 			'disabled_content' => '$1',
 			'block_level' => true,
@@ -129,28 +129,7 @@ if (!defined('SMF'))
 		if (empty($result))
 			return sprintf($txt['OYTE_unvalid_link'], $data);
 
-		/* So we do have something */
-		$result = $data = OYTE_Replace($result);
-
 		return $result;
-	}
-
-	/* A simple function to show the video with some parameters */
-	function OYTE_Replace($string)
-	{
-		global $modSettings;
-
-		/* So, the user did not set the width and height, use the default values then */
-		$width = empty($modSettings['OYTE_video_width']) ? '420' : $modSettings['OYTE_video_width'];
-		$height = empty($modSettings['OYTE_video_height']) ? '315' : $modSettings['OYTE_video_height'];
-
-		/* Return the HTML  */
-		$return = '
-			<div style="text-align:center;margin:auto;padding:5px;" class="youtube '.$string.'">
-				<iframe width="'.$width.'" height="'.$height.'" src="http://www.youtube.com/embed/'.$string.'" frameborder="0"></iframe>
-			</div>';
-
-		return $return;
 	}
 
 	/* DUH! WINNING! */
