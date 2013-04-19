@@ -104,21 +104,36 @@ if (!defined('SMF'))
 
 		loadLanguage('OharaYTEmbed');
 
-		 /* Regex time */
-		$pattern = '((http|https)://(?:www\.)?youtu(?:be\.com/watch\?v=|\.be/)(\w*)(&(amp;)?[\w\?=]*)?)';
+		/* Set a local var for laziness */
+		$result = '';
 
-		/* Is this a valid youtube url? */
-		if (preg_match($pattern, $data))
+		 /* We all love Regex */
+		$pattern = '#^(?:https?://)?(?:www\.)?(?:youtu\.be/|youtube\.com(?:/embed/|/v/|/watch\?v=|/watch\?.+&v=))([\w-]{11})(?:.+)?$#x';
+
+		/* First attempt, pure regex */
+		if (preg_match($pattern, $data, $matches))
+			$result = isset($matches[1]) ? $matches[1] : false;
+
+		/* Give another regex a chance */
+		elseif(empty($result) && preg_match('%(?:youtube(?:-nocookie)?\.com/(?:[^/]+/.+/|(?:v|e(?:mbed)?)/|.*[?&]v=)|youtu\.be/)([^"&?/ ]{11})%i', $data, $match))
+			$result = isset($match[1]) ? $match[1] : false;
+
+		/* No?, then one last chance, let PHPs native parse_url() function do the dirty work */
+		elseif (empty($result))
 		{
-			$data = preg_replace($pattern, '$1', $data);
-			$data = OYTE_Replace($data);
-
-			return $data;
+			/* This relies on the url having ? and =, this is only an emergency check */
+			parse_str(parse_url($data, PHP_URL_QUERY), $result);
+			$result = isset($result['v']) ? $result['v'] : false;
 		}
 
-		/* No? then return the unvalid link along with a text string */
-		else
+		/* At this point, all tests had miserably failed */
+		if (empty($result))
 			return sprintf($txt['OYTE_unvalid_link'], $data);
+
+		/* So we do have something */
+		$result = $data = OYTE_Replace($result);
+
+		return $result;
 	}
 
 	/* A simple function to show the video with some parameters */
