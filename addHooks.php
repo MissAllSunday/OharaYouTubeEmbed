@@ -2,9 +2,9 @@
 
 /**
  * @package Ohara Youtube Embed mod
- * @version 1.0
+ * @version 1.1
  * @author Jessica González <missallsunday@simplemachines.org>
- * @copyright Copyright (c) 2011, Jessica González
+ * @copyright Copyright (C) 2011, 2012, 2013, Jessica González
  * @license http://www.mozilla.org/MPL/MPL-1.1.html
  */
 
@@ -25,7 +25,7 @@
  *
  * The Initial Developer of the Original Code is
  * Jessica González.
- * Portions created by the Initial Developer are Copyright (C) 2011
+ * Portions created by the Initial Developer are Copyright (C) 2011, 2012, 2013,
  * the Initial Developer. All Rights Reserved.
  *
  * Contributor(s):
