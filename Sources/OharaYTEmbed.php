@@ -60,7 +60,6 @@ if (!defined('SMF'))
 			'),
 			'disabled_content' => '$1',
 			'block_level' => true,
-			'test' => '(http://(?:www\.)?youtu(?:be\.com/watch\?v=|\.be/)(\w*)(&(amp;)?[\w\?=]*)?)'
 		);
 	}
 
@@ -115,7 +114,7 @@ if (!defined('SMF'))
 			$result = isset($matches[1]) ? $matches[1] : false;
 
 		/* Give another regex a chance */
-		elseif(empty($result) && preg_match('%(?:youtube(?:-nocookie)?\.com/(?:[^/]+/.+/|(?:v|e(?:mbed)?)/|.*[?&]v=)|youtu\.be/)([^"&?/ ]{11})%i', $data, $match))
+		elseif (empty($result) && preg_match('%(?:youtube(?:-nocookie)?\.com/(?:[^/]+/.+/|(?:v|e(?:mbed)?)/|.*[?&]v=)|youtu\.be/)([^"&?/ ]{11})%i', $data, $match))
 			$result = isset($match[1]) ? $match[1] : false;
 
 		/* No?, then one last chance, let PHPs native parse_url() function do the dirty work */

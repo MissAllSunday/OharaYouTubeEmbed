@@ -10,17 +10,15 @@
 
 <install for="2.0 - 2.0.99">
 		<readme parsebbc="true">readme.txt</readme>
-		<code>database.php</code>
-		<modification>OharaYTEmbed.xml</modification>
-		<require-file name="OharaYTEmbed.php" destination="$sourcedir">The file that handles everything</require-file>
-		<require-dir name="languages" destination="$themedir">The folder with the translations</require-dir>
+		<code>addHooks.php</code>
+		<require-dir name="Themes" destination="$boarddir">Theme and Language files</require-dir>
+		<require-dir name="Sources" destination="$boarddir">Source files</require-dir>
 		<require-file name="youtube.gif" destination="$imagesdir/bbc" />
 		<redirect url="index.php?action=admin;area=modsettings;sa=general" timeout="10000">redirect.txt</redirect>
 	</install>
 
 	<uninstall for="2.0 - 2.0.99">
-		<code>database.php</code>
-		<modification reverse="true">OharaYTEmbed.xml</modification>
+		<code>removeHooks.php</code>
 		<remove-file name="$sourcedir/OharaYTEmbed.php" />
 		<remove-file name="$languagedir/OharaYTEmbed.english.php" />
 		<remove-file name="$languagedir/OharaYTEmbed.english-utf8.php" />
