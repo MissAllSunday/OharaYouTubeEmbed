@@ -1,6 +1,9 @@
 [center][color=purple][size=5][b]Ohara YouTube Embed [/b][/size][/color]
 [b]Author:[/b] [url=http://missallsunday.com]Miss All Sunday[/url][/center]
 
+[color=red][b][size=16pt]Attention:[/size][/b][/color]
+On install make sure to mark the "Install On Other Themes" checkbox.
+
 
 [color=purple][b][size=12pt]Description[/size][/b][/color]
 
@@ -14,15 +17,18 @@ You can enable/disable the mod as well as set the widh and height for the videos
 http://www.youtube.com/watch?v={ID}
 http://www.youtube.com/watch?v={ID}&{Parameters}
 http://youtu.be/{ID}
+http://www.youtube.com/watch?feature=player_embedded&v=[ID]
 [/code]
 
+And many more valid youtube urls.
 
 [color=purple][b][size=12pt]License[/size][/b][/color]
-
+[pre]
  * This SMF modification is subject to the Mozilla Public License Version
  * 1.1 (the "License"); you may not use this SMF modification except in compliance with
  * the License. You may obtain a copy of the License at
  * http://www.mozilla.org/MPL/
+ [/pre]
 
  
 [color=purple][b][size=12pt]Settings[/size][/b][/color]
@@ -38,6 +44,12 @@ http://youtu.be/{ID}
 
 
 [color=purple][b][size=12pt]Changelog[/size][/b][/color]
+
+[b]1.1 - April 19, 2013,[/b]
+- Fix the http/https url issue.
+- Fixed the parsing smiles after a video issue.
+- Fixed the pass by reference issue.
+- Updated the regex to include more valid urls.
 
 [b]1.0.1 - Dic 28, 2011,[/b]
 -Fix the youtube redirect page error if you use the initial tag alone: [youtube]
