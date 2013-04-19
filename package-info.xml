@@ -11,6 +11,7 @@
 <install for="2.0 - 2.0.99">
 		<readme parsebbc="true">readme.txt</readme>
 		<code>addHooks.php</code>
+		<modification>OharaYTEmbed.xml</modification>
 		<require-dir name="Themes" destination="$boarddir">Theme and Language files</require-dir>
 		<require-dir name="Sources" destination="$boarddir">Source files</require-dir>
 		<require-file name="youtube.gif" destination="$imagesdir/bbc" />
@@ -19,6 +20,7 @@
 
 	<uninstall for="2.0 - 2.0.99">
 		<code>removeHooks.php</code>
+		<modification reverse="true">OharaYTEmbed.xml</modification>
 		<remove-file name="$sourcedir/OharaYTEmbed.php" />
 		<remove-file name="$languagedir/OharaYTEmbed.english.php" />
 		<remove-file name="$languagedir/OharaYTEmbed.english-utf8.php" />
