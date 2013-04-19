@@ -5,14 +5,6 @@
 	<id>Suki:ohara_youtube_embed</id>
 	<version>1.0</version>
 
-	<file name="$sourcedir/Who.php">
-	<operation>
-			<search position="replace"><![CDATA[		'mods' => array(]]></search>
-			<add><![CDATA[		'mods' => array(
-			OYTE_Who(),]]></add>
-		</operation>
-	</file>
-
 	<file name="$sourcedir/Post.php">
 	<operation>
 			<search position="replace"><![CDATA[<img>]]></search>
