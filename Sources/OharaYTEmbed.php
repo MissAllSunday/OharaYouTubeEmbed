@@ -151,6 +151,9 @@ function OYTE_Main($data)
 
 	loadLanguage('OharaYTEmbed');
 
+	if (empty($data))
+		return sprintf($txt['OYTE_unvalid_link'], 'youtube');
+
 	/* Set a local var for laziness */
 	$result = '';
 
@@ -175,9 +178,32 @@ function OYTE_Main($data)
 
 	/* At this point, all tests had miserably failed */
 	if (empty($result))
-		return sprintf($txt['OYTE_unvalid_link'], $data);
+		return sprintf($txt['OYTE_unvalid_link'], 'youtube');
 
 	return $result;
+}
+
+function OYTE_Vimeo($data)
+{
+	global $modSettings, $txt, $sourcedir;
+
+	if (empty($data))
+		return sprintf($txt['OYTE_unvalid_link'], 'vimeo');
+
+	loadLanguage('OharaYTEmbed');
+
+	// Need a function in a far far away file...
+	require_once($sourcedir .'/Subs-Package.php');
+
+	// Construct the URL
+	$oembed = 'http://vimeo.com/api/oembed' . rawurlencode($data) . '&width='. (empty($modSettings['OYTE_video_width']) ? '420' : $modSettings['OYTE_video_width']) .'" &height='. (empty($modSettings['OYTE_video_height']) ? '315' : $modSettings['OYTE_video_height']);
+
+	//Attempts to fetch data from a URL, regardless of PHP's allow_url_fopen setting
+	if ($jsonArray = fetch_web_data($oembed))
+		return $jsonArray['html'];
+
+	else
+		return sprintf($txt['OYTE_unvalid_link'], 'vimeo');
 }
 
 function OYTE_Preparse(&$message)
