@@ -132,6 +132,35 @@ function OYTE_Main($data)
 	return $result;
 }
 
+function OYTE_Preparse(&$message)
+{
+	$vimeo = '/(?<=[\s>\.(;\'"]|^)(?:https?\:\/\/)?(?:www\.)?vimeo.com\/(?:album\/|groups\/|channels\/)?[0-9]+\??[/\w\-_\~%@\?;=#}\\\\]?/';
+	$youtube = '~(?<=[\s>\.(;\'"]|^)https?://(?:[0-9A-Z-]+\.)?(?:youtu\.be/|youtube(?:-nocookie)?\.com\S*[^\w\s-])([\w-]{11})(?=[^\w-]|$)(?![?=&+%\w.-]*(?:[\'"][^<>]*>  | </a>  ))[?=&+%\w.-]*[/\w\-_\~%@\?;=#}\\\\]?~ix';
+
+	if (empty($message))
+		return false;
+
+	// Is this a YouTube video url?
+	if ($y = preg_replace_callback(
+		$youtube,
+		function ($matches) {
+			return '[youtube]'. $matches[0] .'[/youtube]';
+		},
+		$v
+	);)
+		$message = $v;
+
+	// A Vimeo url perhaps?
+	if ($v = preg_replace_callback(
+		$vimeo,
+		function ($matches) {
+			return '[vimeo]'. $matches[0] .'[/vimeo]';
+		},
+		$v
+	);)
+		$message = $y;
+}
+
 /* DUH! WINNING! */
 function OYTE_care(&$dummy)
 {
