@@ -8,13 +8,14 @@
 	<version>1.2</version>
 	<type>modification</type>
 
-<install for="2.0 - 2.0.99">
+	<install for="2.0 - 2.0.99">
 		<readme parsebbc="true">readme.txt</readme>
 		<code>addHooks.php</code>
 		<modification>OharaYTEmbed.xml</modification>
 		<require-dir name="Themes" destination="$boarddir">Theme and Language files</require-dir>
 		<require-dir name="Sources" destination="$boarddir">Source files</require-dir>
 		<require-file name="youtube.gif" destination="$imagesdir/bbc" />
+		<require-file name="vimeo.gif" destination="$imagesdir/bbc" />
 		<redirect url="index.php?action=admin;area=modsettings;sa=general" timeout="1000"></redirect>
 	</install>
 
@@ -29,5 +30,6 @@
 		<remove-file name="$languagefir/OharaYTEmbed.spanish_latin_utf8" />
 		<remove-file name="$languagefir/OharaYTEmbed.spanish_latin" />
 		<remove-file name="$imagesdir/bbc/youtube.gif" />
+		<remove-file name="$imagesdir/bbc/vimeo.gif" />
 	</uninstall>
 </package-info>
