@@ -35,105 +35,105 @@
 if (!defined('SMF'))
 	die('Hacking attempt...');
 
-	function OYTE_bbc_add_code(&$codes)
-	{
-		global $modSettings;
+function OYTE_bbc_add_code(&$codes)
+{
+	global $modSettings;
 
-		if (empty($modSettings['OYTE_master']))
-			return;
+	if (empty($modSettings['OYTE_master']))
+		return;
 
-		$codes[] = array(
-			'tag' => 'youtube',
-			'type' => 'unparsed_content',
-			'content' => '<div style="text-align:center;margin:auto;padding:5px;" class="youtube $1">
-				<iframe width="'. (empty($modSettings['OYTE_video_width']) ? '420' : $modSettings['OYTE_video_width']) .'" height="'. (empty($modSettings['OYTE_video_height']) ? '315' : $modSettings['OYTE_video_height']) .'" src="http://www.youtube.com/embed/$1" frameborder="0"></iframe>
-			</div>',
-			'validate' => create_function('&$tag, &$data, $disabled', '
-				global $txt;
+	$codes[] = array(
+		'tag' => 'youtube',
+		'type' => 'unparsed_content',
+		'content' => '<div style="text-align:center;margin:auto;padding:5px;" class="youtube $1">
+			<iframe width="'. (empty($modSettings['OYTE_video_width']) ? '420' : $modSettings['OYTE_video_width']) .'" height="'. (empty($modSettings['OYTE_video_height']) ? '315' : $modSettings['OYTE_video_height']) .'" src="http://www.youtube.com/embed/$1" frameborder="0"></iframe>
+		</div>',
+		'validate' => create_function('&$tag, &$data, $disabled', '
+			global $txt;
 
-				if (empty($data))
-					$data = $txt[\'OYTE_unvalid_link\'];
+			if (empty($data))
+				$data = $txt[\'OYTE_unvalid_link\'];
 
-				else
-					$data = OYTE_Main(trim(strtr($data, array(\'<br />\' => \'\'))));
+			else
+				$data = OYTE_Main(trim(strtr($data, array(\'<br />\' => \'\'))));
 
-			'),
-			'disabled_content' => '$1',
-			'block_level' => true,
+		'),
+		'disabled_content' => '$1',
+		'block_level' => true,
+	);
+}
+
+ /* The bbc button */
+function OYTE_bbc_add_button(&$buttons)
+{
+	global $txt, $modSettings;
+
+	loadLanguage('OharaYTEmbed');
+
+	if (empty($modSettings['OYTE_master']))
+		return;
+
+		$buttons[count($buttons) - 1][] = array(
+			'image' => 'youtube',
+			'code' => 'youtube',
+			'before' => '[youtube]',
+			'after' => '[/youtube]',
+			'description' => $txt['OYTE_desc'],
 		);
-	}
+}
 
-	 /* The bbc button */
-	function OYTE_bbc_add_button(&$buttons)
+/* Don't bother on create a whole new page for this, let's use integrate_general_mod_settings ^o^ */
+function OYTE_settings(&$config_vars)
+{
+	global $txt;
+
+	loadLanguage('OharaYTEmbed');
+
+	$config_vars[] = $txt['OYTE_title'];
+	$config_vars[] = array('check', 'OYTE_master', 'subtext' => $txt['OYTE_master_sub']);
+	$config_vars[] = array('int', 'OYTE_video_width', 'subtext' => $txt['OYTE_video_width_sub'], 'size' => 3);
+	$config_vars[] = array('int', 'OYTE_video_height', 'subtext' => $txt['OYTE_video_height_sub'], 'size' => 3);
+	$config_vars[] = '';
+}
+
+/* Take the url, take the video ID and return the embed code */
+function OYTE_Main($data)
+{
+	global $modSettings, $txt;
+
+	loadLanguage('OharaYTEmbed');
+
+	/* Set a local var for laziness */
+	$result = '';
+
+	 /* We all love Regex */
+	$pattern = '#^(?:https?://)?(?:www\.)?(?:youtu\.be/|youtube\.com(?:/embed/|/v/|/watch\?v=|/watch\?.+&v=))([\w-]{11})(?:.+)?$#x';
+
+	/* First attempt, pure regex */
+	if (preg_match($pattern, $data, $matches))
+		$result = isset($matches[1]) ? $matches[1] : false;
+
+	/* Give another regex a chance */
+	elseif (empty($result) && preg_match('%(?:youtube(?:-nocookie)?\.com/(?:[^/]+/.+/|(?:v|e(?:mbed)?)/|.*[?&]v=)|youtu\.be/)([^"&?/ ]{11})%i', $data, $match))
+		$result = isset($match[1]) ? $match[1] : false;
+
+	/* No?, then one last chance, let PHPs native parse_url() function do the dirty work */
+	elseif (empty($result))
 	{
-		global $txt, $modSettings;
-
-		loadLanguage('OharaYTEmbed');
-
-		if (empty($modSettings['OYTE_master']))
-			return;
-
-			$buttons[count($buttons) - 1][] = array(
-				'image' => 'youtube',
-				'code' => 'youtube',
-				'before' => '[youtube]',
-				'after' => '[/youtube]',
-				'description' => $txt['OYTE_desc'],
-			);
+		/* This relies on the url having ? and =, this is only an emergency check */
+		parse_str(parse_url($data, PHP_URL_QUERY), $result);
+		$result = isset($result['v']) ? $result['v'] : false;
 	}
 
-	/* Don't bother on create a whole new page for this, let's use integrate_general_mod_settings ^o^ */
-	function OYTE_settings(&$config_vars)
-	{
-		global $txt;
+	/* At this point, all tests had miserably failed */
+	if (empty($result))
+		return sprintf($txt['OYTE_unvalid_link'], $data);
 
-		loadLanguage('OharaYTEmbed');
+	return $result;
+}
 
-		$config_vars[] = $txt['OYTE_title'];
-		$config_vars[] = array('check', 'OYTE_master', 'subtext' => $txt['OYTE_master_sub']);
-		$config_vars[] = array('int', 'OYTE_video_width', 'subtext' => $txt['OYTE_video_width_sub'], 'size' => 3);
-		$config_vars[] = array('int', 'OYTE_video_height', 'subtext' => $txt['OYTE_video_height_sub'], 'size' => 3);
-		$config_vars[] = '';
-	}
-
-	/* Take the url, take the video ID and return the embed code */
-	function OYTE_Main($data)
-	{
-		global $modSettings, $txt;
-
-		loadLanguage('OharaYTEmbed');
-
-		/* Set a local var for laziness */
-		$result = '';
-
-		 /* We all love Regex */
-		$pattern = '#^(?:https?://)?(?:www\.)?(?:youtu\.be/|youtube\.com(?:/embed/|/v/|/watch\?v=|/watch\?.+&v=))([\w-]{11})(?:.+)?$#x';
-
-		/* First attempt, pure regex */
-		if (preg_match($pattern, $data, $matches))
-			$result = isset($matches[1]) ? $matches[1] : false;
-
-		/* Give another regex a chance */
-		elseif (empty($result) && preg_match('%(?:youtube(?:-nocookie)?\.com/(?:[^/]+/.+/|(?:v|e(?:mbed)?)/|.*[?&]v=)|youtu\.be/)([^"&?/ ]{11})%i', $data, $match))
-			$result = isset($match[1]) ? $match[1] : false;
-
-		/* No?, then one last chance, let PHPs native parse_url() function do the dirty work */
-		elseif (empty($result))
-		{
-			/* This relies on the url having ? and =, this is only an emergency check */
-			parse_str(parse_url($data, PHP_URL_QUERY), $result);
-			$result = isset($result['v']) ? $result['v'] : false;
-		}
-
-		/* At this point, all tests had miserably failed */
-		if (empty($result))
-			return sprintf($txt['OYTE_unvalid_link'], $data);
-
-		return $result;
-	}
-
-	/* DUH! WINNING! */
-	function OYTE_care(&$dummy)
+/* DUH! WINNING! */
+function OYTE_care(&$dummy)
 {
 	global $context;
 
