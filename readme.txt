@@ -11,18 +11,22 @@ On install make sure to mark the "[b]Install in Other Themes[/b]" checkbox.
 
 [b]Version 1.2 and above requires [color=purple]PHP 5.3[/color] or greater[/b]
 
-This mod will add a BBC tag:  [nobbc][youtube][/youtube][/nobbc]  where you can post your youtube urls and it will be converted to a video directly in the message.
+You can auto-embed any valid youtube or vimeo urls and the mod will automatically convert them to videos.
 
-You can enable/disable the mod as well as set the widh and height for the videos, currently the mod support the following youtube urls:
+This mod will also add a BBC tag:  [nobbc][youtube][/youtube] and [vimeo][/vimeo][/nobbc]  where you can post your youtube or vimeo urls and it will be converted to a video directly in the message.
+
+You can enable/disable the mod as well as set the width and height for the videos, currently the mod support the following youtube and vimeo urls:
 
 [code]
 http://www.youtube.com/watch?v={ID}
 http://www.youtube.com/watch?v={ID}&{Parameters}
 http://youtu.be/{ID}
 http://www.youtube.com/watch?feature=player_embedded&v=[ID]
+http://vimeo.com/[ID]
+http://vimeo.com/channels/[ID]
+http://vimeo.com/group/[ID]
+http://vimeo.com/album/[ID]
 [/code]
-
-And many more valid youtube urls.
 
 [color=purple][b][size=12pt]License[/size][/b][/color]
 [pre]
@@ -46,6 +50,11 @@ And many more valid youtube urls.
 
 
 [color=purple][b][size=12pt]Changelog[/size][/b][/color]
+
+[b]1.2 - March 05, 2014,[/b]
+- Added auto-embed feature.
+- Add support for old [nobbc][yt][/yt][/nobbc] tags
+- Add support for [nobbc][vimeo][/vimeo][/nobbc]
 
 [b]1.1 - April 19, 2013,[/b]
 - Fix the http/https url issue.
