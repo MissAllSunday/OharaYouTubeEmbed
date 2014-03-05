@@ -42,24 +42,64 @@ function OYTE_bbc_add_code(&$codes)
 	if (empty($modSettings['OYTE_master']))
 		return;
 
-	$codes[] = array(
-		'tag' => 'youtube',
-		'type' => 'unparsed_content',
-		'content' => '<div style="text-align:center;margin:auto;padding:5px;" class="youtube $1">
-			<iframe width="'. (empty($modSettings['OYTE_video_width']) ? '420' : $modSettings['OYTE_video_width']) .'" height="'. (empty($modSettings['OYTE_video_height']) ? '315' : $modSettings['OYTE_video_height']) .'" src="http://www.youtube.com/embed/$1" frameborder="0"></iframe>
-		</div>',
-		'validate' => create_function('&$tag, &$data, $disabled', '
-			global $txt;
+	array_push($codes,
+		array(
+			'tag' => 'youtube',
+			'type' => 'unparsed_content',
+			'content' => '<div style="text-align:center;margin:auto;padding:5px;" class="youtube $1">
+				<iframe width="'. (empty($modSettings['OYTE_video_width']) ? '420' : $modSettings['OYTE_video_width']) .'" height="'. (empty($modSettings['OYTE_video_height']) ? '315' : $modSettings['OYTE_video_height']) .'" src="http://www.youtube.com/embed/$1" frameborder="0"></iframe>
+			</div>',
+			'validate' => create_function('&$tag, &$data, $disabled', '
+				global $txt;
 
-			if (empty($data))
-				$data = $txt[\'OYTE_unvalid_link\'];
+				if (empty($data))
+					$data = $txt[\'OYTE_unvalid_link\'];
 
-			else
-				$data = OYTE_Main(trim(strtr($data, array(\'<br />\' => \'\'))));
+				else
+					$data = OYTE_Main(trim(strtr($data, array(\'<br />\' => \'\'))));
 
-		'),
-		'disabled_content' => '$1',
-		'block_level' => true,
+			'),
+			'disabled_content' => '$1',
+			'block_level' => true,
+		),
+		array(
+			'tag' => 'yt',
+			'type' => 'unparsed_content',
+			'content' => '<div style="text-align:center;margin:auto;padding:5px;" class="youtube $1">
+				<iframe width="'. (empty($modSettings['OYTE_video_width']) ? '420' : $modSettings['OYTE_video_width']) .'" height="'. (empty($modSettings['OYTE_video_height']) ? '315' : $modSettings['OYTE_video_height']) .'" src="http://www.youtube.com/embed/$1" frameborder="0"></iframe>
+			</div>',
+			'validate' => create_function('&$tag, &$data, $disabled', '
+				global $txt;
+
+				if (empty($data))
+					$data = $txt[\'OYTE_unvalid_link\'];
+
+				else
+					$data = OYTE_Main(trim(strtr($data, array(\'<br />\' => \'\'))));
+
+			'),
+			'disabled_content' => '$1',
+			'block_level' => true,
+		),
+		array(
+			'tag' => 'vimeo',
+			'type' => 'unparsed_content',
+			'content' => '<div style="text-align:center;margin:auto;padding:5px;">
+				$1
+			</div>',
+			'validate' => create_function('&$tag, &$data, $disabled', '
+				global $txt;
+
+				if (empty($data))
+					$data = $txt[\'OYTE_unvalid_link\'];
+
+				else
+					$data = OYTE_Vimeo(trim(strtr($data, array(\'<br />\' => \'\'))));
+
+			'),
+			'disabled_content' => '$1',
+			'block_level' => true,
+		),
 	);
 }
 
