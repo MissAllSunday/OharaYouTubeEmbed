@@ -23,7 +23,7 @@ http://www.youtube.com/watch?v={ID}&{Parameters}
 http://youtu.be/{ID}
 http://www.youtube.com/watch?feature=player_embedded&v=[ID]
 http://vimeo.com/[ID]
-http://vimeo.com/channels/[ID]
+http://vimeo.com/channels/[channel name]/[ID]
 http://vimeo.com/group/[ID]
 http://vimeo.com/album/[ID]
 [/code]

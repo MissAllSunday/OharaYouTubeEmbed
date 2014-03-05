@@ -75,7 +75,7 @@ function OYTE_bbc_add_code(&$codes)
 			'),
 			'disabled_content' => '$1',
 			'block_level' => true,
-		),
+		)
 	);
 }
 
@@ -172,44 +172,46 @@ function OYTE_Vimeo($data)
 	require_once($sourcedir .'/Subs-Package.php');
 
 	// Construct the URL
-	$oembed = 'http://vimeo.com/api/oembed' . rawurlencode($data) . '&width='. (empty($modSettings['OYTE_video_width']) ? '420' : $modSettings['OYTE_video_width']) .'" &height='. (empty($modSettings['OYTE_video_height']) ? '315' : $modSettings['OYTE_video_height']);
+	$oembed = 'http://vimeo.com/api/oembed.json?url=' . rawurlencode($data) . '&width='. (empty($modSettings['OYTE_video_width']) ? '420' : $modSettings['OYTE_video_width']) .'&height='. (empty($modSettings['OYTE_video_height']) ? '315' : $modSettings['OYTE_video_height']);
 
 	//Attempts to fetch data from a URL, regardless of PHP's allow_url_fopen setting
-	if ($jsonArray = fetch_web_data($oembed))
+	$jsonArray = json_decode(fetch_web_data($oembed), true);
+var_dump($oembed);
+	if (!empty($jsonArray) && is_array($jsonArray) && !empty($jsonArray['html']))
 		return $jsonArray['html'];
 
 	else
 		return sprintf($txt['OYTE_unvalid_link'], 'vimeo');
 }
 
-function OYTE_Preparse(&$message)
+function OYTE_Preparse($message)
 {
 	// The extremely long regex...
-	$vimeo = '/(?<=[\s>\.(;\'"]|^)(?:https?\:\/\/)?(?:www\.)?vimeo.com\/(?:album\/|groups\/|channels\/)?[0-9]+\??[/\w\-_\~%@\?;=#}\\\\]?/';
+	$vimeo = '~(?<=[\s>\.(;\'"]|^)(?:https?\:\/\/)?(?:www\.)?vimeo.com\/(?:album\/|groups\/(.*?)\/|channels\/(.*?)\/)?[0-9]+\??[/\w\-_\~%@\?;=#}\\\\]?~';
 	$youtube = '~(?<=[\s>\.(;\'"]|^)https?://(?:[0-9A-Z-]+\.)?(?:youtu\.be/|youtube(?:-nocookie)?\.com\S*[^\w\s-])([\w-]{11})(?=[^\w-]|$)(?![?=&+%\w.-]*(?:[\'"][^<>]*>  | </a>  ))[?=&+%\w.-]*[/\w\-_\~%@\?;=#}\\\\]?~ix';
 
 	if (empty($message))
 		return false;
 
 	// Is this a YouTube video url?
-	if ($y = preg_replace_callback(
+	$message = preg_replace_callback(
 		$youtube,
 		function ($matches) {
 			return '[youtube]'. $matches[0] .'[/youtube]';
 		},
-		$v
-	);)
-		$message = $v;
+		$message
+	);
 
 	// A Vimeo url perhaps?
-	if ($v = preg_replace_callback(
+	$message = preg_replace_callback(
 		$vimeo,
 		function ($matches) {
 			return '[vimeo]'. $matches[0] .'[/vimeo]';
 		},
-		$v
-	);)
-		$message = $y;
+		$message
+	);
+
+	return $message;
 }
 
 /* DUH! WINNING! */
