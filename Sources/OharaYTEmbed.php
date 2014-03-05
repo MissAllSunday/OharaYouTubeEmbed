@@ -89,20 +89,21 @@ function OYTE_bbc_add_button(&$buttons)
 	if (empty($modSettings['OYTE_master']))
 		return;
 
-	array_push($buttons, array(
-			'image' => 'youtube',
-			'code' => 'youtube',
-			'before' => '[youtube]',
-			'after' => '[/youtube]',
-			'description' => $txt['OYTE_desc'],
-		),
-		array(
-			'image' => 'vimeo',
-			'code' => 'vimeo',
-			'before' => '[vimeo]',
-			'after' => '[/vimeo]',
-			'description' => $txt['OYTE_vimeo_desc'],
-		));
+	$buttons[count($buttons) - 1][] = array(
+		'image' => 'youtube',
+		'code' => 'youtube',
+		'before' => '[youtube]',
+		'after' => '[/youtube]',
+		'description' => $txt['OYTE_desc'],
+	);
+
+	$buttons[count($buttons) - 1][] =array(
+		'image' => 'vimeo',
+		'code' => 'vimeo',
+		'before' => '[vimeo]',
+		'after' => '[/vimeo]',
+		'description' => $txt['OYTE_vimeo_desc'],
+	);
 
 }
 
