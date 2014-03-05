@@ -11,4 +11,13 @@
 			<add><![CDATA[<img><iframe>]]></add>
 		</operation>
 	</file>
+	<file name="$sourcedir/Subs.php">
+	<operation>
+			<search position="replace"><![CDATA[// Sift out the bbc for a performance improvement.]]></search>
+			<add><![CDATA[// Ohar youtube embed
+	OYTE_Preparse(&$message);
+
+	// Sift out the bbc for a performance improvement.]]></add>
+		</operation>
+	</file>
 </modification>
