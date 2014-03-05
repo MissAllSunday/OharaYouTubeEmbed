@@ -28,6 +28,8 @@ function OYTE_bbc_add_code(&$codes)
 			'validate' => create_function('&$tag, &$data, $disabled', '
 				global $txt;
 
+				loadLanguage(\'OharaYTEmbed\');
+
 				if (empty($data))
 					$data = $txt[\'OYTE_unvalid_link\'];
 
@@ -47,6 +49,8 @@ function OYTE_bbc_add_code(&$codes)
 			'validate' => create_function('&$tag, &$data, $disabled', '
 				global $txt;
 
+				loadLanguage(\'OharaYTEmbed\');
+
 				if (empty($data))
 					$data = $txt[\'OYTE_unvalid_link\'];
 
@@ -65,6 +69,8 @@ function OYTE_bbc_add_code(&$codes)
 			</div>',
 			'validate' => create_function('&$tag, &$data, $disabled', '
 				global $txt;
+
+				loadLanguage(\'OharaYTEmbed\');
 
 				if (empty($data))
 					$data = $txt[\'OYTE_unvalid_link\'];
