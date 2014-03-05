@@ -3,7 +3,7 @@
 
 <modification xmlns="http://www.simplemachines.org/xml/modification" xmlns:smf="http://www.simplemachines.org/">
 	<id>Suki:ohara_youtube_embed</id>
-	<version>1.1</version>
+	<version>1.2</version>
 
 	<file name="$sourcedir/Post.php">
 	<operation>
@@ -14,7 +14,7 @@
 	<file name="$sourcedir/Subs.php">
 	<operation>
 			<search position="replace"><![CDATA[// Sift out the bbc for a performance improvement.]]></search>
-			<add><![CDATA[// Ohar youtube embed
+			<add><![CDATA[// Ohara youtube embed
 	OYTE_Preparse(&$message);
 
 	// Sift out the bbc for a performance improvement.]]></add>
