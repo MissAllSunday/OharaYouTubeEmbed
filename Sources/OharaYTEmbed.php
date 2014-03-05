@@ -176,7 +176,7 @@ function OYTE_Vimeo($data)
 
 	//Attempts to fetch data from a URL, regardless of PHP's allow_url_fopen setting
 	$jsonArray = json_decode(fetch_web_data($oembed), true);
-var_dump($oembed);
+
 	if (!empty($jsonArray) && is_array($jsonArray) && !empty($jsonArray['html']))
 		return $jsonArray['html'];
 
