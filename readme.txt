@@ -9,6 +9,8 @@ On install make sure to mark the "[b]Install in Other Themes[/b]" checkbox.
 
 [b]For SMF 2.0.x only[/b]
 
+[b]Version 1.2 and above requires [color=purple]PHP 5.3[/color] or greater[/b]
+
 This mod will add a BBC tag:  [nobbc][youtube][/youtube][/nobbc]  where you can post your youtube urls and it will be converted to a video directly in the message.
 
 You can enable/disable the mod as well as set the widh and height for the videos, currently the mod support the following youtube urls:
