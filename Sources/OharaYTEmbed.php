@@ -130,7 +130,7 @@ class OharaYTEmbed extends Ohara
 	}
 
 	/* Take the url, take the video ID and return the embed code */
-	function init($data)
+	function youtube($data)
 	{
 		global $modSettings, $txt;
 
@@ -193,7 +193,7 @@ class OharaYTEmbed extends Ohara
 			return sprintf($txt['OYTE_unvalid_link'], 'vimeo');
 	}
 
-	function youtube($message)
+	function init$message)
 	{
 		// The extremely long regex...
 		$vimeo = '~(?<=[\s>\.(;\'"]|^)(?:https?\:\/\/)?(?:www\.)?vimeo.com\/(?:album\/|groups\/(.*?)\/|channels\/(.*?)\/)?[0-9]+\??[/\w\-_\~%@\?;=#}\\\\]?~';
