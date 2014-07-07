@@ -35,6 +35,9 @@ class OharaYTEmbed extends Ohara
 		if (empty($modSettings['OYTE_master']))
 			return;
 
+		// Quick fix for PHP lower than 5.4
+		$that = $this;
+
 		array_push($codes,
 			array(
 				'tag' => 'youtube',
