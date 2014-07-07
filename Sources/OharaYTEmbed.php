@@ -13,7 +13,7 @@ if (!defined('SMF'))
 
 class OharaYTEmbed extends Ohara
 {
-	function OYTE_bbc_add_code(&$codes)
+	function code(&$codes)
 	{
 		global $modSettings;
 
@@ -88,7 +88,7 @@ class OharaYTEmbed extends Ohara
 	}
 
 	 /* The bbc button */
-	function OYTE_bbc_add_button(&$buttons)
+	function button(&$buttons)
 	{
 		global $txt, $modSettings;
 
@@ -116,7 +116,7 @@ class OharaYTEmbed extends Ohara
 	}
 
 	/* Don't bother on create a whole new page for this, let's use integrate_general_mod_settings ^o^ */
-	function OYTE_settings(&$config_vars)
+	function settings(&$config_vars)
 	{
 		global $txt;
 
@@ -130,7 +130,7 @@ class OharaYTEmbed extends Ohara
 	}
 
 	/* Take the url, take the video ID and return the embed code */
-	function OYTE_Main($data)
+	function init($data)
 	{
 		global $modSettings, $txt;
 
@@ -168,7 +168,7 @@ class OharaYTEmbed extends Ohara
 		return $result;
 	}
 
-	function OYTE_Vimeo($data)
+	function vimeo($data)
 	{
 		global $modSettings, $txt, $sourcedir;
 
@@ -193,7 +193,7 @@ class OharaYTEmbed extends Ohara
 			return sprintf($txt['OYTE_unvalid_link'], 'vimeo');
 	}
 
-	function OYTE_Preparse($message)
+	function youtube($message)
 	{
 		// The extremely long regex...
 		$vimeo = '~(?<=[\s>\.(;\'"]|^)(?:https?\:\/\/)?(?:www\.)?vimeo.com\/(?:album\/|groups\/(.*?)\/|channels\/(.*?)\/)?[0-9]+\??[/\w\-_\~%@\?;=#}\\\\]?~';
@@ -224,7 +224,7 @@ class OharaYTEmbed extends Ohara
 	}
 
 	/* DUH! WINNING! */
-	function OYTE_care(&$dummy)
+	function who(&$dummy)
 	{
 		global $context;
 
