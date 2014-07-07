@@ -13,6 +13,21 @@ if (!defined('SMF'))
 
 class OharaYTEmbed extends Ohara
 {
+	public static $name = __CLASS__;
+
+	/* Don't bother on create a whole new page for this, let's use integrate_general_mod_settings ^o^ */
+	function settings(&$config_vars)
+	{
+		loadLanguage(self::$name);
+
+		$config_vars[] = $this->text('title');
+		$config_vars[] = array('check', '_enable', 'subtext' => $this->text('enable_sub'));
+		$config_vars[] = array('check', '_autoEmbed', 'subtext' => $this->text('autoEmbed_sub'));
+		$config_vars[] = array('int', '_width', 'subtext' => $this->text('width_sub'), 'size' => 3);
+		$config_vars[] = array('int', '_height', 'subtext' => $this->text('height_sub'), 'size' => 3);
+		$config_vars[] = '';
+	}
+
 	function code(&$codes)
 	{
 		global $modSettings;
@@ -113,20 +128,6 @@ class OharaYTEmbed extends Ohara
 			'description' => $txt['OYTE_vimeo_desc'],
 		);
 
-	}
-
-	/* Don't bother on create a whole new page for this, let's use integrate_general_mod_settings ^o^ */
-	function settings(&$config_vars)
-	{
-		global $txt;
-
-		loadLanguage('OharaYTEmbed');
-
-		$config_vars[] = $txt['OYTE_title'];
-		$config_vars[] = array('check', 'OYTE_master', 'subtext' => $txt['OYTE_master_sub']);
-		$config_vars[] = array('int', 'OYTE_video_width', 'subtext' => $txt['OYTE_video_width_sub'], 'size' => 3);
-		$config_vars[] = array('int', 'OYTE_video_height', 'subtext' => $txt['OYTE_video_height_sub'], 'size' => 3);
-		$config_vars[] = '';
 	}
 
 	/* Take the url, take the video ID and return the embed code */
