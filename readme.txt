@@ -22,10 +22,9 @@ http://www.youtube.com/watch?v={ID}
 http://www.youtube.com/watch?v={ID}&{Parameters}
 http://youtu.be/{ID}
 http://www.youtube.com/watch?feature=player_embedded&v=[ID]
-http://vimeo.com/[ID]
-http://vimeo.com/channels/[channel name]/[ID]
-http://vimeo.com/group/[ID]
-http://vimeo.com/album/[ID]
+vimeo.com/[ID]
+vimeo.com/channels/[channel name]/[ID]
+vimeo.com/groups/[Group name]/videos/[ID]
 [/code]
 
 [color=purple][b][size=12pt]License[/size][/b][/color]
@@ -55,6 +54,7 @@ http://vimeo.com/album/[ID]
 - Added auto-embed feature.
 - Add support for old [nobbc][yt][/yt][/nobbc] tags
 - Add support for [nobbc][vimeo][/vimeo][/nobbc]
+- Requires PHP 5.3 or greater.
 
 [b]1.1 - April 19, 2013,[/b]
 - Fix the http/https url issue.

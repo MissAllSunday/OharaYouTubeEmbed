@@ -23,7 +23,7 @@ function OYTE_bbc_add_code(&$codes)
 			'tag' => 'youtube',
 			'type' => 'unparsed_content',
 			'content' => '<div style="text-align:center;margin:auto;padding:5px;" class="youtube $1">
-				<iframe width="'. (empty($modSettings['OYTE_video_width']) ? '420' : $modSettings['OYTE_video_width']) .'" height="'. (empty($modSettings['OYTE_video_height']) ? '315' : $modSettings['OYTE_video_height']) .'" src="http://www.youtube.com/embed/$1" frameborder="0"></iframe>
+				<iframe width="'. (empty($modSettings['OYTE_video_width']) ? '420' : $modSettings['OYTE_video_width']) .'" height="'. (empty($modSettings['OYTE_video_height']) ? '315' : $modSettings['OYTE_video_height']) .'" src="'. (!empty($modSettings['setting_secureCookies']) ? 'https' : 'http') .'://www.youtube.com/embed/$1" frameborder="0"></iframe>
 			</div>',
 			'validate' => create_function('&$tag, &$data, $disabled', '
 				global $txt;
@@ -44,7 +44,7 @@ function OYTE_bbc_add_code(&$codes)
 			'tag' => 'yt',
 			'type' => 'unparsed_content',
 			'content' => '<div style="text-align:center;margin:auto;padding:5px;" class="youtube $1">
-				<iframe width="'. (empty($modSettings['OYTE_video_width']) ? '420' : $modSettings['OYTE_video_width']) .'" height="'. (empty($modSettings['OYTE_video_height']) ? '315' : $modSettings['OYTE_video_height']) .'" src="http://www.youtube.com/embed/$1" frameborder="0"></iframe>
+				<iframe width="'. (empty($modSettings['OYTE_video_width']) ? '420' : $modSettings['OYTE_video_width']) .'" height="'. (empty($modSettings['OYTE_video_height']) ? '315' : $modSettings['OYTE_video_height']) .'" src="'. (!empty($modSettings['setting_secureCookies']) ? 'https' : 'http') .'://www.youtube.com/embed/$1" frameborder="0"></iframe>
 			</div>',
 			'validate' => create_function('&$tag, &$data, $disabled', '
 				global $txt;
@@ -179,7 +179,7 @@ function OYTE_Vimeo($data)
 	require_once($sourcedir .'/Subs-Package.php');
 
 	// Construct the URL
-	$oembed = 'http://vimeo.com/api/oembed.json?url=' . rawurlencode($data) . '&width='. (empty($modSettings['OYTE_video_width']) ? '420' : $modSettings['OYTE_video_width']) .'&height='. (empty($modSettings['OYTE_video_height']) ? '315' : $modSettings['OYTE_video_height']);
+	$oembed = ''. (!empty($modSettings['setting_secureCookies']) ? 'https' : 'http') .'://vimeo.com/api/oembed.json?url=' . rawurlencode($data) . '&width='. (empty($modSettings['OYTE_video_width']) ? '420' : $modSettings['OYTE_video_width']) .'&height='. (empty($modSettings['OYTE_video_height']) ? '315' : $modSettings['OYTE_video_height']);
 
 	//Attempts to fetch data from a URL, regardless of PHP's allow_url_fopen setting
 	$jsonArray = json_decode(fetch_web_data($oembed), true);
