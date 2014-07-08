@@ -43,8 +43,6 @@ class OharaYTEmbed extends Suki\Ohara
 
 	public function code(&$codes)
 	{
-		global $modSettings;
-
 		// Mod is disabled.
 		if (!$this->enable('enable'))
 			return;
@@ -120,8 +118,6 @@ class OharaYTEmbed extends Suki\Ohara
 	//Take the url, take the video ID and return the embed code.
 	public function youtube($data)
 	{
-		global $modSettings, $txt;
-
 		if (empty($data))
 			return sprintf($this->text('unvalid_link'), 'youtube');
 
