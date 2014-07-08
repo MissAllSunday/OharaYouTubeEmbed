@@ -20,7 +20,7 @@ $hooks = array(
 	'integrate_bbc_codes' => '$sourcedir/OharaYTEmbed.php|OharaYTEmbed::code#',
 	'integrate_bbc_buttons' => '$sourcedir/OharaYTEmbed.php|OharaYTEmbed::button#',
 	'integrate_general_mod_settings' => '$sourcedir/OharaYTEmbed.php|OharaYTEmbed::settings#',
-	'integrate_menu_buttons' => '$sourcedir/OharaYTEmbed.php|OharaYTEmbed::who#',
+	'integrate_credits' => '$sourcedir/OharaYTEmbed.php|OharaYTEmbed::who#',
 	'integrate_pre_parsebbc' => '$sourcedir/OharaYTEmbed.php|OharaYTEmbed::autoEmbed#',
 );
 
