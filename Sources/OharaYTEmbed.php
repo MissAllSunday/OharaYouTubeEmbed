@@ -19,7 +19,7 @@ class OharaYTEmbed extends Ohara
 	public static $name = __CLASS__;
 
 	/* Don't bother on create a whole new page for this, let's use integrate_general_mod_settings ^o^ */
-	function settings(&$config_vars)
+	public function settings(&$config_vars)
 	{
 		loadLanguage(self::$name);
 
@@ -31,7 +31,7 @@ class OharaYTEmbed extends Ohara
 		$config_vars[] = '';
 	}
 
-	function code(&$codes)
+	public function code(&$codes)
 	{
 		global $modSettings;
 
@@ -86,7 +86,7 @@ class OharaYTEmbed extends Ohara
 	}
 
 	 /* The bbc button */
-	function button(&$buttons)
+	public function button(&$buttons)
 	{
 		// Mod is disabled.
 		if (!$this->enable('enable'))
@@ -111,7 +111,7 @@ class OharaYTEmbed extends Ohara
 	}
 
 	/* Take the url, take the video ID and return the embed code */
-	function youtube($data)
+	public function youtube($data)
 	{
 		global $modSettings, $txt;
 
@@ -149,7 +149,7 @@ class OharaYTEmbed extends Ohara
 		return $result;
 	}
 
-	function vimeo($data)
+	public function vimeo($data)
 	{
 		global $modSettings, $txt, $sourcedir;
 
@@ -174,7 +174,7 @@ class OharaYTEmbed extends Ohara
 			return sprintf($txt['OYTE_unvalid_link'], 'vimeo');
 	}
 
-	function autoEmbed(&$message, &$smileys, &$cache_id, &$parse_tags)
+	public function autoEmbed(&$message, &$smileys, &$cache_id, &$parse_tags)
 	{
 		// The extremely long regex...
 		$vimeo = '~(?<=[\s>\.(;\'"]|^)(?:https?\:\/\/)?(?:www\.)?vimeo.com\/(?:album\/|groups\/(.*?)\/|channels\/(.*?)\/)?[0-9]+\??[/\w\-_\~%@\?;=#}\\\\]?~';
@@ -205,12 +205,12 @@ class OharaYTEmbed extends Ohara
 	}
 
 	/* DUH! WINNING! */
-	function who(&$dummy)
+	public function who(&$dummy)
 	{
 		global $context;
 
-		if (isset($context['current_action']) && $context['current_action'] == 'credits')
-			$context['copyrights']['mods'][] = '<a href="http://missallsunday.com" target="_blank" title="Free SMF mods">Ohara YouTube Embed mod &copy Suki</a>';
+		if (isset($context['current_action']) && $context['current_action'] === 'credits')
+			$context['copyrights']['mods'][] = '<a href="http://missallsunday.com" title="Free SMF Mods">Activity Bar mod &copy Suki</a>';
 	}
 }
 
