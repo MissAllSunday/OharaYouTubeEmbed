@@ -121,7 +121,7 @@ class OharaYTEmbed extends Ohara
 		loadLanguage('OharaYTEmbed');
 
 		if (empty($data))
-			return sprintf($txt['OYTE_unvalid_link'], 'youtube');
+			return sprintf($txt['OharaYTEmbed_unvalid_link'], 'youtube');
 
 		/* Set a local var for laziness */
 		$result = '';
