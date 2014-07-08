@@ -30,7 +30,7 @@ class OharaYTEmbed extends Suki\Ohara
 		$this->height = $this->enable('height') ? $this->setting('height') : '315';
 	}
 
-	/* Don't bother on create a whole new page for this, let's use integrate_general_mod_settings ^o^ */
+	//Don't bother on create a whole new page for this, let's use integrate_general_mod_settings ^o^.
 	public function settings(&$config_vars)
 	{
 		$config_vars[] = $this->text('title');
@@ -56,9 +56,7 @@ class OharaYTEmbed extends Suki\Ohara
 			array(
 				'tag' => 'youtube',
 				'type' => 'unparsed_content',
-				'content' => '<div style="text-align:center;margin:auto;padding:5px;" class="youtube $1">
-					<iframe width="'. ($this->width) .'" height="'. ($this->height) .'" src="'. ($this->useSSL) .'://www.youtube.com/embed/$1" frameborder="0"></iframe>
-				</div>',
+				'content' => '<div style="text-align:center;margin:auto;padding:5px;" class="youtube">$1</div>',
 				'validate' => function (&$tag, &$data, $disabled) use ($that)
 				{
 					$data = empty($data) ? sprintf($that->text('unvalid_link'), 'youtube') : $that->youtube(trim(strtr($data, array('<br />' => ''))));
@@ -69,9 +67,7 @@ class OharaYTEmbed extends Suki\Ohara
 			array(
 				'tag' => 'yt',
 				'type' => 'unparsed_content',
-				'content' => '<div style="text-align:center;margin:auto;padding:5px;" class="youtube $1">
-					<iframe width="'. ($this->width) .'" height="'. ($this->height) .'" src="'. ($this->useSSL) .'://www.youtube.com/embed/$1" frameborder="0"></iframe>
-				</div>',
+				'content' => '<div style="text-align:center;margin:auto;padding:5px;" class="youtube">$1</div>',
 				'validate' => function (&$tag, &$data, $disabled) use ($that)
 				{
 					$data = empty($data) ? sprintf($that->text('unvalid_link'), 'youtube') : $that->youtube(trim(strtr($data, array('<br />' => ''))));
@@ -82,9 +78,7 @@ class OharaYTEmbed extends Suki\Ohara
 			array(
 				'tag' => 'vimeo',
 				'type' => 'unparsed_content',
-				'content' => '<div style="text-align:center;margin:auto;padding:5px;">
-					$1
-				</div>',
+				'content' => '<div style="text-align:center;margin:auto;padding:5px;">$1</div>',
 				'validate' => function (&$tag, &$data, $disabled) use ($that)
 				{
 					$data = empty($data) ? sprintf($that->text('unvalid_link'), 'vimeo') : $that->vimeo(trim(strtr($data, array('<br />' => ''))));
@@ -98,7 +92,7 @@ class OharaYTEmbed extends Suki\Ohara
 		unset($that);
 	}
 
-	 /* The bbc button */
+	//The bbc button.
 	public function button(&$buttons)
 	{
 		// Mod is disabled.
@@ -123,7 +117,7 @@ class OharaYTEmbed extends Suki\Ohara
 
 	}
 
-	/* Take the url, take the video ID and return the embed code */
+	//Take the url, take the video ID and return the embed code.
 	public function youtube($data)
 	{
 		global $modSettings, $txt;
@@ -133,33 +127,34 @@ class OharaYTEmbed extends Suki\Ohara
 		if (empty($data))
 			return sprintf($this->text('unvalid_link'), 'youtube');
 
-		/* Set a local var for laziness */
+		//Set a local var for laziness.
 		$result = '';
 
-		 /* We all love Regex */
+		// We all love Regex.
 		$pattern = '#^(?:https?://)?(?:www\.)?(?:youtu\.be/|youtube\.com(?:/embed/|/v/|/watch\?v=|/watch\?.+&v=))([\w-]{11})(?:.+)?$#x';
 
-		/* First attempt, pure regex */
+		// First attempt, pure regex.
 		if (preg_match($pattern, $data, $matches))
 			$result = isset($matches[1]) ? $matches[1] : false;
 
-		/* Give another regex a chance */
+		// Give another regex a chance.
 		elseif (empty($result) && preg_match('%(?:youtube(?:-nocookie)?\.com/(?:[^/]+/.+/|(?:v|e(?:mbed)?)/|.*[?&]v=)|youtu\.be/)([^"&?/ ]{11})%i', $data, $match))
 			$result = isset($match[1]) ? $match[1] : false;
 
-		/* No?, then one last chance, let PHPs native parse_url() function do the dirty work */
+		// No?, then one last chance, let PHPs native parse_url() function do the dirty work.
 		elseif (empty($result))
 		{
-			/* This relies on the url having ? and =, this is only an emergency check */
+			// This relies on the url having ? and =, this is only an emergency check.
 			parse_str(parse_url($data, PHP_URL_QUERY), $result);
 			$result = isset($result['v']) ? $result['v'] : false;
 		}
 
-		/* At this point, all tests had miserably failed */
+		// At this point, all tests had miserably failed.
 		if (empty($result))
 			return sprintf($this->text('unvalid_link'), 'youtube');
 
-		return $result;
+		// Got something, return an iframe.
+		return '<iframe width="'. ($this->width) .'" height="'. ($this->height) .'" src="'. ($this->useSSL) .'://www.youtube.com/embed/'. ($result).'" frameborder="0"></iframe>';
 	}
 
 	public function vimeo($data)
@@ -177,7 +172,7 @@ class OharaYTEmbed extends Suki\Ohara
 		// Construct the URL
 		$oembed = ''. ($this->useSSL) .'://vimeo.com/api/oembed.json?url=' . rawurlencode($data) . '&width='. ($this->width) .'&height='. ($this->height);
 
-		//Attempts to fetch data from a URL, regardless of PHP's allow_url_fopen setting
+		// Attempts to fetch data from a URL, regardless of PHP's allow_url_fopen setting.
 		$jsonArray = json_decode(fetch_web_data($oembed), true);
 
 		if (!empty($jsonArray) && is_array($jsonArray) && !empty($jsonArray['html']))
@@ -221,7 +216,7 @@ class OharaYTEmbed extends Suki\Ohara
 		return $message;
 	}
 
-	/* DUH! WINNING! */
+	// DUH! WINNING!.
 	public function who(&$dummy)
 	{
 		global $context;
@@ -231,5 +226,5 @@ class OharaYTEmbed extends Suki\Ohara
 	}
 }
 
-	/* Slowly repeating
-	...Sunday morning */
+/* Slowly repeating
+...Sunday morning */
