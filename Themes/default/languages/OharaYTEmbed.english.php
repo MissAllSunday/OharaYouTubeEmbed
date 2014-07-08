@@ -12,10 +12,10 @@ global $txt;
 
 $txt['OharaYTEmbed_enable'] = 'Enable the Ohara Youtube and Vimeo (auto)Embed mod';
 $txt['OharaYTEmbed_master_sub'] = 'This is the master setting, it needs to be enable for the mod to work.';
-$txt['OharaYTEmbed_video_width'] = 'Video\'s width:';
-$txt['OharaYTEmbed_video_width_sub'] = 'If empty it will take the default value: 420.';
-$txt['OharaYTEmbed_video_height'] = 'Video\'s height:';
-$txt['OharaYTEmbed_video_height_sub'] = 'If empty it will take the default value: 315';
+$txt['OharaYTEmbed_width'] = 'Video\'s width:';
+$txt['OharaYTEmbed_width_sub'] = 'If empty it will take the default value: 420.';
+$txt['OharaYTEmbed_height'] = 'Video\'s height:';
+$txt['OharaYTEmbed_height_sub'] = 'If empty it will take the default value: 315';
 $txt['OharaYTEmbed_desc'] = 'Embed a youtube video url';
 $txt['OharaYTEmbed_vimeo_desc'] = 'Embed a vimeo video url';
 $txt['OharaYTEmbed_unvalid_link'] = 'Not a valid %s URL';
