@@ -77,11 +77,12 @@ class Ohara
 
 	public function validate($var, $type = 'request')
 	{
-		$this->_types = array('request' => $_REQUEST, 'get' => $_GET, 'post' => $_POST);
+		$types = array('request' => $_REQUEST, 'get' => $_GET, 'post' => $_POST);
 
 		$this->_request = (empty($type) || !isset($types[$type])) ? $_REQUEST : $types[$type];
 
-		return (isset($this->_request[$var]));
+		unset($types);
+		return (in_array($var, $this->_request));
 	}
 
 	public function sanitize($var)
