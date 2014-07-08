@@ -11,6 +11,9 @@
 if (!defined('SMF'))
 	die('Hacking attempt...');
 
+// There is no autoload feature on SMF so...
+require_once($sourcedir . '/Ohara.php');
+
 class OharaYTEmbed extends Ohara
 {
 	public static $name = __CLASS__;
@@ -171,7 +174,7 @@ class OharaYTEmbed extends Ohara
 			return sprintf($txt['OYTE_unvalid_link'], 'vimeo');
 	}
 
-	function init$message)
+	function autoEmbed(&$message, &$smileys, &$cache_id, &$parse_tags)
 	{
 		// The extremely long regex...
 		$vimeo = '~(?<=[\s>\.(;\'"]|^)(?:https?\:\/\/)?(?:www\.)?vimeo.com\/(?:album\/|groups\/(.*?)\/|channels\/(.*?)\/)?[0-9]+\??[/\w\-_\~%@\?;=#}\\\\]?~';
