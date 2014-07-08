@@ -7,7 +7,7 @@ On install make sure to mark the "[b]Install in Other Themes[/b]" checkbox.
 
 [color=purple][b][size=12pt]Description[/size][/b][/color]
 
-[b]For SMF 2.0.x only[/b]
+[b]For SMF 2.1.x only[/b]
 
 [b]Versions 1.2 and above requires [color=purple]PHP 5.3[/color] or greater[/b]
 
@@ -35,7 +35,7 @@ vimeo.com/groups/[Group name]/videos/[ID]
  * http://www.mozilla.org/MPL/
  [/pre]
 
- 
+
 [color=purple][b][size=12pt]Settings[/size][/b][/color]
 
 - Admin->Configuration->Modifications
@@ -49,6 +49,13 @@ vimeo.com/groups/[Group name]/videos/[ID]
 
 
 [color=purple][b][size=12pt]Changelog[/size][/b][/color]
+
+[b]1.2 - July, 2014,[/b]
+- Drop compatibility with SMF 2.0.x
+- Add compatibility with SMF 2.1
+- Add a setting to disable auto-embedding.
+- Add compatibility with SSL
+- One less file edit.
 
 [b]1.2 - March 05, 2014,[/b]
 - Added auto-embed feature.
