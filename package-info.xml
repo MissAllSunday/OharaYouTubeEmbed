@@ -8,7 +8,7 @@
 	<version>1.3</version>
 	<type>modification</type>
 
-	<install for="2.0 - 2.0.99">
+	<install for="2.1 Alpha 1, 2.1 - 2.1.99">
 		<readme parsebbc="true">readme.txt</readme>
 		<code>addHooks.php</code>
 		<modification>OharaYTEmbed.xml</modification>
@@ -19,7 +19,7 @@
 		<redirect url="index.php?action=admin;area=modsettings;sa=general" timeout="1000"></redirect>
 	</install>
 
-	<uninstall for="2.0 - 2.0.99">
+	<uninstall for="2.1 Alpha 1, 2.1 - 2.1.99">
 		<code>removeHooks.php</code>
 		<modification reverse="true">OharaYTEmbed.xml</modification>
 		<remove-file name="$sourcedir/OharaYTEmbed.php" />
