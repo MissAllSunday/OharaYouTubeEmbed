@@ -60,7 +60,7 @@ class OharaYTEmbed extends Ohara
 				'tag' => 'yt',
 				'type' => 'unparsed_content',
 				'content' => '<div style="text-align:center;margin:auto;padding:5px;" class="youtube $1">
-					<iframe width="'. (empty($modSettings['OYTE_video_width']) ? '420' : $modSettings['OYTE_video_width']) .'" height="'. (empty($modSettings['OYTE_video_height']) ? '315' : $modSettings['OYTE_video_height']) .'" src="'. (!empty($modSettings['setting_secureCookies']) ? 'https' : 'http') .'://www.youtube.com/embed/$1" frameborder="0"></iframe>
+					<iframe width="'. ($this->enable('width') ? $this->setting('width') : '420') .'" height="'. ($this->enable('height') ? $this->setting('height') : '315') .'" src="'. (!empty($modSettings['setting_secureCookies']) ? 'https' : 'http') .'://www.youtube.com/embed/$1" frameborder="0"></iframe>
 				</div>',
 				'validate' => function (&$tag, &$data, $disabled) use ($that)
 				{
@@ -83,6 +83,9 @@ class OharaYTEmbed extends Ohara
 				'block_level' => true,
 			)
 		);
+
+		// No longer needed.
+		unset($that);
 	}
 
 	 /* The bbc button */
@@ -144,17 +147,17 @@ class OharaYTEmbed extends Ohara
 
 		/* At this point, all tests had miserably failed */
 		if (empty($result))
-			return sprintf($txt['OYTE_unvalid_link'], 'youtube');
+			return sprintf($this->text('unvalid_link'), 'youtube');
 
 		return $result;
 	}
 
 	public function vimeo($data)
 	{
-		global $modSettings, $txt, $sourcedir;
+		global $sourcedir;
 
 		if (empty($data))
-			return sprintf($txt['OYTE_unvalid_link'], 'vimeo');
+			return sprintf($this->text('unvalid_link'), 'vimeo');
 
 		loadLanguage('OharaYTEmbed');
 
@@ -162,7 +165,7 @@ class OharaYTEmbed extends Ohara
 		require_once($sourcedir .'/Subs-Package.php');
 
 		// Construct the URL
-		$oembed = ''. (!empty($modSettings['setting_secureCookies']) ? 'https' : 'http') .'://vimeo.com/api/oembed.json?url=' . rawurlencode($data) . '&width='. (empty($modSettings['OYTE_video_width']) ? '420' : $modSettings['OYTE_video_width']) .'&height='. (empty($modSettings['OYTE_video_height']) ? '315' : $modSettings['OYTE_video_height']);
+		$oembed = ''. (!empty($modSettings['setting_secureCookies']) ? 'https' : 'http') .'://vimeo.com/api/oembed.json?url=' . rawurlencode($data) . '&width='. ($this->enable('width') ? $this->setting('width') : '420') .'&height='. ($this->enable('height') ? $this->setting('height') : '315');
 
 		//Attempts to fetch data from a URL, regardless of PHP's allow_url_fopen setting
 		$jsonArray = json_decode(fetch_web_data($oembed), true);
@@ -171,7 +174,7 @@ class OharaYTEmbed extends Ohara
 			return $jsonArray['html'];
 
 		else
-			return sprintf($txt['OYTE_unvalid_link'], 'vimeo');
+			return sprintf($this->text('unvalid_link'), 'vimeo');
 	}
 
 	public function autoEmbed(&$message, &$smileys, &$cache_id, &$parse_tags)
