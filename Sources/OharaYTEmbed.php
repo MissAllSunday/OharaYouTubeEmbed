@@ -122,8 +122,6 @@ class OharaYTEmbed extends Suki\Ohara
 	{
 		global $modSettings, $txt;
 
-		loadLanguage('OharaYTEmbed');
-
 		if (empty($data))
 			return sprintf($this->text('unvalid_link'), 'youtube');
 
@@ -163,8 +161,6 @@ class OharaYTEmbed extends Suki\Ohara
 
 		if (empty($data))
 			return sprintf($this->text('unvalid_link'), 'vimeo');
-
-		loadLanguage('OharaYTEmbed');
 
 		// Need a function in a far far away file...
 		require_once($sourcedir .'/Subs-Package.php');
