@@ -176,6 +176,10 @@ class OharaYTEmbed extends Ohara
 
 	public function autoEmbed(&$message, &$smileys, &$cache_id, &$parse_tags)
 	{
+		// Mod is disabled or the user don't want to use autoEmbed.
+		if (!$this->enable('enable') || !$this->enable('autoEmbed'))
+			return;
+
 		// The extremely long regex...
 		$vimeo = '~(?<=[\s>\.(;\'"]|^)(?:https?\:\/\/)?(?:www\.)?vimeo.com\/(?:album\/|groups\/(.*?)\/|channels\/(.*?)\/)?[0-9]+\??[/\w\-_\~%@\?;=#}\\\\]?~';
 		$youtube = '~(?<=[\s>\.(;\'"]|^)https?://(?:[0-9A-Z-]+\.)?(?:youtu\.be/|youtube(?:-nocookie)?\.com\S*[^\w\s-])([\w-]{11})(?=[^\w-]|$)(?![?=&+%\w.-]*(?:[\'"][^<>]*>  | </a>  ))[?=&+%\w.-]*[/\w\-_\~%@\?;=#}\\\\]?~ix';
