@@ -11,7 +11,7 @@
 global $txt;
 
 $txt['OharaYTEmbed_enable'] = 'Activar el mod Ohara Youtube Embed';
-$txt['OharaYTEmbed_master_sub'] = 'Esta es la configuración principal, necasita estar activada para que el mod funcione correctamente.';
+$txt['OharaYTEmbed_enable_sub'] = 'Esta es la configuración principal, necasita estar activada para que el mod funcione correctamente.';
 $txt['OharaYTEmbed_width'] = 'Ancho del video:';
 $txt['OharaYTEmbed_width_sub'] = 'Si se deja vacio se usará el valor por deault: 420.';
 $txt['OharaYTEmbed_height'] = 'Altura del video:';
