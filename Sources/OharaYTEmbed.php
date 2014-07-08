@@ -217,7 +217,7 @@ class OharaYTEmbed extends Ohara
 		global $context;
 
 		if (isset($context['current_action']) && $context['current_action'] === 'credits')
-			$context['copyrights']['mods'][] = '<a href="http://missallsunday.com" title="Free SMF Mods">Activity Bar mod &copy Suki</a>';
+			$context['copyrights']['mods'][] = '<a href="http://missallsunday.com" title="Free SMF Mods">Ohara Youtube and Vimeo (auto)embed mod &copy Suki</a>';
 	}
 }
 
