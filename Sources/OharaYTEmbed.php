@@ -51,7 +51,7 @@ class OharaYTEmbed extends Ohara
 				</div>',
 				'validate' => function (&$tag, &$data, $disabled) use ($that)
 				{
-					$data = empty($data) ? $that->text('unvalid_link') : $that->youtube(trim(strtr($data, array('<br />' => ''))));
+					$data = empty($data) ? sprintf($that->text('unvalid_link'), 'youtube') : $that->youtube(trim(strtr($data, array('<br />' => ''))));
 				},
 				'disabled_content' => '$1',
 				'block_level' => true,
@@ -64,7 +64,7 @@ class OharaYTEmbed extends Ohara
 				</div>',
 				'validate' => function (&$tag, &$data, $disabled) use ($that)
 				{
-					$data = empty($data) ? $that->text('unvalid_link') : $that->youtube(trim(strtr($data, array('<br />' => ''))));
+					$data = empty($data) ? sprintf($that->text('unvalid_link'), 'youtube') : $that->youtube(trim(strtr($data, array('<br />' => ''))));
 				},
 				'disabled_content' => '$1',
 				'block_level' => true,
@@ -77,7 +77,7 @@ class OharaYTEmbed extends Ohara
 				</div>',
 				'validate' => function (&$tag, &$data, $disabled) use ($that)
 				{
-					$data = empty($data) ? $that->text('unvalid_link') : $that->vimeo(trim(strtr($data, array('<br />' => ''))));
+					$data = empty($data) ? sprintf($that->text('unvalid_link'), 'vimeo') : $that->vimeo(trim(strtr($data, array('<br />' => ''))));
 				},
 				'disabled_content' => '$1',
 				'block_level' => true,
@@ -121,7 +121,7 @@ class OharaYTEmbed extends Ohara
 		loadLanguage('OharaYTEmbed');
 
 		if (empty($data))
-			return sprintf($txt['OharaYTEmbed_unvalid_link'], 'youtube');
+			return sprintf($this->text('unvalid_link'), 'youtube');
 
 		/* Set a local var for laziness */
 		$result = '';
