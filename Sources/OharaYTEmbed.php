@@ -14,7 +14,7 @@ if (!defined('SMF'))
 // There is no autoload feature on SMF so...
 require_once($sourcedir . '/Ohara.php');
 
-class OharaYTEmbed extends Ohara
+class OharaYTEmbed extends Suki\Ohara
 {
 	public static $name = __CLASS__;
 

@@ -1,5 +1,5 @@
 [center][color=purple][size=5][b]Ohara YouTube Embed [/b][/size][/color]
-[b]Author:[/b] [url=http://missallsunday.com]Miss All Sunday[/url][/center]
+[b]Author:[/b] [url=http://missallsunday.com]Suki[/url][/center]
 
 [color=red][b][size=16pt]Attention:[/size][/b][/color]
 On install make sure to mark the "[b]Install in Other Themes[/b]" checkbox.
@@ -50,7 +50,7 @@ vimeo.com/groups/[Group name]/videos/[ID]
 
 [color=purple][b][size=12pt]Changelog[/size][/b][/color]
 
-[b]1.2 - July, 2014,[/b]
+[b]1.3 - July, 2014,[/b]
 - Drop compatibility with SMF 2.0.x
 - Add compatibility with SMF 2.1
 - Add a setting to disable auto-embedding.
