@@ -9,7 +9,7 @@ On install make sure to mark the "[b]Install in Other Themes[/b]" checkbox.
 
 [b]For SMF 2.0.x only[/b]
 
-[b]Version 1.2 and above requires [color=purple]PHP 5.3[/color] or greater[/b]
+[b]Versions 1.2 and above requires [color=purple]PHP 5.3[/color] or greater[/b]
 
 You can auto-embed any valid youtube or vimeo urls and the mod will automatically convert them to videos.
 
