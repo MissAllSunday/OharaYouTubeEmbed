@@ -32,10 +32,11 @@ class OharaYTEmbed extends Ohara
 	{
 		global $modSettings;
 
-		if (empty($modSettings['OYTE_master']))
+		// Mod is disabled.
+		if (!$this->enable('enable'))
 			return;
 
-		// Quick fix for PHP lower than 5.4
+		// Quick fix for PHP lower than 5.4.
 		$that = $this;
 
 		array_push($codes,
@@ -43,20 +44,12 @@ class OharaYTEmbed extends Ohara
 				'tag' => 'youtube',
 				'type' => 'unparsed_content',
 				'content' => '<div style="text-align:center;margin:auto;padding:5px;" class="youtube $1">
-					<iframe width="'. (empty($modSettings['OYTE_video_width']) ? '420' : $modSettings['OYTE_video_width']) .'" height="'. (empty($modSettings['OYTE_video_height']) ? '315' : $modSettings['OYTE_video_height']) .'" src="'. (!empty($modSettings['setting_secureCookies']) ? 'https' : 'http') .'://www.youtube.com/embed/$1" frameborder="0"></iframe>
+					<iframe width="'. ($this->enable('width') ? $this->setting('width') : '420') .'" height="'. ($this->enable('height') ? $this->setting('height') : '315') .'" src="'. (!empty($modSettings['setting_secureCookies']) ? 'https' : 'http') .'://www.youtube.com/embed/$1" frameborder="0"></iframe>
 				</div>',
-				'validate' => create_function('&$tag, &$data, $disabled', '
-					global $txt;
-
-					loadLanguage(\'OharaYTEmbed\');
-
-					if (empty($data))
-						$data = $txt[\'OYTE_unvalid_link\'];
-
-					else
-						$data = OYTE_Main(trim(strtr($data, array(\'<br />\' => \'\'))));
-
-				'),
+				'validate' => function (&$tag, &$data, $disabled) use ($that)
+				{
+					$data = empty($data) ? $that->text('unvalid_link') : $that->youtube(trim(strtr($data, array('<br />' => ''))));
+				},
 				'disabled_content' => '$1',
 				'block_level' => true,
 			),
@@ -66,18 +59,10 @@ class OharaYTEmbed extends Ohara
 				'content' => '<div style="text-align:center;margin:auto;padding:5px;" class="youtube $1">
 					<iframe width="'. (empty($modSettings['OYTE_video_width']) ? '420' : $modSettings['OYTE_video_width']) .'" height="'. (empty($modSettings['OYTE_video_height']) ? '315' : $modSettings['OYTE_video_height']) .'" src="'. (!empty($modSettings['setting_secureCookies']) ? 'https' : 'http') .'://www.youtube.com/embed/$1" frameborder="0"></iframe>
 				</div>',
-				'validate' => create_function('&$tag, &$data, $disabled', '
-					global $txt;
-
-					loadLanguage(\'OharaYTEmbed\');
-
-					if (empty($data))
-						$data = $txt[\'OYTE_unvalid_link\'];
-
-					else
-						$data = OYTE_Main(trim(strtr($data, array(\'<br />\' => \'\'))));
-
-				'),
+				'validate' => function (&$tag, &$data, $disabled) use ($that)
+				{
+					$data = empty($data) ? $that->text('unvalid_link') : $that->youtube(trim(strtr($data, array('<br />' => ''))));
+				},
 				'disabled_content' => '$1',
 				'block_level' => true,
 			),
@@ -87,18 +72,10 @@ class OharaYTEmbed extends Ohara
 				'content' => '<div style="text-align:center;margin:auto;padding:5px;">
 					$1
 				</div>',
-				'validate' => create_function('&$tag, &$data, $disabled', '
-					global $txt;
-
-					loadLanguage(\'OharaYTEmbed\');
-
-					if (empty($data))
-						$data = $txt[\'OYTE_unvalid_link\'];
-
-					else
-						$data = OYTE_Vimeo(trim(strtr($data, array(\'<br />\' => \'\'))));
-
-				'),
+				'validate' => function (&$tag, &$data, $disabled) use ($that)
+				{
+					$data = empty($data) ? $that->text('unvalid_link') : $that->vimeo(trim(strtr($data, array('<br />' => ''))));
+				},
 				'disabled_content' => '$1',
 				'block_level' => true,
 			)
@@ -108,11 +85,8 @@ class OharaYTEmbed extends Ohara
 	 /* The bbc button */
 	function button(&$buttons)
 	{
-		global $txt, $modSettings;
-
-		loadLanguage('OharaYTEmbed');
-
-		if (empty($modSettings['OYTE_master']))
+		// Mod is disabled.
+		if (!$this->enable('enable'))
 			return;
 
 		$buttons[count($buttons) - 1][] = array(
@@ -120,7 +94,7 @@ class OharaYTEmbed extends Ohara
 			'code' => 'youtube',
 			'before' => '[youtube]',
 			'after' => '[/youtube]',
-			'description' => $txt['OYTE_desc'],
+			'description' => $this->text('desc'),
 		);
 
 		$buttons[count($buttons) - 1][] =array(
@@ -128,7 +102,7 @@ class OharaYTEmbed extends Ohara
 			'code' => 'vimeo',
 			'before' => '[vimeo]',
 			'after' => '[/vimeo]',
-			'description' => $txt['OYTE_vimeo_desc'],
+			'description' => $this->text('vimeo_desc'),
 		);
 
 	}
