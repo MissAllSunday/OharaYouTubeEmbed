@@ -17,6 +17,18 @@ require_once($sourcedir . '/Ohara.php');
 class OharaYTEmbed extends Suki\Ohara
 {
 	public static $name = __CLASS__;
+	public $useSSL;
+	public $width;
+	public $height;
+
+	public function __construct()
+	{
+		global $modSettings;
+
+		$this->useSSL = !empty($modSettings['setting_secureCookies']) ? 'https' : 'http';
+		$this->width = $this->enable('width') ? $this->setting('width') : '420';
+		$this->height = $this->enable('height') ? $this->setting('height') : '315';
+	}
 
 	/* Don't bother on create a whole new page for this, let's use integrate_general_mod_settings ^o^ */
 	public function settings(&$config_vars)
@@ -45,7 +57,7 @@ class OharaYTEmbed extends Suki\Ohara
 				'tag' => 'youtube',
 				'type' => 'unparsed_content',
 				'content' => '<div style="text-align:center;margin:auto;padding:5px;" class="youtube $1">
-					<iframe width="'. ($this->enable('width') ? $this->setting('width') : '420') .'" height="'. ($this->enable('height') ? $this->setting('height') : '315') .'" src="'. (!empty($modSettings['setting_secureCookies']) ? 'https' : 'http') .'://www.youtube.com/embed/$1" frameborder="0"></iframe>
+					<iframe width="'. ($this->width) .'" height="'. ($this->height) .'" src="'. ($this->useSSL) .'://www.youtube.com/embed/$1" frameborder="0"></iframe>
 				</div>',
 				'validate' => function (&$tag, &$data, $disabled) use ($that)
 				{
@@ -58,7 +70,7 @@ class OharaYTEmbed extends Suki\Ohara
 				'tag' => 'yt',
 				'type' => 'unparsed_content',
 				'content' => '<div style="text-align:center;margin:auto;padding:5px;" class="youtube $1">
-					<iframe width="'. ($this->enable('width') ? $this->setting('width') : '420') .'" height="'. ($this->enable('height') ? $this->setting('height') : '315') .'" src="'. (!empty($modSettings['setting_secureCookies']) ? 'https' : 'http') .'://www.youtube.com/embed/$1" frameborder="0"></iframe>
+					<iframe width="'. ($this->width) .'" height="'. ($this->height) .'" src="'. ($this->useSSL) .'://www.youtube.com/embed/$1" frameborder="0"></iframe>
 				</div>',
 				'validate' => function (&$tag, &$data, $disabled) use ($that)
 				{
@@ -163,7 +175,7 @@ class OharaYTEmbed extends Suki\Ohara
 		require_once($sourcedir .'/Subs-Package.php');
 
 		// Construct the URL
-		$oembed = ''. (!empty($modSettings['setting_secureCookies']) ? 'https' : 'http') .'://vimeo.com/api/oembed.json?url=' . rawurlencode($data) . '&width='. ($this->enable('width') ? $this->setting('width') : '420') .'&height='. ($this->enable('height') ? $this->setting('height') : '315');
+		$oembed = ''. ($this->useSSL) .'://vimeo.com/api/oembed.json?url=' . rawurlencode($data) . '&width='. ($this->width) .'&height='. ($this->height);
 
 		//Attempts to fetch data from a URL, regardless of PHP's allow_url_fopen setting
 		$jsonArray = json_decode(fetch_web_data($oembed), true);
