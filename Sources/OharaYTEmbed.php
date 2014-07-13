@@ -26,6 +26,8 @@ class OharaYTEmbed extends Suki\Ohara
 		$this->useSSL = $this->modSetting('setting_secureCookies') ? 'https' : 'http';
 		$this->width = $this->enable('width') ? $this->setting('width') : '420';
 		$this->height = $this->enable('height') ? $this->setting('height') : '315';
+
+		$this->setRegistry();
 	}
 
 	//Don't bother on create a whole new page for this, let's use integrate_general_mod_settings ^o^.
