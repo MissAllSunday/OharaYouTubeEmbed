@@ -16,7 +16,7 @@ require_once($sourcedir . '/Ohara.php');
 
 class OharaYTEmbed extends Suki\Ohara
 {
-	public static $name = __CLASS__;
+	public $name = __CLASS__;
 	public $useSSL;
 	public $width;
 	public $height;
@@ -34,10 +34,10 @@ class OharaYTEmbed extends Suki\Ohara
 	public function settings(&$config_vars)
 	{
 		$config_vars[] = $this->text('title');
-		$config_vars[] = array('check', self::$name .'_enable', 'subtext' => $this->text('enable_sub'));
-		$config_vars[] = array('check', self::$name .'_autoEmbed', 'subtext' => $this->text('autoEmbed_sub'));
-		$config_vars[] = array('int', self::$name .'_width', 'subtext' => $this->text('width_sub'), 'size' => 3);
-		$config_vars[] = array('int', self::$name .'_height', 'subtext' => $this->text('height_sub'), 'size' => 3);
+		$config_vars[] = array('check', $this->name .'_enable', 'subtext' => $this->text('enable_sub'));
+		$config_vars[] = array('check', $this->name .'_autoEmbed', 'subtext' => $this->text('autoEmbed_sub'));
+		$config_vars[] = array('int', $this->name .'_width', 'subtext' => $this->text('width_sub'), 'size' => 3);
+		$config_vars[] = array('int', $this->name .'_height', 'subtext' => $this->text('height_sub'), 'size' => 3);
 		$config_vars[] = '';
 	}
 
