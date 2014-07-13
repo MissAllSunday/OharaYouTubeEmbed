@@ -209,7 +209,7 @@ class OharaYTEmbed extends Suki\Ohara
 	}
 
 	// DUH! WINNING!.
-	public function who(&$dummy)
+	public function who()
 	{
 		global $context;
 
