@@ -23,9 +23,7 @@ class OharaYTEmbed extends Suki\Ohara
 
 	public function __construct()
 	{
-		global $modSettings;
-
-		$this->useSSL = !empty($modSettings['setting_secureCookies']) ? 'https' : 'http';
+		$this->useSSL = $this->modSetting('setting_secureCookies') ? 'https' : 'http';
 		$this->width = $this->enable('width') ? $this->setting('width') : '420';
 		$this->height = $this->enable('height') ? $this->setting('height') : '315';
 	}
