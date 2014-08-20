@@ -31,7 +31,7 @@ function OYTE_bbc_add_code(&$codes)
 				loadLanguage(\'OharaYTEmbed\');
 
 				if (empty($data))
-					$data = $txt[\'OYTE_unvalid_link\'];
+					$data = sprintf($txt[\'OYTE_unvalid_link\'], \'youtube\');
 
 				else
 					$data = OYTE_Main(trim(strtr($data, array(\'<br />\' => \'\'))));
@@ -52,7 +52,7 @@ function OYTE_bbc_add_code(&$codes)
 				loadLanguage(\'OharaYTEmbed\');
 
 				if (empty($data))
-					$data = $txt[\'OYTE_unvalid_link\'];
+					$data = sprintf($txt[\'OYTE_unvalid_link\'], \'youtube\');
 
 				else
 					$data = OYTE_Main(trim(strtr($data, array(\'<br />\' => \'\'))));
@@ -73,7 +73,7 @@ function OYTE_bbc_add_code(&$codes)
 				loadLanguage(\'OharaYTEmbed\');
 
 				if (empty($data))
-					$data = $txt[\'OYTE_unvalid_link\'];
+					$data = sprintf($txt[\'OYTE_unvalid_link\'], \'vimeo\');
 
 				else
 					$data = OYTE_Vimeo(trim(strtr($data, array(\'<br />\' => \'\'))));
