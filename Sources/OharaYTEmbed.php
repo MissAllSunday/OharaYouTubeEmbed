@@ -122,6 +122,7 @@ function OYTE_settings(&$config_vars)
 
 	$config_vars[] = $txt['OYTE_title'];
 	$config_vars[] = array('check', 'OYTE_master', 'subtext' => $txt['OYTE_master_sub']);
+	$config_vars[] = array('check', 'OYTE_autoEmbed', 'subtext' => $txt['OYTE_autoEmbed_sub']);
 	$config_vars[] = array('int', 'OYTE_video_width', 'subtext' => $txt['OYTE_video_width_sub'], 'size' => 3);
 	$config_vars[] = array('int', 'OYTE_video_height', 'subtext' => $txt['OYTE_video_height_sub'], 'size' => 3);
 	$config_vars[] = '';
@@ -193,6 +194,12 @@ function OYTE_Vimeo($data)
 
 function OYTE_Preparse($message)
 {
+	global $modSettings;
+
+	// The mod is disabled or the admin doesn't want to auto-embed videos.
+	if (empty($modSettings['OYTE_master']) || empty($modSettings['OYTE_autoEmbed']))
+		return $message;
+
 	// The extremely long regex...
 	$vimeo = '~(?<=[\s>\.(;\'"]|^)(?:https?\:\/\/)?(?:www\.)?vimeo.com\/(?:album\/|groups\/(.*?)\/|channels\/(.*?)\/)?[0-9]+\??[/\w\-_\~%@\?;=#}\\\\]?~';
 	$youtube = '~(?<=[\s>\.(;\'"]|^)https?://(?:[0-9A-Z-]+\.)?(?:youtu\.be/|youtube(?:-nocookie)?\.com\S*[^\w\s-])([\w-]{11})(?=[^\w-]|$)(?![?=&+%\w.-]*(?:[\'"][^<>]*>  | </a>  ))[?=&+%\w.-]*[/\w\-_\~%@\?;=#}\\\\]?~ix';

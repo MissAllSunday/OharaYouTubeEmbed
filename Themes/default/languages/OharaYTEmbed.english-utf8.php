@@ -12,6 +12,8 @@ global $txt;
 
 $txt['OYTE_master'] = 'Enable the Ohara Youtube Embed mod';
 $txt['OYTE_master_sub'] = 'This is the master setting, it needs to be enable for the mod to work.';
+$txt['OYTE_autoEmbed'] = 'Enable the autoembed feature';
+$txt['OYTE_autoEmbed_sub'] = 'If enable, all valid youtube anb vimeo links posted will be converted to embedded videos automatically. If disabled you will have to use the BBC tags to convert links to videos.';
 $txt['OYTE_video_width'] = 'Video\'s width:';
 $txt['OYTE_video_width_sub'] = 'If empty it will take the default value: 420.';
 $txt['OYTE_video_height'] = 'Video\'s height:';
