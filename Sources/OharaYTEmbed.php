@@ -176,20 +176,40 @@ function OYTE_Vimeo($data)
 
 	loadLanguage('OharaYTEmbed');
 
-	// Need a function in a far far away file...
-	require_once($sourcedir .'/Subs-Package.php');
+	// First try, pure regex.
+	$r = '/(https?:\/\/)?(www\.)?(player\.)?vimeo\.com\/([a-z]*\/)*([0-9]{6,11})[?]?.*/';
 
-	// Construct the URL
-	$oembed = 'http://vimeo.com/api/oembed.json?url=' . rawurlencode($data) . '&width='. (empty($modSettings['OYTE_video_width']) ? '420' : $modSettings['OYTE_video_width']) .'&height='. (empty($modSettings['OYTE_video_height']) ? '315' : $modSettings['OYTE_video_height']);
+	// Get the video ID.
+	if (preg_match($r, $data, $matches))
+		$videoID = isset($matches[5]) ? $matches[5] : false;
 
-	//Attempts to fetch data from a URL, regardless of PHP's allow_url_fopen setting
-	$jsonArray = json_decode(fetch_web_data($oembed), true);
+	if (!empty($videoID) && ctype_digit($videoID))
+	{
+		// Build the iframe.
+		return '<iframe src="//player.vimeo.com/video/'. $videoID .'" width="'. (empty($modSettings['OYTE_video_width']) ? '420' : $modSettings['OYTE_video_width']) .'" height="'. (empty($modSettings['OYTE_video_height']) ? '315' : $modSettings['OYTE_video_height'] .'" frameborder="0" webkitallowfullscreen mozallowfullscreen allowfullscreen></iframe>';
+	}
 
-	if (!empty($jsonArray) && is_array($jsonArray) && !empty($jsonArray['html']))
-		return $jsonArray['html'];
-
+	// Nope? then fall back to vimeo's API.
 	else
-		return sprintf($txt['OYTE_unvalid_link'], 'vimeo');
+	{
+		// Need a function in a far far away file...
+		require_once($sourcedir .'/Subs-Package.php');
+
+		// Construct the URL
+		$oembed = 'http://vimeo.com/api/oembed.json?url=' . rawurlencode($data) . '&width='. (empty($modSettings['OYTE_video_width']) ? '420' : $modSettings['OYTE_video_width']) .'&height='. (empty($modSettings['OYTE_video_height']) ? '315' : $modSettings['OYTE_video_height']);
+
+		//Attempts to fetch data from a URL, regardless of PHP's allow_url_fopen setting
+		$jsonArray = json_decode(fetch_web_data($oembed), true);
+
+		if (!empty($jsonArray) && is_array($jsonArray) && !empty($jsonArray['html']))
+			return $jsonArray['html'];
+
+		else
+			return sprintf($txt['OYTE_unvalid_link'], 'vimeo');
+	}
+
+	// If we reach this place, it means everything else failed miserably...
+	return sprintf($txt['OYTE_unvalid_link'], 'vimeo');
 }
 
 function OYTE_Preparse($message)
@@ -201,7 +221,7 @@ function OYTE_Preparse($message)
 		return $message;
 
 	// The extremely long regex...
-	$vimeo = '~(?<=[\s>\.(;\'"]|^)(?:https?\:\/\/)?(?:www\.)?vimeo.com\/(?:album\/|groups\/(.*?)\/|channels\/(.*?)\/)?[0-9]+\??[/\w\-_\~%@\?;=#}\\\\]?~';
+	$vimeo = '/(https?:\/\/)?(www\.)?(player\.)?vimeo\.com\/([a-z]*\/)*([0-9]{6,11})[?]?.*/';
 	$youtube = '~(?<=[\s>\.(;\'"]|^)https?://(?:[0-9A-Z-]+\.)?(?:youtu\.be/|youtube(?:-nocookie)?\.com\S*[^\w\s-])([\w-]{11})(?=[^\w-]|$)(?![?=&+%\w.-]*(?:[\'"][^<>]*>  | </a>  ))[?=&+%\w.-]*[/\w\-_\~%@\?;=#}\\\\]?~ix';
 
 	if (empty($message))
