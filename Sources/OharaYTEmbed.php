@@ -183,7 +183,7 @@ function OYTE_Vimeo($data)
 
 	// Get the video ID.
 	if (preg_match($r, $data, $matches))
-		$videoID = isset($matches[5]) ? $matches[5] : false;
+		$videoID = isset($matches[1]) ? $matches[1] : false;
 
 	if (!empty($videoID) && ctype_digit($videoID))
 	{
