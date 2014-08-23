@@ -59,7 +59,7 @@ function OYTE_bbc_add_code(&$codes)
 				else
 					$data = OYTE_Main(trim(strtr($data, array('<br />' => ''))));
 
-			},,
+			},
 			'disabled_content' => '$1',
 			'block_level' => true,
 		),
@@ -81,7 +81,7 @@ function OYTE_bbc_add_code(&$codes)
 				else
 					$data = OYTE_Vimeo(trim(strtr($data, array('<br />' => ''))));
 
-			},,
+			},
 			'disabled_content' => '$1',
 			'block_level' => true,
 		)
@@ -191,7 +191,7 @@ function OYTE_Vimeo($data)
 	if (!empty($videoID) && ctype_digit($videoID))
 	{
 		// Build the iframe.
-		return '<iframe src="//player.vimeo.com/video/'. $videoID .'" width="'. (empty($modSettings['OYTE_video_width']) ? '420' : $modSettings['OYTE_video_width']) .'" height="'. (empty($modSettings['OYTE_video_height']) ? '315' : $modSettings['OYTE_video_height'] .'" frameborder="0" webkitallowfullscreen mozallowfullscreen allowfullscreen></iframe>';
+		return '<iframe src="//player.vimeo.com/video/'. $videoID .'" width="'. (empty($modSettings['OYTE_video_width']) ? '420' : $modSettings['OYTE_video_width']) .'" height="'. (empty($modSettings['OYTE_video_height']) ? '315' : $modSettings['OYTE_video_height']) .'" frameborder="0" webkitallowfullscreen mozallowfullscreen allowfullscreen></iframe>';
 	}
 
 	// Nope? then fall back to vimeo's API.
