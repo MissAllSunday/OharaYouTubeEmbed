@@ -22,7 +22,7 @@ function OYTE_bbc_add_code(&$codes)
 		array(
 			'tag' => 'youtube',
 			'type' => 'unparsed_content',
-			'content' => '<div style="text-align:center;margin:auto;padding:5px;" class="youtube $1">
+			'content' => '<div style="text-align:center;margin:auto;padding:5px;">
 				$1
 			</div>',
 			'validate' => function (&$tag, &$data, $disabled)
@@ -44,7 +44,7 @@ function OYTE_bbc_add_code(&$codes)
 		array(
 			'tag' => 'yt',
 			'type' => 'unparsed_content',
-			'content' => '<div style="text-align:center;margin:auto;padding:5px;" class="youtube $1">
+			'content' => '<div style="text-align:center;margin:auto;padding:5px;">
 				$1
 			</div>',
 			'validate' => function (&$tag, &$data, $disabled)
