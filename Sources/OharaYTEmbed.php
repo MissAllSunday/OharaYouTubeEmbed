@@ -25,18 +25,19 @@ function OYTE_bbc_add_code(&$codes)
 			'content' => '<div style="text-align:center;margin:auto;padding:5px;" class="youtube $1">
 				$1
 			</div>',
-			'validate' => create_function('&$tag, &$data, $disabled', '
+			'validate' => function (&$tag, &$data, $disabled)
+			{
 				global $txt;
 
-				loadLanguage(\'OharaYTEmbed\');
+				loadLanguage('OharaYTEmbed');
 
 				if (empty($data))
-					$data = sprintf($txt[\'OYTE_unvalid_link\'], \'youtube\');
+					$data = sprintf($txt['OYTE_unvalid_link'], 'youtube');
 
 				else
-					$data = OYTE_Main(trim(strtr($data, array(\'<br />\' => \'\'))));
+					$data = OYTE_Main(trim(strtr($data, array('<br />' => ''))));
 
-			'),
+			},
 			'disabled_content' => '$1',
 			'block_level' => true,
 		),
@@ -46,18 +47,19 @@ function OYTE_bbc_add_code(&$codes)
 			'content' => '<div style="text-align:center;margin:auto;padding:5px;" class="youtube $1">
 				$1
 			</div>',
-			'validate' => create_function('&$tag, &$data, $disabled', '
+			'validate' => function (&$tag, &$data, $disabled)
+			{
 				global $txt;
 
-				loadLanguage(\'OharaYTEmbed\');
+				loadLanguage('OharaYTEmbed');
 
 				if (empty($data))
-					$data = sprintf($txt[\'OYTE_unvalid_link\'], \'youtube\');
+					$data = sprintf($txt['OYTE_unvalid_link'], 'youtube');
 
 				else
-					$data = OYTE_Main(trim(strtr($data, array(\'<br />\' => \'\'))));
+					$data = OYTE_Main(trim(strtr($data, array('<br />' => ''))));
 
-			'),
+			},,
 			'disabled_content' => '$1',
 			'block_level' => true,
 		),
@@ -67,18 +69,19 @@ function OYTE_bbc_add_code(&$codes)
 			'content' => '<div style="text-align:center;margin:auto;padding:5px;">
 				$1
 			</div>',
-			'validate' => create_function('&$tag, &$data, $disabled', '
+			'validate' => function (&$tag, &$data, $disabled)
+			{
 				global $txt;
 
-				loadLanguage(\'OharaYTEmbed\');
+				loadLanguage('OharaYTEmbed');
 
 				if (empty($data))
-					$data = sprintf($txt[\'OYTE_unvalid_link\'], \'vimeo\');
+					$data = sprintf($txt['OYTE_unvalid_link'], 'vimeo');
 
 				else
-					$data = OYTE_Vimeo(trim(strtr($data, array(\'<br />\' => \'\'))));
+					$data = OYTE_Vimeo(trim(strtr($data, array('<br />' => ''))));
 
-			'),
+			},,
 			'disabled_content' => '$1',
 			'block_level' => true,
 		)
