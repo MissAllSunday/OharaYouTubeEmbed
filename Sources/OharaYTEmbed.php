@@ -236,7 +236,9 @@ function OYTE_Preparse($message)
 	$message = preg_replace_callback(
 		$youtube,
 		function ($matches) {
-			return '[youtube]'. $matches[0] .'[/youtube]';
+			global $modSettings;
+
+			return '<iframe width="'. (empty($modSettings['OYTE_video_width']) ? '420' : $modSettings['OYTE_video_width']) .'" height="'. (empty($modSettings['OYTE_video_height']) ? '315' : $modSettings['OYTE_video_height']) .'" src="http://www.youtube.com/embed/'. $matches[1] .'" frameborder="0"></iframe>';
 		},
 		$message
 	);
@@ -245,7 +247,9 @@ function OYTE_Preparse($message)
 	$message = preg_replace_callback(
 		$vimeo,
 		function ($matches) {
-			return '[vimeo]'. $matches[0] .'[/vimeo]';
+			global $modSettings;
+
+			return '<iframe src="//player.vimeo.com/video/'. $matches[1] .'" width="'. (empty($modSettings['OYTE_video_width']) ? '420' : $modSettings['OYTE_video_width']) .'" height="'. (empty($modSettings['OYTE_video_height']) ? '315' : $modSettings['OYTE_video_height']) .'" frameborder="0" webkitallowfullscreen mozallowfullscreen allowfullscreen></iframe>';
 		},
 		$message
 	);
