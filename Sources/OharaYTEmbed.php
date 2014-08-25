@@ -240,7 +240,7 @@ function OYTE_Preparse($message)
 			global $modSettings, $txt;
 
 			if (!empty($matches) && !empty($matches[1]))
-				return '<iframe width="'. (empty($modSettings['OYTE_video_width']) ? '420' : $modSettings['OYTE_video_width']) .'" height="'. (empty($modSettings['OYTE_video_height']) ? '315' : $modSettings['OYTE_video_height']) .'" src="http://www.youtube.com/embed/'. $matches[1] .'" frameborder="0"></iframe>';
+				return '<div style="text-align:center;margin:auto;padding:5px;"><iframe width="'. (empty($modSettings['OYTE_video_width']) ? '420' : $modSettings['OYTE_video_width']) .'" height="'. (empty($modSettings['OYTE_video_height']) ? '315' : $modSettings['OYTE_video_height']) .'" src="http://www.youtube.com/embed/'. $matches[1] .'" frameborder="0"></iframe></div>';
 
 			else
 				sprintf($txt['OYTE_unvalid_link'], 'youtube');
@@ -255,7 +255,7 @@ function OYTE_Preparse($message)
 			global $modSettings, $txt;
 
 			if (!empty($matches) && !empty($matches[1]))
-				return '<iframe src="//player.vimeo.com/video/'. $matches[1] .'" width="'. (empty($modSettings['OYTE_video_width']) ? '420' : $modSettings['OYTE_video_width']) .'" height="'. (empty($modSettings['OYTE_video_height']) ? '315' : $modSettings['OYTE_video_height']) .'" frameborder="0" webkitallowfullscreen mozallowfullscreen allowfullscreen></iframe>';
+				return '<div style="text-align:center;margin:auto;padding:5px;"><iframe src="//player.vimeo.com/video/'. $matches[1] .'" width="'. (empty($modSettings['OYTE_video_width']) ? '420' : $modSettings['OYTE_video_width']) .'" height="'. (empty($modSettings['OYTE_video_height']) ? '315' : $modSettings['OYTE_video_height']) .'" frameborder="0" webkitallowfullscreen mozallowfullscreen allowfullscreen></iframe></div>';
 
 			else
 				sprintf($txt['OYTE_unvalid_link'], 'vimeo');
