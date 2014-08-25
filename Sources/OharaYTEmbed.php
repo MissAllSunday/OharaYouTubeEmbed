@@ -145,7 +145,7 @@ function OYTE_Main($data)
 	$result = '';
 
 	 // We all love Regex.
-	$pattern = '#^(?:https?://)?(?:www\.)?(?:youtu\.be/|youtube\.com(?:/embed/|/v/|/watch\?v=|/watch\?.+&v=))([\w-]{11})(?:.+)?$#x';
+	$pattern = '#(?:https?:\/\/)?(?:www\.)?(?:youtu\.be/|youtube\.com(?:/embed/|/v/|/watch\?v=|/watch\?.+&v=))([\w-]{11})(?:.+)?$#x';
 
 	// First attempt, pure regex.
 	if (preg_match($pattern, $data, $matches))
@@ -155,7 +155,7 @@ function OYTE_Main($data)
 	elseif (empty($result) && preg_match('%(?:youtube(?:-nocookie)?\.com/(?:[^/]+/.+/|(?:v|e(?:mbed)?)/|.*[?&]v=)|youtu\.be/)([^"&?/ ]{11})%i', $data, $match))
 		$result = isset($match[1]) ? $match[1] : false;
 
-	// No?, then one last chance, let PHPs native parse_url() function do the dirty work./
+	// No?, then one last chance, let PHPs native parse_url() function do the dirty work.
 	elseif (empty($result))
 	{
 		// This relies on the url having ? and =, this is only an emergency check.
@@ -228,6 +228,7 @@ function OYTE_Preparse($message)
 	// The extremely long regex...
 	$vimeo = '~(?<=[\s>\.(;\'"]|^)(?:https?:\/\/)?(?:www\.)?(?:player\.)?vimeo\.com\/(?:[a-z]*\/)*([0-9]{6,11})[?=&+%\w.-]*[/\w\-_\~%@\?;=#}\\\\]?~ix';
 	$youtube = '~(?<=[\s>\.(;\'"]|^)(?:https?:\/\/)?(?:[0-9A-Z-]+\.)?(?:youtu\.be/|youtube(?:-nocookie)?\.com\S*[^\w\s-])([\w-]{11})(?=[^\w-]|$)(?![?=&+%\w.-]*(?:[\'"][^<>]*>  | </a>  ))[?=&+%\w.-]*[/\w\-_\~%@\?;=#}\\\\]?~ix';
+
 
 	if (empty($message))
 		return false;

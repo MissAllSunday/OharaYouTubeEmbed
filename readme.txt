@@ -1,5 +1,5 @@
 [center][color=purple][size=5][b]Ohara YouTube Embed [/b][/size][/color]
-[b]Author:[/b] [url=http://missallsunday.com]Miss All Sunday[/url][/center]
+[b]Author:[/b] [url=http://missallsunday.com]Suki[/url][/center]
 
 [color=red][b][size=16pt]Attention:[/size][/b][/color]
 On install make sure to mark the "[b]Install in Other Themes[/b]" checkbox.
@@ -50,6 +50,15 @@ http://vimeo.com/album/[ID]
 
 
 [color=purple][b][size=12pt]Changelog[/size][/b][/color]
+
+[b]1.3 - August 23, 2014,[/b]
+- Added an enable/disable setting for auto-embedding.
+- Regex updates.
+- Usage of closures
+- The auto embed feature now directly replaces the url with an iframe.
+- Using the universal embed code for vimeo urls, fall back to the oembed API.
+- $txt['OYTE_unvalid_link'] now uses  sprintf().
+- Added an extra file edit to make sure both places gets edited.
 
 [b]1.2 - March 05, 2014,[/b]
 - Added auto-embed feature.
