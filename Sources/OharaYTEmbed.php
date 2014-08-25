@@ -5,7 +5,7 @@
  * @version 1.3
  * @author Jessica González <missallsunday@simplemachines.org>
  * @copyright Copyright (C) 2011, 2012, 2013, 2014 Jessica González
- * @license http://www.mozilla.org/MPL/MPL-1.1.html
+ * @license //www.mozilla.org/MPL/MPL-1.1.html
  */
 
 if (!defined('SMF'))
@@ -165,7 +165,7 @@ function OYTE_Main($data)
 
 	// Build the iframe.
 	if (!empty($result))
-		return '<iframe width="'. (empty($modSettings['OYTE_video_width']) ? '420' : $modSettings['OYTE_video_width']) .'" height="'. (empty($modSettings['OYTE_video_height']) ? '315' : $modSettings['OYTE_video_height']) .'" src="http://www.youtube.com/embed/'. $result .'" frameborder="0"></iframe>';
+		return '<iframe width="'. (empty($modSettings['OYTE_video_width']) ? '420' : $modSettings['OYTE_video_width']) .'" height="'. (empty($modSettings['OYTE_video_height']) ? '315' : $modSettings['OYTE_video_height']) .'" src="//www.youtube.com/embed/'. $result .'" frameborder="0"></iframe>';
 
 	// At this point, all tests had miserably failed.
 	else
@@ -201,7 +201,7 @@ function OYTE_Vimeo($data)
 		require_once($sourcedir .'/Subs-Package.php');
 
 		// Construct the URL
-		$oembed = 'http://vimeo.com/api/oembed.json?url=' . rawurlencode($data) . '&width='. (empty($modSettings['OYTE_video_width']) ? '420' : $modSettings['OYTE_video_width']) .'&height='. (empty($modSettings['OYTE_video_height']) ? '315' : $modSettings['OYTE_video_height']);
+		$oembed = '//vimeo.com/api/oembed.json?url=' . rawurlencode($data) . '&width='. (empty($modSettings['OYTE_video_width']) ? '420' : $modSettings['OYTE_video_width']) .'&height='. (empty($modSettings['OYTE_video_height']) ? '315' : $modSettings['OYTE_video_height']);
 
 		//Attempts to fetch data from a URL, regardless of PHP's allow_url_fopen setting
 		$jsonArray = json_decode(fetch_web_data($oembed), true);
@@ -240,7 +240,7 @@ function OYTE_Preparse($message)
 			global $modSettings, $txt;
 
 			if (!empty($matches) && !empty($matches[1]))
-				return '<div style="text-align:center;margin:auto;padding:5px;"><iframe width="'. (empty($modSettings['OYTE_video_width']) ? '420' : $modSettings['OYTE_video_width']) .'" height="'. (empty($modSettings['OYTE_video_height']) ? '315' : $modSettings['OYTE_video_height']) .'" src="http://www.youtube.com/embed/'. $matches[1] .'" frameborder="0"></iframe></div>';
+				return '<div style="text-align:center;margin:auto;padding:5px;"><iframe width="'. (empty($modSettings['OYTE_video_width']) ? '420' : $modSettings['OYTE_video_width']) .'" height="'. (empty($modSettings['OYTE_video_height']) ? '315' : $modSettings['OYTE_video_height']) .'" src="//www.youtube.com/embed/'. $matches[1] .'" frameborder="0"></iframe></div>';
 
 			else
 				sprintf($txt['OYTE_unvalid_link'], 'youtube');
@@ -272,7 +272,7 @@ function OYTE_care(&$dummy)
 	global $context;
 
 	if (isset($context['current_action']) && $context['current_action'] == 'credits')
-		$context['copyrights']['mods'][] = '<a href="http://missallsunday.com" target="_blank" title="Free SMF mods">Ohara YouTube Embed mod &copy Suki</a>';
+		$context['copyrights']['mods'][] = '<a href="//missallsunday.com" target="_blank" title="Free SMF mods">Ohara YouTube Embed mod &copy Suki</a>';
 }
 
 	// Slowly repeating
