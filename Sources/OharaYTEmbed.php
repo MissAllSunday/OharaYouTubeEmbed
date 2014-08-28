@@ -246,7 +246,7 @@ function OYTE_Preparse($message)
 				return '<div style="margin:auto; text-align:center;"><iframe width="'. $width .'" height="'. $height .'" src="//www.youtube.com/embed/'. $matches[1] .'" frameborder="0"></iframe></div>';
 
 			else
-				sprintf($txt['OYTE_unvalid_link'], 'youtube');
+				return sprintf($txt['OYTE_unvalid_link'], 'youtube');
 		},
 		$message
 	);
@@ -261,7 +261,7 @@ function OYTE_Preparse($message)
 				return '<div style="margin:auto; text-align:center;"><iframe src="//player.vimeo.com/video/'. $matches[1] .'" width="'. (empty($modSettings['OYTE_video_width']) ? '420' : $modSettings['OYTE_video_width']) .'" height="'. (empty($modSettings['OYTE_video_height']) ? '315' : $modSettings['OYTE_video_height']) .'" frameborder="0" webkitallowfullscreen mozallowfullscreen allowfullscreen></iframe></div>';
 
 			else
-				sprintf($txt['OYTE_unvalid_link'], 'vimeo');
+				return sprintf($txt['OYTE_unvalid_link'], 'vimeo');
 		},
 		$message
 	);
