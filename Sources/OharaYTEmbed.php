@@ -22,7 +22,7 @@ function OYTE_bbc_add_code(&$codes)
 		array(
 			'tag' => 'youtube',
 			'type' => 'unparsed_content',
-			'content' => '<div style="position: relative; padding-bottom: 56.25%; padding-top: 30px; height: 0; overflow: hidden;">
+			'content' => '<div style="margin:auto; text-align:center;">
 				$1
 			</div>',
 			'validate' => function (&$tag, &$data, $disabled)
@@ -44,7 +44,7 @@ function OYTE_bbc_add_code(&$codes)
 		array(
 			'tag' => 'yt',
 			'type' => 'unparsed_content',
-			'content' => '<div style="position: relative; padding-bottom: 56.25%; padding-top: 30px; height: 0; overflow: hidden;">
+			'content' => '<div style="margin:auto; text-align:center;">
 				$1
 			</div>',
 			'validate' => function (&$tag, &$data, $disabled)
@@ -66,7 +66,7 @@ function OYTE_bbc_add_code(&$codes)
 		array(
 			'tag' => 'vimeo',
 			'type' => 'unparsed_content',
-			'content' => '<div style="position: relative; padding-bottom: 56.25%; padding-top: 30px; height: 0; overflow: hidden;">
+			'content' => '<div style="margin:auto; text-align:center;">
 				$1
 			</div>',
 			'validate' => function (&$tag, &$data, $disabled)
@@ -165,7 +165,7 @@ function OYTE_Main($data)
 
 	// Build the iframe.
 	if (!empty($result))
-		return '<iframe width="'. (empty($modSettings['OYTE_video_width']) ? '420' : $modSettings['OYTE_video_width']) .'" height="'. (empty($modSettings['OYTE_video_height']) ? '315' : $modSettings['OYTE_video_height']) .'" src="//www.youtube.com/embed/'. $result .'" frameborder="0" style="position: absolute; top: 0; left: 0; width: 100%; height: 100%;"style="position: absolute; top: 0; left: 0; ma-width: 100%; ma.height: 100%;"style="position: absolute; top: 0; left: 0; width: 100%; height: 100%;"></iframe>';
+		return '<iframe width="'. (empty($modSettings['OYTE_video_width']) ? '420' : $modSettings['OYTE_video_width']) .'" height="'. (empty($modSettings['OYTE_video_height']) ? '315' : $modSettings['OYTE_video_height']) .'" src="//www.youtube.com/embed/'. $result .'" frameborder="0"></iframe>';
 
 	// At this point, all tests had miserably failed.
 	else
@@ -191,7 +191,7 @@ function OYTE_Vimeo($data)
 	if (!empty($videoID) && ctype_digit($videoID))
 	{
 		// Build the iframe.
-		return '<iframe src="//player.vimeo.com/video/'. $videoID .'" width="'. (empty($modSettings['OYTE_video_width']) ? '420' : $modSettings['OYTE_video_width']) .'" height="'. (empty($modSettings['OYTE_video_height']) ? '315' : $modSettings['OYTE_video_height']) .'" frameborder="0" webkitallowfullscreen mozallowfullscreen allowfullscreen style="position: absolute; top: 0; left: 0; width: 100%; height: 100%;"style="position: absolute; top: 0; left: 0; width: 100%; height: 100%;"></iframe>';
+		return '<iframe src="//player.vimeo.com/video/'. $videoID .'" width="'. (empty($modSettings['OYTE_video_width']) ? '420' : $modSettings['OYTE_video_width']) .'" height="'. (empty($modSettings['OYTE_video_height']) ? '315' : $modSettings['OYTE_video_height']) .'" frameborder="0" webkitallowfullscreen mozallowfullscreen allowfullscreen></iframe>';
 	}
 
 	// Nope? then fall back to vimeo's API.
@@ -239,8 +239,11 @@ function OYTE_Preparse($message)
 		function ($matches) {
 			global $modSettings, $txt;
 
+			$width = (empty($modSettings['OYTE_video_width']) ? '420' : $modSettings['OYTE_video_width']);
+			$height = (empty($modSettings['OYTE_video_height']) ? '315' : $modSettings['OYTE_video_height']);
+
 			if (!empty($matches) && !empty($matches[1]))
-				return '<div style="position: relative; padding-bottom: 56.25%; padding-top: 30px; height: 0; overflow: hidden;"><iframe width="'. (empty($modSettings['OYTE_video_width']) ? '420' : $modSettings['OYTE_video_width']) .'" height="'. (empty($modSettings['OYTE_video_height']) ? '315' : $modSettings['OYTE_video_height']) .'" src="//www.youtube.com/embed/'. $matches[1] .'" frameborder="0"style="position: absolute; top: 0; left: 0; width: 100%; height: 100%;"style="position: absolute; top: 0; left: 0; width: 100%; height: 100%;"></iframe></div>';
+				return '<div style="margin:auto; text-align:center;"><iframe width="'. $width .'" height="'. $height .'" src="//www.youtube.com/embed/'. $matches[1] .'" frameborder="0"></iframe></div>';
 
 			else
 				sprintf($txt['OYTE_unvalid_link'], 'youtube');
@@ -255,7 +258,7 @@ function OYTE_Preparse($message)
 			global $modSettings, $txt;
 
 			if (!empty($matches) && !empty($matches[1]))
-				return '<div style="position: relative; padding-bottom: 56.25%; padding-top: 30px; height: 0; overflow: hidden;"><iframe src="//player.vimeo.com/video/'. $matches[1] .'" width="'. (empty($modSettings['OYTE_video_width']) ? '420' : $modSettings['OYTE_video_width']) .'" height="'. (empty($modSettings['OYTE_video_height']) ? '315' : $modSettings['OYTE_video_height']) .'" frameborder="0" webkitallowfullscreen mozallowfullscreen allowfullscreen style="position: absolute; top: 0; left: 0; width: 100%; height: 100%;"style="position: absolute; top: 0; left: 0; width: 100%; height: 100%;"></iframe></div>';
+				return '<div style="margin:auto; text-align:center;"><iframe src="//player.vimeo.com/video/'. $matches[1] .'" width="'. (empty($modSettings['OYTE_video_width']) ? '420' : $modSettings['OYTE_video_width']) .'" height="'. (empty($modSettings['OYTE_video_height']) ? '315' : $modSettings['OYTE_video_height']) .'" frameborder="0" webkitallowfullscreen mozallowfullscreen allowfullscreen></iframe></div>';
 
 			else
 				sprintf($txt['OYTE_unvalid_link'], 'vimeo');
