@@ -50,12 +50,24 @@ vimeo.com/groups/[Group name]/videos/[ID]
 
 [color=purple][b][size=12pt]Changelog[/size][/b][/color]
 
-[b]1.3 - July, 2014,[/b]
+[b]2.0 - August, 2014,[/b]
 - Drop compatibility with SMF 2.0.x
 - Add compatibility with SMF 2.1
 - Add a setting to disable auto-embedding.
-- Add compatibility with SSL
+- Schema-less urls
 - One less file edit.
+- Add responsive iframes.
+
+[b]1.3 - August 23, 2014,[/b]
+- Added an enable/disable setting for auto-embedding.
+- Regex updates.
+- Usage of closures
+- The auto embed feature now directly replaces the url with an iframe.
+- Using the universal embed code for vimeo urls, fall back to the oembed API.
+- $txt['OYTE_unvalid_link'] now uses  sprintf().
+- Added an extra file edit to make sure both places gets edited.
+- Schema-less urls.
+- Responsive iframes, only works if you're using a fully responsive theme.
 
 [b]1.2 - March 05, 2014,[/b]
 - Added auto-embed feature.
