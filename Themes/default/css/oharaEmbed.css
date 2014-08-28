@@ -1,0 +1,24 @@
+@media screen and (max-width: 600px) and (min-width: 700px) {
+	.oharaEmbed {
+		position: relative;
+		padding-bottom: 56.25%;
+		height: 0;
+		overflow: hidden;
+		margin-bottom: 1em;
+	}
+	.oharaEmbed iframe,
+	.oharaEmbed object,
+	.oharaEmbed embed {
+		position: absolute;
+		top: 0;
+		left: 0;
+		width: 100%;
+		height: 100%;
+	}
+}
+
+/* Default values for desktops */
+.oharaEmbed {
+	margin:auto;
+	text-align:center;
+}

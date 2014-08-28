@@ -22,6 +22,7 @@ $hooks = array(
 	'integrate_general_mod_settings' => '$sourcedir/OharaYTEmbed.php|OharaYTEmbed::settings#',
 	'integrate_credits' => '$sourcedir/OharaYTEmbed.php|OharaYTEmbed::who#',
 	'integrate_pre_parsebbc' => '$sourcedir/OharaYTEmbed.php|OharaYTEmbed::autoEmbed#',
+	'integrate_load_theme' => '$sourcedir/OharaYTEmbed.php|OharaYTEmbed::css#',
 );
 
 foreach ($hooks as $hook => $function)

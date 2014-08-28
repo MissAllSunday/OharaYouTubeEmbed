@@ -17,7 +17,6 @@ require_once($sourcedir . '/Ohara.php');
 class OharaYTEmbed extends Suki\Ohara
 {
 	public $name = __CLASS__;
-	public $useSSL;
 	public $width;
 	public $height;
 
@@ -252,6 +251,12 @@ class OharaYTEmbed extends Suki\Ohara
 		);
 
 		return $message;
+	}
+
+	public function css()
+	{
+		// The much needed css file.
+		loadCSSFile('oharaEmbed.css', array('force_current' => false, 'validate' => true));
 	}
 
 	// DUH! WINNING!.
