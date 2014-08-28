@@ -27,6 +27,20 @@ class OharaYTEmbed extends Suki\Ohara
 		$this->width = $this->enable('width') ? $this->setting('width') : '420';
 		$this->height = $this->enable('height') ? $this->setting('height') : '315';
 
+		// Quick fix for PHP lower than 5.4.
+		$that = $this;
+
+		$this->create = function($videoID, $type) use($that)
+		{
+			if (empty($videoID) || empty($type))
+				return '';
+
+			$src = $type == 'youtube' ? 'youtube.com/embed' : 'player.vimeo.com/video';
+
+			return '<div class="oharaEmbed"><iframe width="'. $that->width .'" height="'. $that->height .'" src="//'. $src .'/'. $videoID .'" frameborder="0"></iframe></div>';
+		}
+
+		// Get yourself noted.
 		$this->setRegistry();
 	}
 
@@ -54,7 +68,7 @@ class OharaYTEmbed extends Suki\Ohara
 			array(
 				'tag' => 'youtube',
 				'type' => 'unparsed_content',
-				'content' => '<div style="text-align:center;margin:auto;padding:5px;" class="youtube">$1</div>',
+				'content' => '$1',
 				'validate' => function (&$tag, &$data, $disabled) use ($that)
 				{
 					$data = empty($data) ? sprintf($that->text('unvalid_link'), 'youtube') : $that->youtube(trim(strtr($data, array('<br />' => ''))));
@@ -65,7 +79,7 @@ class OharaYTEmbed extends Suki\Ohara
 			array(
 				'tag' => 'yt',
 				'type' => 'unparsed_content',
-				'content' => '<div style="text-align:center;margin:auto;padding:5px;" class="youtube">$1</div>',
+				'content' => '$1',
 				'validate' => function (&$tag, &$data, $disabled) use ($that)
 				{
 					$data = empty($data) ? sprintf($that->text('unvalid_link'), 'youtube') : $that->youtube(trim(strtr($data, array('<br />' => ''))));
@@ -76,7 +90,7 @@ class OharaYTEmbed extends Suki\Ohara
 			array(
 				'tag' => 'vimeo',
 				'type' => 'unparsed_content',
-				'content' => '<div style="text-align:center;margin:auto;padding:5px;">$1</div>',
+				'content' => '$1',
 				'validate' => function (&$tag, &$data, $disabled) use ($that)
 				{
 					$data = empty($data) ? sprintf($that->text('unvalid_link'), 'vimeo') : $that->vimeo(trim(strtr($data, array('<br />' => ''))));
@@ -125,7 +139,7 @@ class OharaYTEmbed extends Suki\Ohara
 		$result = '';
 
 		// We all love Regex.
-		$pattern = '#^(?:https?://)?(?:www\.)?(?:youtu\.be/|youtube\.com(?:/embed/|/v/|/watch\?v=|/watch\?.+&v=))([\w-]{11})(?:.+)?$#x';
+		$pattern = '#(?:https?:\/\/)?(?:www\.)?(?:youtu\.be/|youtube\.com(?:/embed/|/v/|/watch\?v=|/watch\?.+&v=))([\w-]{11})(?:.+)?$#x';
 
 		// First attempt, pure regex.
 		if (preg_match($pattern, $data, $matches))
@@ -147,8 +161,11 @@ class OharaYTEmbed extends Suki\Ohara
 		if (empty($result))
 			return sprintf($this->text('unvalid_link'), 'youtube');
 
+		// To avoid all kinds of weirdness.
+		$call = $this->create;
+
 		// Got something, return an iframe.
-		return '<iframe width="'. ($this->width) .'" height="'. ($this->height) .'" src="'. ($this->useSSL) .'://www.youtube.com/embed/'. ($result).'" frameborder="0"></iframe>';
+		return $call($result, 'youtube');
 	}
 
 	public function vimeo($data)
@@ -158,20 +175,43 @@ class OharaYTEmbed extends Suki\Ohara
 		if (empty($data))
 			return sprintf($this->text('unvalid_link'), 'vimeo');
 
-		// Need a function in a far far away file...
-		require_once($sourcedir .'/Subs-Package.php');
+		// To avoid all kinds of weirdness.
+		$call = $this->create;
 
-		// Construct the URL
-		$oembed = ''. ($this->useSSL) .'://vimeo.com/api/oembed.json?url=' . rawurlencode($data) . '&width='. ($this->width) .'&height='. ($this->height);
+		// First try, pure regex.
+		$r = '/(?:https?:\/\/)?(?:www\.)?(?:player\.)?vimeo\.com\/(?:[a-z]*\/)*([0-9]{6,11})[?]?.*/';
 
-		// Attempts to fetch data from a URL, regardless of PHP's allow_url_fopen setting.
-		$jsonArray = json_decode(fetch_web_data($oembed), true);
+		// Get the video ID.
+		if (preg_match($r, $data, $matches))
+			$videoID = isset($matches[1]) ? $matches[1] : false;
 
-		if (!empty($jsonArray) && is_array($jsonArray) && !empty($jsonArray['html']))
-			return $jsonArray['html'];
+		if (!empty($videoID) && ctype_digit($videoID))
+		{
+			// Build the iframe.
+			return $call($videoID, 'vimeo');
+		}
 
+		// Nope? then fall back to vimeo's API.
 		else
-			return sprintf($this->text('unvalid_link'), 'vimeo');
+		{
+			// Need a function in a far far away file...
+			require_once($sourcedir .'/Subs-Package.php');
+
+			// Construct the URL
+			$oembed = '//vimeo.com/api/oembed.json?url=' . rawurlencode($data) . '&width='. (empty($modSettings['OYTE_video_width']) ? '420' : $modSettings['OYTE_video_width']) .'&height='. (empty($modSettings['OYTE_video_height']) ? '315' : $modSettings['OYTE_video_height']);
+
+			//Attempts to fetch data from a URL, regardless of PHP's allow_url_fopen setting
+			$jsonArray = json_decode(fetch_web_data($oembed), true);
+
+			if (!empty($jsonArray) && is_array($jsonArray) && !empty($jsonArray['html']))
+				return $jsonArray['html'];
+
+			else
+				return sprintf($txt['OYTE_unvalid_link'], 'vimeo');
+		}
+
+		// If we reach this place, it means everything else failed miserably...
+		return sprintf($txt['OYTE_unvalid_link'], 'vimeo');
 	}
 
 	public function autoEmbed(&$message, &$smileys, &$cache_id, &$parse_tags)
