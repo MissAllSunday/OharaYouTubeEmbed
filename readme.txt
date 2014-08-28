@@ -59,6 +59,8 @@ http://vimeo.com/album/[ID]
 - Using the universal embed code for vimeo urls, fall back to the oembed API.
 - $txt['OYTE_unvalid_link'] now uses  sprintf().
 - Added an extra file edit to make sure both places gets edited.
+- Schema-less urls.
+- Responsive iframes, only works if you're using a fully responsive theme.
 
 [b]1.2 - March 05, 2014,[/b]
 - Added auto-embed feature.
