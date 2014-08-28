@@ -223,15 +223,21 @@ class OharaYTEmbed extends Suki\Ohara
 		$vimeo = '~(?<=[\s>\.(;\'"]|^)(?:https?:\/\/)?(?:www\.)?(?:player\.)?vimeo\.com\/(?:[a-z]*\/)*([0-9]{6,11})[?=&+%\w.-]*[/\w\-_\~%@\?;=#}\\\\]?~ix';
 		$youtube = '~(?<=[\s>\.(;\'"]|^)(?:https?:\/\/)?(?:[0-9A-Z-]+\.)?(?:youtu\.be/|youtube(?:-nocookie)?\.com\S*[^\w\s-])([\w-]{11})(?=[^\w-]|$)(?![?=&+%\w.-]*(?:[\'"][^<>]*>  | </a>  ))[?=&+%\w.-]*[/\w\-_\~%@\?;=#}\\\\]?~ix';
 
-
 		if (empty($message))
 			return false;
+
+		// To avoid all kinds of weirdness.
+		$call = $this->create;
 
 		// Is this a YouTube video url?
 		$message = preg_replace_callback(
 			$youtube,
-			function ($matches) {
-				return '[youtube]'. $matches[0] .'[/youtube]';
+			function ($matches) use($call) {
+				if (!empty($matches) && !empty($matches[1]))
+					return $call($matches[1], 'youtube');
+
+				else
+					return sprintf($txt['OYTE_unvalid_link'], 'youtube');
 			},
 			$message
 		);
@@ -239,8 +245,8 @@ class OharaYTEmbed extends Suki\Ohara
 		// A Vimeo url perhaps?
 		$message = preg_replace_callback(
 			$vimeo,
-			function ($matches) {
-				return '[vimeo]'. $matches[0] .'[/vimeo]';
+			function ($matches) use($call) {
+				return $call($matches[1], 'vimeo');
 			},
 			$message
 		);
