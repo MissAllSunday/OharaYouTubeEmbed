@@ -197,7 +197,7 @@ class OharaYTEmbed extends Suki\Ohara
 			require_once($sourcedir .'/Subs-Package.php');
 
 			// Construct the URL
-			$oembed = '//vimeo.com/api/oembed.json?url=' . rawurlencode($data) . '&width='. (empty($modSettings['OYTE_video_width']) ? '420' : $modSettings['OYTE_video_width']) .'&height='. (empty($modSettings['OYTE_video_height']) ? '315' : $modSettings['OYTE_video_height']);
+			$oembed = '//vimeo.com/api/oembed.json?url=' . rawurlencode($data) . '&width='. ($this->width) .'&height='. ($this->height);
 
 			//Attempts to fetch data from a URL, regardless of PHP's allow_url_fopen setting
 			$jsonArray = json_decode(fetch_web_data($oembed), true);
