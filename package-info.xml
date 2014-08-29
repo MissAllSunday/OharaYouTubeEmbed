@@ -25,10 +25,10 @@
 		<remove-file name="$sourcedir/OharaYTEmbed.php" />
 		<remove-file name="$languagedir/OharaYTEmbed.english.php" />
 		<remove-file name="$languagedir/OharaYTEmbed.english-utf8.php" />
-		<remove-file name="$languagefir/OharaYTEmbed.spanish_es" />
-		<remove-file name="$languagefir/OharaYTEmbed.spanish_es_utf8" />
-		<remove-file name="$languagefir/OharaYTEmbed.spanish_latin_utf8" />
-		<remove-file name="$languagefir/OharaYTEmbed.spanish_latin" />
+		<remove-file name="$languagefile/OharaYTEmbed.spanish_es" />
+		<remove-file name="$languagefile/OharaYTEmbed.spanish_es_utf8" />
+		<remove-file name="$languagefile/OharaYTEmbed.spanish_latin_utf8" />
+		<remove-file name="$languagefile/OharaYTEmbed.spanish_latin" />
 		<remove-file name="$imagesdir/bbc/youtube.png" />
 		<remove-file name="$imagesdir/bbc/vimeo.png" />
 	</uninstall>
