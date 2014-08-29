@@ -38,6 +38,9 @@ class OharaYTEmbed extends Suki\Ohara
 			return '<div class="oharaEmbed"><iframe width="'. $that->width .'" height="'. $that->height .'" src="//'. $src .'/'. $videoID .'" frameborder="0"></iframe></div>';
 		}
 
+		// No longer needed.
+		unset($that);
+
 		// Get yourself noted.
 		$this->setRegistry();
 	}
@@ -223,7 +226,7 @@ class OharaYTEmbed extends Suki\Ohara
 		$youtube = '~(?<=[\s>\.(;\'"]|^)(?:https?:\/\/)?(?:[0-9A-Z-]+\.)?(?:youtu\.be/|youtube(?:-nocookie)?\.com\S*[^\w\s-])([\w-]{11})(?=[^\w-]|$)(?![?=&+%\w.-]*(?:[\'"][^<>]*>  | </a>  ))[?=&+%\w.-]*[/\w\-_\~%@\?;=#}\\\\]?~ix';
 
 		if (empty($message))
-			return false;
+			return $message;
 
 		// To avoid all kinds of weirdness.
 		$call = $this->create;
