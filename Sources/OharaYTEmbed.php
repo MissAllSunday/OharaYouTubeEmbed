@@ -36,7 +36,7 @@ class OharaYTEmbed extends Suki\Ohara
 			$src = $type == 'youtube' ? 'youtube.com/embed' : 'player.vimeo.com/video';
 
 			return '<div class="oharaEmbed"><iframe width="'. $that->width .'" height="'. $that->height .'" src="//'. $src .'/'. $videoID .'" frameborder="0"></iframe></div>';
-		}
+		};
 
 		// No longer needed.
 		unset($that);
