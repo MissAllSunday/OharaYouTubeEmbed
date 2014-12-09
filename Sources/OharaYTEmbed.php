@@ -11,8 +11,8 @@
 if (!defined('SMF'))
 	die('Hacking attempt...');
 
-// There is no autoload feature on SMF so...
-require_once($sourcedir . '/Ohara.php');
+// Use composer!
+require_once ($boarddir .'/vendor/autoload.php');
 
 class OharaYTEmbed extends Suki\Ohara
 {
