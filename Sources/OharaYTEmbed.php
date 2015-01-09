@@ -3,8 +3,8 @@
 /*
  * @package Ohara Youtube Embed mod
  * @version 2.0
- * @author Jessica Gonz·lez <missallsunday@simplemachines.org>
- * @copyright Copyright (C) 2014 Jessica Gonz·lez
+ * @author Jessica Gonz–±lez <missallsunday@simplemachines.org>
+ * @copyright Copyright (C) 2014 Jessica Gonz–±lez
  * @license http://www.mozilla.org/MPL/MPL-1.1.html
  */
 
@@ -35,7 +35,8 @@ class OharaYTEmbed extends Suki\Ohara
 
 			$src = $type == 'youtube' ? 'youtube.com/embed' : 'player.vimeo.com/video';
 
-			return '<div class="oharaEmbed"><iframe width="'. $that->width .'" height="'. $that->height .'" src="//'. $src .'/'. $videoID .'" frameborder="0"></iframe></div>';
+			//return '<div class="oharaEmbed"><iframe width="'. $that->width .'" height="'. $that->height .'" src="//'. $src .'/'. $videoID .'" frameborder="0"></iframe></div>';
+			return '<div class="oharaEmbed"><div class="youtube" id="'. $videoID .'" src="//'. $src .'/'. $videoID .'"></div></div>';
 		};
 
 		// No longer needed.
@@ -260,6 +261,39 @@ class OharaYTEmbed extends Suki\Ohara
 	{
 		// The much needed css file.
 		loadCSSFile('oharaEmbed.css', array('force_current' => false, 'validate' => true));
+		//loadJavascriptFile('youtube/youtube.js', array('force_current' => false, 'default_theme' => true, 'defer' => true));
+
+        addInlineJavaScript('
+
+        (function() {
+            var i, c, y, v, s, n;
+            v = document.getElementsByClassName("youtube");
+
+            for (n = 0; n < v.length; n++) {
+                y = v[n];
+                i = document.createElement("img");
+                i.setAttribute("src", "http://i.ytimg.com/vi/" + y.id + "/hqdefault.jpg");
+                i.setAttribute("class", "thumb");
+                c = document.createElement("div");
+                c.setAttribute("class", "play");
+                y.appendChild(i);
+                y.appendChild(c);
+
+                y.onclick = function() {
+                    var frame = document.createElement("iframe");
+                    frame.setAttribute("src", "https://www.youtube.com/embed/" + this.id + "?autoplay=1&autohide=1&border=0&wmode=opaque&enablejsapi=1");
+                    frame.setAttribute("type", "text/html");
+                    frame.setAttribute("frameborder", "0");
+                    frame.setAttribute("width", "'.$this->width.'");
+                    frame.setAttribute("height", "'.$this->height.'");
+                    frame.style.width = this.style.width;
+                    frame.style.height = this.style.height;
+                    this.parentNode.replaceChild(frame, this)
+                }
+            }
+        })();
+
+        ', true);
 	}
 
 	// DUH! WINNING!.
