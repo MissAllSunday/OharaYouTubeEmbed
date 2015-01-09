@@ -26,7 +26,6 @@
 *.log
 *.sql
 *.sqlite
-*.session
 
 # OS generated files #
 ######################
@@ -38,3 +37,4 @@ Thumbs.db
 /nbproject/private/
 /nbproject/
 /.project
+/.idea/
