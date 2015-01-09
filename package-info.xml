@@ -8,27 +8,29 @@
 	<version>2.0</version>
 	<type>modification</type>
 
-	<install for="2.1 Alpha 1, 2.1 - 2.1.99">
+	<install for="2.0 - 2.99.99">
 		<readme parsebbc="true">readme.txt</readme>
-		<code>addHooks.php</code>
+		<code>hooks.php</code>
 		<modification>OharaYTEmbed.xml</modification>
-		<require-dir name="Themes" destination="$boarddir">Theme and Language files</require-dir>
 		<require-dir name="Sources" destination="$boarddir">Source files</require-dir>
-		<require-file name="youtube.png" destination="$imagesdir/bbc" />
-		<require-file name="vimeo.png" destination="$imagesdir/bbc" />
+		<require-dir name="Themes" destination="$boarddir">Theme and Language files</require-dir>
 		<redirect url="index.php?action=admin;area=modsettings;sa=general" timeout="1000"></redirect>
 	</install>
 
-	<uninstall for="2.1 Alpha 1, 2.1 - 2.1.99">
-		<code>removeHooks.php</code>
+	<uninstall for="2.0 - 2.99.99">
+		<code>hooks.php</code>
 		<modification reverse="true">OharaYTEmbed.xml</modification>
 		<remove-file name="$sourcedir/OharaYTEmbed.php" />
+		
+		<remove-file name="$themedir/css/oharaEmbed.css" />
+		
 		<remove-file name="$languagedir/OharaYTEmbed.english.php" />
 		<remove-file name="$languagedir/OharaYTEmbed.english-utf8.php" />
-		<remove-file name="$languagefile/OharaYTEmbed.spanish_es" />
-		<remove-file name="$languagefile/OharaYTEmbed.spanish_es_utf8" />
-		<remove-file name="$languagefile/OharaYTEmbed.spanish_latin_utf8" />
-		<remove-file name="$languagefile/OharaYTEmbed.spanish_latin" />
+		<remove-file name="$languagedir/OharaYTEmbed.spanish_es.php" />
+		<remove-file name="$languagedir/OharaYTEmbed.spanish_es_utf8.php" />
+		<remove-file name="$languagedir/OharaYTEmbed.spanish_latin_utf8.php" />
+		<remove-file name="$languagedir/OharaYTEmbed.spanish_latin.php" />
+		
 		<remove-file name="$imagesdir/bbc/youtube.png" />
 		<remove-file name="$imagesdir/bbc/vimeo.png" />
 	</uninstall>
