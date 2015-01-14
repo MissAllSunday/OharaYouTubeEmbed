@@ -12,37 +12,45 @@ if (!defined('SMF'))
 	die('Hacking attempt...');
 
 // Use composer!
-require_once ($boarddir .'/vendor/autoload.php');
+require_once ($boarddir .'/vendor/suki/ohara/src/Suki/Ohara.php');
 
 class OharaYTEmbed extends Suki\Ohara
 {
 	public $name = __CLASS__;
 	public $width;
 	public $height;
+	public static $sites = array();
 
 	public function __construct()
 	{
+		// Get yourself noted.
+		$this->setRegistry();
+
+
 		$this->width = $this->enable('width') ? $this->setting('width') : '420';
 		$this->height = $this->enable('height') ? $this->setting('height') : '315';
 
-		// Quick fix for PHP lower than 5.4.
-		$that = $this;
+		$this->sitesFolder = $this->sourceDir . '/'. $this->name;
 
-		$this->create = function($videoID, $type) use($that)
-		{
-			if (empty($videoID) || empty($type))
-				return '';
+		// Get a list of all available sites.
+		$this->getSites();
+	}
 
-			$src = $type == 'youtube' ? 'youtube.com/embed' : 'player.vimeo.com/video';
+	public function getSites()
+	{
+		$directories = glob($this->sitesFolder . '/*' , GLOB_ONLYDIR);
 
-			return '<div class="oharaEmbed"><iframe width="'. $that->width .'" height="'. $that->height .'" src="//'. $src .'/'. $videoID .'" frameborder="0"></iframe></div>';
-		};
+		if (empty(self::$sites))
+			foreach ($directories as $dir)
+			{
+				$name = basename($dir);
 
-		// No longer needed.
-		unset($that);
+				// Does it exists?
+				if (file_exists($this->sitesFolder .'/'. $name .'/'. $name .'.php'))
+					self::$sites[] = include_once $this->sitesFolder .'/'. $name .'/'. $name .'.php';
+			}
 
-		// Get yourself noted.
-		$this->setRegistry();
+		return self::$sites;
 	}
 
 	//Don't bother on create a whole new page for this, let's use integrate_general_mod_settings ^o^.
@@ -53,6 +61,11 @@ class OharaYTEmbed extends Suki\Ohara
 		$config_vars[] = array('check', $this->name .'_autoEmbed', 'subtext' => $this->text('autoEmbed_sub'));
 		$config_vars[] = array('int', $this->name .'_width', 'subtext' => $this->text('width_sub'), 'size' => 3);
 		$config_vars[] = array('int', $this->name .'_height', 'subtext' => $this->text('height_sub'), 'size' => 3);
+
+		// Gotta include a setting for the sites.
+		foreach (self::$sites as $site)
+			$config_vars[] = array('check', $this->name .'_'. $site['name'] .'_enable',);
+
 		$config_vars[] = '';
 	}
 
@@ -62,44 +75,43 @@ class OharaYTEmbed extends Suki\Ohara
 		if (!$this->enable('enable'))
 			return;
 
-		// Quick fix for PHP lower than 5.4.
-		$that = $this;
+		foreach (self::$sites as $site)
+			if (!empty($site) && !empty($site['fucntion']))
+			{
+				$codes[] = array(
+					'tag' => $site['tag'],
+					'type' => 'unparsed_content',
+					'content' => '$1',
+					'validate' => function (&$tag, &$data, $disabled) use ($that, $site)
+					{
+						$data = empty($data) ? sprintf($that->text('unvalid_link'), $site['name']) : $site['fucntion'](trim(strtr($data, array('<br />' => ''))));
 
-		array_push($codes,
-			array(
-				'tag' => 'youtube',
-				'type' => 'unparsed_content',
-				'content' => '$1',
-				'validate' => function (&$tag, &$data, $disabled) use ($that)
-				{
-					$data = empty($data) ? sprintf($that->text('unvalid_link'), 'youtube') : $that->youtube(trim(strtr($data, array('<br />' => ''))));
-				},
-				'disabled_content' => '$1',
-				'block_level' => true,
-			),
-			array(
-				'tag' => 'yt',
-				'type' => 'unparsed_content',
-				'content' => '$1',
-				'validate' => function (&$tag, &$data, $disabled) use ($that)
-				{
-					$data = empty($data) ? sprintf($that->text('unvalid_link'), 'youtube') : $that->youtube(trim(strtr($data, array('<br />' => ''))));
-				},
-				'disabled_content' => '$1',
-				'block_level' => true,
-			),
-			array(
-				'tag' => 'vimeo',
-				'type' => 'unparsed_content',
-				'content' => '$1',
-				'validate' => function (&$tag, &$data, $disabled) use ($that)
-				{
-					$data = empty($data) ? sprintf($that->text('unvalid_link'), 'vimeo') : $that->vimeo(trim(strtr($data, array('<br />' => ''))));
-				},
-				'disabled_content' => '$1',
-				'block_level' => true,
-			)
-		);
+						// Can't do this check on the plugins function so...
+						if ($data == 'invalid')
+							$data = sprintf($that->text('invalid_link'), $site['name']);
+					},
+					'disabled_content' => '$1',
+					'block_level' => true,
+				);
+
+				// Any extra tags?
+				if (!empty($site['extra_tag']))
+					$codes[] = array(
+						'tag' => $site['extra_tag'],
+						'type' => 'unparsed_content',
+						'content' => '$1',
+						'validate' => function (&$tag, &$data, $disabled) use ($that, $site)
+						{
+							$data = empty($data) ? sprintf($that->text('unvalid_link'), $site['name']) : $site['fucntion'](trim(strtr($data, array('<br />' => ''))));
+
+							// Can't do this check on the plugins function so...
+							if ($data == 'invalid')
+								$data = sprintf($that->text('invalid_link'), $site['name']);
+						},
+						'disabled_content' => '$1',
+						'block_level' => true,
+					);
+			}
 
 		// No longer needed.
 		unset($that);
@@ -127,46 +139,6 @@ class OharaYTEmbed extends Suki\Ohara
 			'after' => '[/vimeo]',
 			'description' => $this->text('vimeo_desc'),
 		);
-
-	}
-
-	//Take the url, take the video ID and return the embed code.
-	public function youtube($data)
-	{
-		if (empty($data))
-			return sprintf($this->text('unvalid_link'), 'youtube');
-
-		//Set a local var for laziness.
-		$result = '';
-
-		// We all love Regex.
-		$pattern = '#(?:https?:\/\/)?(?:www\.)?(?:youtu\.be/|youtube\.com(?:/embed/|/v/|/watch\?v=|/watch\?.+&v=))([\w-]{11})(?:.+)?$#x';
-
-		// First attempt, pure regex.
-		if (preg_match($pattern, $data, $matches))
-			$result = isset($matches[1]) ? $matches[1] : false;
-
-		// Give another regex a chance.
-		elseif (empty($result) && preg_match('%(?:youtube(?:-nocookie)?\.com/(?:[^/]+/.+/|(?:v|e(?:mbed)?)/|.*[?&]v=)|youtu\.be/)([^"&?/ ]{11})%i', $data, $match))
-			$result = isset($match[1]) ? $match[1] : false;
-
-		// No?, then one last chance, let PHPs native parse_url() function do the dirty work.
-		elseif (empty($result))
-		{
-			// This relies on the url having ? and =, this is only an emergency check.
-			parse_str(parse_url($data, PHP_URL_QUERY), $result);
-			$result = isset($result['v']) ? $result['v'] : false;
-		}
-
-		// At this point, all tests had miserably failed.
-		if (empty($result))
-			return sprintf($this->text('unvalid_link'), 'youtube');
-
-		// To avoid all kinds of weirdness.
-		$call = $this->create;
-
-		// Got something, return an iframe.
-		return $call($result, 'youtube');
 	}
 
 	public function vimeo($data)
