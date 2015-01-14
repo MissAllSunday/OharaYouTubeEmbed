@@ -17,23 +17,13 @@ class OHYouTube extends OharaYTEmbed
 
 		// Get the default settings.
 		$this->defaultSettings();
-
-		// The much needed text strings.
-		$this->setPluginText();
-	}
-
-	protected function setPluginText()
-	{
-		global $txt;
-
-		$txt['OharaYTEmbed_youtube_enable'] = 'Enable youtube site';
 	}
 
 	public function content($data)
 	{
-		// Just return "invalid", the main class should know what to do.
+		// Return a nice "invalid" message.
 		if (empty($data))
-			return 'invalid';
+			return str_replace('{site}', $this->siteSettings['name'], $that->text('invalid_link'));
 
 		// Does this particular site is enabled?
 		if (!$this->setting('_'. $this->siteSettings['name'] .'_enable'))
@@ -63,7 +53,7 @@ class OHYouTube extends OharaYTEmbed
 
 		// At this point, all tests had miserably failed.
 		if (empty($result))
-			return 'invalid';
+			return str_replace('{site}', $this->siteSettings['name'], $that->text('invalid_link'));
 
 		// Got something, return it!.
 		return '<div class="youtube" id="'. $result .'" style="width: '. $this->width .'px; height: '. $this->height .'px;"></div>';

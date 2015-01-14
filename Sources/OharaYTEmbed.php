@@ -74,8 +74,7 @@ class OharaYTEmbed extends Suki\Ohara
 
 		// Gotta include a setting for the sites. Make sure the txt string actually exists!
 		foreach (self::$sites as $site)
-			if (isset($txt[$this->name .'_'. $site['name'] .'_enable']))
-				$config_vars[] = array('check', $this->name .'_'. $site->settings['name'] .'_enable',);
+			$config_vars[] = array('check', $this->name .'_enable_'. $site->siteSettings['identifier'], 'label' => str_replace('{site}', $site->siteSettings['name'], $this->text('enable_generic')));
 
 		$config_vars[] = '';
 	}
@@ -95,11 +94,7 @@ class OharaYTEmbed extends Suki\Ohara
 					'content' => '$1',
 					'validate' => function (&$tag, &$data, $disabled) use ($that, $site)
 					{
-						$data = empty($data) ? sprintf($that->text('unvalid_link'), $site['name']) : $site['function'](trim(strtr($data, array('<br />' => ''))));
-
-						// Can't do this check on the plugins function so...
-						if ($data == 'invalid')
-							$data = sprintf($that->text('invalid_link'), $site['name']);
+						$data = empty($data) ? sprintf($that->text('unvalid_link'), $site->siteSettings['name']) : $site['function'](trim(strtr($data, array('<br />' => ''))));
 					},
 					'disabled_content' => '$1',
 					'block_level' => true,
@@ -113,11 +108,7 @@ class OharaYTEmbed extends Suki\Ohara
 						'content' => '$1',
 						'validate' => function (&$tag, &$data, $disabled) use ($that, $site)
 						{
-							$data = empty($data) ? sprintf($that->text('unvalid_link'), $site['name']) : $site['function'](trim(strtr($data, array('<br />' => ''))));
-
-							// Can't do this check on the plugins function so...
-							if ($data == 'invalid')
-								$data = sprintf($that->text('invalid_link'), $site['name']);
+							$data = empty($data) ? sprintf($that->text('unvalid_link'), $site->siteSettings['name']) : $site['function'](trim(strtr($data, array('<br />' => ''))));
 						},
 						'disabled_content' => '$1',
 						'block_level' => true,
