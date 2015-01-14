@@ -22,3 +22,4 @@ $txt['OharaYTEmbed_invalid_link'] = 'Not a valid {site} URL';
 $txt['OharaYTEmbed_title'] = 'Ohara Embed mod';
 $txt['OharaYTEmbed_disabled_generic'] = 'The site {site} is currently disabled';
 $txt['OharaYTEmbed_enable_generic'] = 'Enable {site}';
+$txt['OharaYTEmbed_desc_generic'] = 'Embed a {site} video';

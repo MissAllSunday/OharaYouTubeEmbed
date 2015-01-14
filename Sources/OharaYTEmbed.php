@@ -86,7 +86,7 @@ class OharaYTEmbed extends Suki\Ohara
 			return;
 
 		foreach (self::$sites as $site)
-			if (!empty($site) && !empty($site['function']))
+			if (!empty($site) && is_object($site))
 			{
 				$codes[] = array(
 					'tag' => $site['tag'],
@@ -94,7 +94,7 @@ class OharaYTEmbed extends Suki\Ohara
 					'content' => '$1',
 					'validate' => function (&$tag, &$data, $disabled) use ($that, $site)
 					{
-						$data = empty($data) ? sprintf($that->text('unvalid_link'), $site->siteSettings['name']) : $site['function'](trim(strtr($data, array('<br />' => ''))));
+						$data = empty($data) ? str_replace('{site}', $site->siteSettings['name'], $that->text('unvalid_link')) : $site->content(trim(strtr($data, array('<br />' => ''))));
 					},
 					'disabled_content' => '$1',
 					'block_level' => true,
@@ -108,7 +108,7 @@ class OharaYTEmbed extends Suki\Ohara
 						'content' => '$1',
 						'validate' => function (&$tag, &$data, $disabled) use ($that, $site)
 						{
-							$data = empty($data) ? sprintf($that->text('unvalid_link'), $site->siteSettings['name']) : $site['function'](trim(strtr($data, array('<br />' => ''))));
+							$data = empty($data) ? str_replace('{site}', $site->siteSettings['name'], $that->text('unvalid_link')) : $site->content(trim(strtr($data, array('<br />' => ''))));
 						},
 						'disabled_content' => '$1',
 						'block_level' => true,
@@ -120,27 +120,24 @@ class OharaYTEmbed extends Suki\Ohara
 	}
 
 	//The bbc button.
-	public function button(&$buttons)
+	public function button(&$dummy)
 	{
+		global $context;
+
 		// Mod is disabled.
 		if (!$this->enable('enable'))
 			return;
 
-		$buttons[count($buttons) - 1][] = array(
-			'image' => 'youtube',
-			'code' => 'youtube',
-			'before' => '[youtube]',
-			'after' => '[/youtube]',
-			'description' => $this->text('desc'),
-		);
+		$buttons = array();
 
-		$buttons[count($buttons) - 1][] =array(
-			'image' => 'vimeo',
-			'code' => 'vimeo',
-			'before' => '[vimeo]',
-			'after' => '[/vimeo]',
-			'description' => $this->text('vimeo_desc'),
-		);
+		foreach (self::$sites as $site)
+			if (!empty($site) && is_object($site))
+				$buttons[] = array(
+					'code' => $site->siteSettings['identifier'],
+					'description' => str_replace('{site}', $site->siteSettings['name'], $that->text('desc_generic')),
+				);
+
+		$context['bbc_tags'][] = $buttons;
 	}
 
 	public function vimeo($data)

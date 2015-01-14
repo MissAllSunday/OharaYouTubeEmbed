@@ -8,7 +8,7 @@ class OHYouTube extends OharaYTEmbed
 	public $siteSettings = array(
 		'identifier' => 'youtube',
 		'name' => 'You Tube',
-		'image' => 'youtube.png',
+		'code' => 'youtube'
 	);
 
 	public function __construct()
