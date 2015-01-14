@@ -20,3 +20,4 @@ $txt['OharaYTEmbed_height'] = 'Video\'s height:';
 $txt['OharaYTEmbed_height_sub'] = 'If empty it will take the default value: 315';
 $txt['OharaYTEmbed_invalid_link'] = 'Not a valid %s URL';
 $txt['OharaYTEmbed_title'] = 'Ohara Embed mod';
+$txt['OharaYTEmbed_disabled_generic'] = 'The site {site} is currently disabled';

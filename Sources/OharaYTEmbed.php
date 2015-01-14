@@ -26,13 +26,19 @@ class OharaYTEmbed extends Suki\Ohara
 		// Get yourself noted.
 		$this->setRegistry();
 
+		// Get the default settings.
+		$this->defaultSettings();
+
+		// Get a list of all available sites.
+		$this->getSites();
+	}
+
+	public function defaultSettings()
+	{
 		$this->width = $this->enable('width') ? $this->setting('width') : '420';
 		$this->height = $this->enable('height') ? $this->setting('height') : '315';
 
 		$this->sitesFolder = $this->sourceDir . '/'. $this->name;
-
-		// Get a list of all available sites.
-		$this->getSites();
 	}
 
 	public function getSites()
@@ -46,7 +52,10 @@ class OharaYTEmbed extends Suki\Ohara
 
 				// Does it exists?
 				if (file_exists($this->sitesFolder .'/'. $name .'/'. $name .'.php'))
-					self::$sites[] = include_once $this->sitesFolder .'/'. $name .'/'. $name .'.php';
+				{
+					include_once $this->sitesFolder .'/'. $name .'/'. $name .'.php';
+					self::$sites[$name] = new $name;
+				}
 			}
 
 		return self::$sites;
@@ -66,7 +75,7 @@ class OharaYTEmbed extends Suki\Ohara
 		// Gotta include a setting for the sites. Make sure the txt string actually exists!
 		foreach (self::$sites as $site)
 			if (isset($txt[$this->name .'_'. $site['name'] .'_enable']))
-				$config_vars[] = array('check', $this->name .'_'. $site['name'] .'_enable',);
+				$config_vars[] = array('check', $this->name .'_'. $site->settings['name'] .'_enable',);
 
 		$config_vars[] = '';
 	}

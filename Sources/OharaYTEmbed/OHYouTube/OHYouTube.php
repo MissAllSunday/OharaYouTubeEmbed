@@ -3,22 +3,41 @@
 if (!defined('SMF'))
 	die('No direct access...');
 
-global $txt;
+class OHYouTube extends OharaYTEmbed
+{
+	public $siteSettings = array(
+		'identifier' => 'youtube',
+		'name' => 'You Tube',
+		'image' => 'youtube.png',
+	);
 
-$txt['OharaYTEmbed_youtube_enable'] = 'Enable youtube site';
+	public function __construct()
+	{
+		$this->setRegistry();
 
-return array(
-	'name' => 'youtube',
-	'image' => 'youtube',
-	'tag' => 'youtbe',
-	'extra_tag' => 'yt',
-	'js_inline' => '',
-	'js_file' => 'youtube.js',
-	'function' => function ($data)
+		// Get the default settings.
+		$this->defaultSettings();
+
+		// The much needed text strings.
+		$this->setPluginText();
+	}
+
+	protected function setPluginText()
+	{
+		global $txt;
+
+		$txt['OharaYTEmbed_youtube_enable'] = 'Enable youtube site';
+	}
+
+	public function content($data)
 	{
 		// Just return "invalid", the main class should know what to do.
 		if (empty($data))
 			return 'invalid';
+
+		// Does this particular site is enabled?
+		if (!$this->setting('_'. $this->siteSettings['name'] .'_enable'))
+			return str_replace('{site}', $this->siteSettings['name'], $this->text('disabled_generic'));
 
 		//Set a local var for laziness.
 		$result = '';
@@ -47,7 +66,6 @@ return array(
 			return 'invalid';
 
 		// Got something, return it!.
-		return '<div class="youtube" id="'. $result .'" style="width: {width}px; height: {height}px;"></div>';
-	},
-
-);
+		return '<div class="youtube" id="'. $result .'" style="width: '. $this->width .'px; height: '. $this->height .'px;"></div>';
+	}
+}
