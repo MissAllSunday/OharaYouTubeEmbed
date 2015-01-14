@@ -26,7 +26,6 @@ class OharaYTEmbed extends Suki\Ohara
 		// Get yourself noted.
 		$this->setRegistry();
 
-
 		$this->width = $this->enable('width') ? $this->setting('width') : '420';
 		$this->height = $this->enable('height') ? $this->setting('height') : '315';
 
@@ -56,15 +55,18 @@ class OharaYTEmbed extends Suki\Ohara
 	//Don't bother on create a whole new page for this, let's use integrate_general_mod_settings ^o^.
 	public function settings(&$config_vars)
 	{
+		global $txt;
+
 		$config_vars[] = $this->text('title');
 		$config_vars[] = array('check', $this->name .'_enable', 'subtext' => $this->text('enable_sub'));
 		$config_vars[] = array('check', $this->name .'_autoEmbed', 'subtext' => $this->text('autoEmbed_sub'));
 		$config_vars[] = array('int', $this->name .'_width', 'subtext' => $this->text('width_sub'), 'size' => 3);
 		$config_vars[] = array('int', $this->name .'_height', 'subtext' => $this->text('height_sub'), 'size' => 3);
 
-		// Gotta include a setting for the sites.
+		// Gotta include a setting for the sites. Make sure the txt string actually exists!
 		foreach (self::$sites as $site)
-			$config_vars[] = array('check', $this->name .'_'. $site['name'] .'_enable',);
+			if (isset($txt[$this->name .'_'. $site['name'] .'_enable']))
+				$config_vars[] = array('check', $this->name .'_'. $site['name'] .'_enable',);
 
 		$config_vars[] = '';
 	}
@@ -76,7 +78,7 @@ class OharaYTEmbed extends Suki\Ohara
 			return;
 
 		foreach (self::$sites as $site)
-			if (!empty($site) && !empty($site['fucntion']))
+			if (!empty($site) && !empty($site['function']))
 			{
 				$codes[] = array(
 					'tag' => $site['tag'],
