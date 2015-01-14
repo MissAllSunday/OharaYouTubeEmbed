@@ -86,7 +86,7 @@ class OharaYTEmbed extends Suki\Ohara
 					'content' => '$1',
 					'validate' => function (&$tag, &$data, $disabled) use ($that, $site)
 					{
-						$data = empty($data) ? sprintf($that->text('unvalid_link'), $site['name']) : $site['fucntion'](trim(strtr($data, array('<br />' => ''))));
+						$data = empty($data) ? sprintf($that->text('unvalid_link'), $site['name']) : $site['function'](trim(strtr($data, array('<br />' => ''))));
 
 						// Can't do this check on the plugins function so...
 						if ($data == 'invalid')
@@ -104,7 +104,7 @@ class OharaYTEmbed extends Suki\Ohara
 						'content' => '$1',
 						'validate' => function (&$tag, &$data, $disabled) use ($that, $site)
 						{
-							$data = empty($data) ? sprintf($that->text('unvalid_link'), $site['name']) : $site['fucntion'](trim(strtr($data, array('<br />' => ''))));
+							$data = empty($data) ? sprintf($that->text('unvalid_link'), $site['name']) : $site['function'](trim(strtr($data, array('<br />' => ''))));
 
 							// Can't do this check on the plugins function so...
 							if ($data == 'invalid')
