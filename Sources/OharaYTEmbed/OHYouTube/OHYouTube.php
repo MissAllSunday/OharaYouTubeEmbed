@@ -27,7 +27,7 @@ class OHYouTube extends OharaYTEmbed
 			return str_replace('{site}', $this->siteSettings['name'], $that->text('invalid_link'));
 
 		// Does this particular site is enabled? No? then just return what was given to us...
-		if (!$this->setting('_'. $this->siteSettings['name'] .'_enable'))
+		if (!$this->setting('enable_'. $this->siteSettings['identifier']))
 			return $data;
 
 		//Set a local var for laziness.
