@@ -19,7 +19,8 @@
 
 /* Default values for desktops */
 .oharaEmbed {
-	margin:auto;
+	margin-left: auto ;
+	margin-right: auto ;
 	text-align:center;
 }
 

@@ -11,7 +11,8 @@ class OHYouTube extends OharaYTEmbed
 		'code' => 'youtube',
 		'extra_tag' => 'yt',
 		'js_inline' => '',
-		'js_file' => 'ohyoutube.js'
+		'js_file' => 'ohyoutube.js',
+		'regex' => '~(?<=[\s>\.(;\'"]|^)(?:https?:\/\/)?(?:[0-9A-Z-]+\.)?(?:youtu\.be/|youtube(?:-nocookie)?\.com\S*[^\w\s-])([\w-]{11})(?=[^\w-]|$)(?![?=&+%\w.-]*(?:[\'"][^<>]*>  | </a>  ))[?=&+%\w.-]*[/\w\-_\~%@\?;=#}\\\\]?~ix',
 	);
 
 	public function __construct()
@@ -59,6 +60,36 @@ class OHYouTube extends OharaYTEmbed
 			return str_replace('{site}', $this->siteSettings['name'], $that->text('invalid_link'));
 
 		// Got something, return it!.
-		return '<div class="youtube" id="'. $result .'" style="width: '. $this->width .'px; height: '. $this->height .'px;"></div>';
+		return $this->create($result);
+	}
+
+	public function autoEmbed(&$message)
+	{
+		// Need something to work with.
+		if (!empty($message))
+			return;
+
+		// Quick fix for PHP lower than 5.4.
+		$that = $this;
+
+		$message = preg_replace_callback(
+			$this->siteSettings['regex'],
+			function ($matches) use($that) {
+				if (!empty($matches) && !empty($matches[1]))
+					return $that->create($matches[1]);
+
+				else
+					return str_replace('{site}', $this->siteSettings['name'], $that->text('invalid_link'));
+			},
+			$message
+		);
+
+		// Get lost!
+		unset($that);
+	}
+
+	public function create($videoID)
+	{
+		return !empty($videoID) ? '<div class="oharaEmbed youtube" id="'. $videoID .'" style="width: '. $this->width .'px; height: '. $this->height .'px;"></div>' : '';
 	}
 }

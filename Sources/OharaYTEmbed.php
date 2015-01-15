@@ -89,7 +89,7 @@ class OharaYTEmbed extends Suki\Ohara
 		$that = $this;
 
 		foreach (self::$sites as $site)
-			if (!empty($site) && is_object($site))
+			if (!empty($site) is_object($site) && $this->setting('enable_'. $site->siteSettings['identifier']))
 			{
 				$codes[] = array(
 					'tag' => $site->siteSettings['identifier'],
@@ -134,7 +134,7 @@ class OharaYTEmbed extends Suki\Ohara
 		$buttons = array();
 
 		foreach (self::$sites as $site)
-			if (!empty($site)  && $this->setting('enable_'. $site->siteSettings['identifier']))
+			if (!empty($site) is_object($site) && $this->setting('enable_'. $site->siteSettings['identifier']))
 				$buttons[] = array(
 					'code' => $site->siteSettings['identifier'],
 					'description' => str_replace('{site}', $site->siteSettings['name'], $this->text('desc_generic')),
@@ -195,7 +195,14 @@ class OharaYTEmbed extends Suki\Ohara
 
 	public function autoEmbed(&$message, &$smileys, &$cache_id, &$parse_tags)
 	{
-		return $message;
+		// Mod is disabled or the user don't want to use autoEmbed.
+		if (!$this->enable('enable') || !$this->enable('autoEmbed'))
+			return;
+
+		// As always, the good old foreach saves the day!
+		foreach (self::$sites as $site)
+			if (!empty($site) is_object($site) && $this->setting('enable_'. $site->siteSettings['identifier']))
+				$site->autoEmbed($message);
 	}
 
 	public function css()
