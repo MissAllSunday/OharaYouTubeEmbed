@@ -10,6 +10,8 @@ class OHYouTube extends OharaYTEmbed
 		'name' => 'You Tube',
 		'code' => 'youtube',
 		'extra_tag' => 'yt',
+		'js_inline' => '',
+		'js_file' => 'ohyoutube.js'
 	);
 
 	public function __construct()

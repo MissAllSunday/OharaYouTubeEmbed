@@ -202,6 +202,18 @@ class OharaYTEmbed extends Suki\Ohara
 	{
 		// The much needed css file.
 		loadCSSFile('oharaEmbed.css', array('force_current' => false, 'validate' => true));
+
+		foreach (self::$sites as $site)
+			if (!empty($site) && is_object($site))
+			{
+				// Is there any inline or JS file to be loaded? Please be sure to add a new line at the beginning and end of your string and to follow proper indent style too!
+				if (!empty($site->siteSettings['js_inline']))
+					addInlineJavascript($site->siteSettings['js_inline'], true);
+
+				// The js file is expected to be located at the default theme's script folder and needs to include its own extension!
+				if (!empty($site->siteSettings['js_file']))
+					loadJavascriptFile($site->siteSettings['js_file'], array('local' => true, 'default_theme' => true, 'defer' => true));
+			}
 	}
 
 	// DUH! WINNING!.
