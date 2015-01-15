@@ -8,7 +8,8 @@ class OHYouTube extends OharaYTEmbed
 	public $siteSettings = array(
 		'identifier' => 'youtube',
 		'name' => 'You Tube',
-		'code' => 'youtube'
+		'code' => 'youtube',
+		'extra_tag' => 'yt',
 	);
 
 	public function __construct()
@@ -25,9 +26,9 @@ class OHYouTube extends OharaYTEmbed
 		if (empty($data))
 			return str_replace('{site}', $this->siteSettings['name'], $that->text('invalid_link'));
 
-		// Does this particular site is enabled?
+		// Does this particular site is enabled? No? then just return what was given to us...
 		if (!$this->setting('_'. $this->siteSettings['name'] .'_enable'))
-			return str_replace('{site}', $this->siteSettings['name'], $this->text('disabled_generic'));
+			return $data;
 
 		//Set a local var for laziness.
 		$result = '';

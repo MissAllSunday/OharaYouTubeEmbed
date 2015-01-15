@@ -85,11 +85,14 @@ class OharaYTEmbed extends Suki\Ohara
 		if (!$this->enable('enable'))
 			return;
 
+		// Quick fix for PHP below 5.4.
+		$that = $this;
+
 		foreach (self::$sites as $site)
 			if (!empty($site) && is_object($site))
 			{
 				$codes[] = array(
-					'tag' => $site['tag'],
+					'tag' => $site->siteSettings['identifier'],
 					'type' => 'unparsed_content',
 					'content' => '$1',
 					'validate' => function (&$tag, &$data, $disabled) use ($that, $site)
@@ -101,9 +104,9 @@ class OharaYTEmbed extends Suki\Ohara
 				);
 
 				// Any extra tags?
-				if (!empty($site['extra_tag']))
+				if (!empty($site->siteSettings['extra_tag']))
 					$codes[] = array(
-						'tag' => $site['extra_tag'],
+						'tag' => $site->siteSettings['extra_tag'],
 						'type' => 'unparsed_content',
 						'content' => '$1',
 						'validate' => function (&$tag, &$data, $disabled) use ($that, $site)
@@ -131,13 +134,17 @@ class OharaYTEmbed extends Suki\Ohara
 		$buttons = array();
 
 		foreach (self::$sites as $site)
-			if (!empty($site) && is_object($site))
+			if (!empty($site)  && $this->setting('enable_'. $site->siteSettings['identifier']))
 				$buttons[] = array(
 					'code' => $site->siteSettings['identifier'],
-					'description' => str_replace('{site}', $site->siteSettings['name'], $that->text('desc_generic')),
+					'description' => str_replace('{site}', $site->siteSettings['name'], $this->text('desc_generic')),
+					'before' => '[youtube]',
+					'after' => '[/youtube]',
+					'image' => 'youtube',
 				);
 
-		$context['bbc_tags'][] = $buttons;
+		if (!empty($buttons) && is_array($buttons))
+			$context['bbc_tags'][count($context['bbc_tags']) - 1] = array_merge($context['bbc_tags'][count($context['bbc_tags']) - 1], $buttons);
 	}
 
 	public function vimeo($data)
@@ -188,42 +195,6 @@ class OharaYTEmbed extends Suki\Ohara
 
 	public function autoEmbed(&$message, &$smileys, &$cache_id, &$parse_tags)
 	{
-		// Mod is disabled or the user don't want to use autoEmbed.
-		if (!$this->enable('enable') || !$this->enable('autoEmbed'))
-			return;
-
-		// The extremely long regex...
-		$vimeo = '~(?<=[\s>\.(;\'"]|^)(?:https?:\/\/)?(?:www\.)?(?:player\.)?vimeo\.com\/(?:[a-z]*\/)*([0-9]{6,11})[?=&+%\w.-]*[/\w\-_\~%@\?;=#}\\\\]?~ix';
-		$youtube = '~(?<=[\s>\.(;\'"]|^)(?:https?:\/\/)?(?:[0-9A-Z-]+\.)?(?:youtu\.be/|youtube(?:-nocookie)?\.com\S*[^\w\s-])([\w-]{11})(?=[^\w-]|$)(?![?=&+%\w.-]*(?:[\'"][^<>]*>  | </a>  ))[?=&+%\w.-]*[/\w\-_\~%@\?;=#}\\\\]?~ix';
-
-		if (empty($message))
-			return $message;
-
-		// To avoid all kinds of weirdness.
-		$call = $this->create;
-
-		// Is this a YouTube video url?
-		$message = preg_replace_callback(
-			$youtube,
-			function ($matches) use($call) {
-				if (!empty($matches) && !empty($matches[1]))
-					return $call($matches[1], 'youtube');
-
-				else
-					return sprintf($txt['OYTE_unvalid_link'], 'youtube');
-			},
-			$message
-		);
-
-		// A Vimeo url perhaps?
-		$message = preg_replace_callback(
-			$vimeo,
-			function ($matches) use($call) {
-				return $call($matches[1], 'vimeo');
-			},
-			$message
-		);
-
 		return $message;
 	}
 
