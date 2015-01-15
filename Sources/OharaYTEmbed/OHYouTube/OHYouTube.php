@@ -63,10 +63,10 @@ class OHYouTube extends OharaYTEmbed
 		return $this->create($result);
 	}
 
-	public function autoEmbed(&$message)
+	public function auto(&$message)
 	{
 		// Need something to work with.
-		if (!empty($message))
+		if (empty($message))
 			return;
 
 		// Quick fix for PHP lower than 5.4.
@@ -79,7 +79,7 @@ class OHYouTube extends OharaYTEmbed
 					return $that->create($matches[1]);
 
 				else
-					return str_replace('{site}', $this->siteSettings['name'], $that->text('invalid_link'));
+					return str_replace('{site}', $that->siteSettings['name'], $that->text('invalid_link'));
 			},
 			$message
 		);
