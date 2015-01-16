@@ -12,7 +12,7 @@ class OHYouTube extends OharaYTEmbed
 		'extra_tag' => 'yt',
 		'js_inline' => '',
 		'js_file' => 'ohyoutube.js',
-		'regex' => '~(?<=[\s>\.(;\'"]|^)(?:https?:\/\/)?(?:[0-9A-Z-]+\.)?(?:youtu\.be/|youtube(?:-nocookie)?\.com\S*[^\w\s-])([\w-]{11})(?=[^\w-]|$)(?![?=&+%\w.-]*(?:[\'"][^<>]*>  | </a>  ))[?=&+%\w.-]*[/\w\-_\~%@\?;=#}\\\\]?~ix',
+		'regex' => '~(?<=[\s>\.(;\'"]|^)(?:http|https):\/\/[\w\-_%@:|]?(?:www\.)?(?:youtu\.be/|youtube\.com(?:/embed/|/v/|/watch\?v=|/watch\?.+&v=))([\w-]{11})(?=[^\w-]|$)(?![?=&+%\w.-]*(?:[\'"][^<>]*>  | </a>  ))[?=&+%\w.-]*[/\w\-_\~%@\?;=#}\\\\]?~ix',
 	);
 
 	public function __construct()
@@ -57,7 +57,7 @@ class OHYouTube extends OharaYTEmbed
 
 		// At this point, all tests had miserably failed.
 		if (empty($result))
-			return str_replace('{site}', $this->siteSettings['name'], $that->text('invalid_link'));
+			return $data;
 
 		// Got something, return it!.
 		return $this->create($result);
