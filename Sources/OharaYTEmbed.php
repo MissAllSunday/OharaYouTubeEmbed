@@ -43,18 +43,17 @@ class OharaYTEmbed extends Suki\Ohara
 
 	public function getSites()
 	{
-		$directories = glob($this->sitesFolder . '/*' , GLOB_ONLYDIR);
+		$directories = array_diff(scandir($this->sitesFolder), array('..', '.'));
 
-		if (empty(self::$sites))
-			foreach ($directories as $dir)
+		if (empty(self::$sites) && !empty($directories) && is_array($directories))
+			foreach ($directories as $file)
 			{
-				$name = basename($dir);
-
 				// Does it exists?
-				if (file_exists($this->sitesFolder .'/'. $name .'/'. $name .'.php'))
+				if (file_exists($this->sitesFolder .'/'. $file))
 				{
-					include_once $this->sitesFolder .'/'. $name .'/'. $name .'.php';
-					self::$sites[$name] = new $name;
+					$filename = pathinfo($this->sitesFolder .'/'. $file, PATHINFO_FILENAME);
+					include_once $this->sitesFolder .'/'. $file;
+					self::$sites[$filename] = new $filename;
 				}
 			}
 
@@ -211,7 +210,7 @@ class OharaYTEmbed extends Suki\Ohara
 		loadCSSFile('oharaEmbed.css', array('force_current' => false, 'validate' => true));
 
 		foreach (self::$sites as $site)
-			if (!empty($site) && is_object($site))
+			if (!empty($site) && is_object($site) && $this->setting('enable_'. $site->siteSettings['identifier']))
 			{
 				// Is there any inline or JS file to be loaded? Please be sure to add a new line at the beginning and end of your string and to follow proper indent style too!
 				if (!empty($site->siteSettings['js_inline']))
