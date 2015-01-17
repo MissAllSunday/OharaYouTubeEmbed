@@ -146,52 +146,6 @@ class OharaYTEmbed extends Suki\Ohara
 			$context['bbc_tags'][count($context['bbc_tags']) - 1] = array_merge($context['bbc_tags'][count($context['bbc_tags']) - 1], $buttons);
 	}
 
-	public function vimeo($data)
-	{
-		global $sourcedir;
-
-		if (empty($data))
-			return sprintf($this->text('unvalid_link'), 'vimeo');
-
-		// To avoid all kinds of weirdness.
-		$call = $this->create;
-
-		// First try, pure regex.
-		$r = '/(?:https?:\/\/)?(?:www\.)?(?:player\.)?vimeo\.com\/(?:[a-z]*\/)*([0-9]{6,11})[?]?.*/';
-
-		// Get the video ID.
-		if (preg_match($r, $data, $matches))
-			$videoID = isset($matches[1]) ? $matches[1] : false;
-
-		if (!empty($videoID) && ctype_digit($videoID))
-		{
-			// Build the iframe.
-			return $call($videoID, 'vimeo');
-		}
-
-		// Nope? then fall back to vimeo's API.
-		else
-		{
-			// Need a function in a far far away file...
-			require_once($sourcedir .'/Subs-Package.php');
-
-			// Construct the URL
-			$oembed = '//vimeo.com/api/oembed.json?url=' . rawurlencode($data) . '&width='. ($this->width) .'&height='. ($this->height);
-
-			//Attempts to fetch data from a URL, regardless of PHP's allow_url_fopen setting
-			$jsonArray = json_decode(fetch_web_data($oembed), true);
-
-			if (!empty($jsonArray) && is_array($jsonArray) && !empty($jsonArray['html']))
-				return $jsonArray['html'];
-
-			else
-				return sprintf($txt['OYTE_unvalid_link'], 'vimeo');
-		}
-
-		// If we reach this place, it means everything else failed miserably...
-		return sprintf($txt['OYTE_unvalid_link'], 'vimeo');
-	}
-
 	public function autoEmbed(&$message, &$smileys, &$cache_id, &$parse_tags)
 	{
 		// Mod is disabled or the user don't want to use autoEmbed.
