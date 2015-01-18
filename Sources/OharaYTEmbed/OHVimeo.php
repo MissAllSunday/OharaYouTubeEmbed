@@ -3,7 +3,7 @@
 if (!defined('SMF'))
 	die('No direct access...');
 
-class OHYouTube extends OharaYTEmbed
+class OHVimeo extends OharaYTEmbed
 {
 	public $siteSettings = array(
 		'identifier' => 'vimeo',
@@ -11,7 +11,7 @@ class OHYouTube extends OharaYTEmbed
 		'code' => 'vimeo',
 		'js_inline' => '',
 		'js_file' => '',
-		'regex' => '',
+		'regex' => '~(?<=[\s>\.(;\'"]|^)(?:https?:\/\/)?(?:www\.)?(?:player\.)?vimeo\.com\/(?:[a-z]*\/)*([0-9]{6,11})[?=&+%\w.-]*[/\w\-_\~%@\?;=#}\\\\]?~ix',
 	);
 
 	public function __construct()
@@ -66,7 +66,7 @@ class OHYouTube extends OharaYTEmbed
 		}
 
 		// If we reach this place, it means everything else failed miserably...
-		return sprintf($txt['OYTE_unvalid_link'], 'vimeo');
+		return str_replace('{site}', $this->siteSettings['name'], $that->text('invalid_link'));
 	}
 
 	public function auto(&$message)
@@ -96,7 +96,6 @@ class OHYouTube extends OharaYTEmbed
 
 	public function create($videoID)
 	{
-		return !empty($videoID) ? '<div class="oharaEmbed"><iframe width="'. $that->width .'" height="'. $that->height .'" src="//player.vimeo.com/video/'. $videoID .'" frameborder="0"></iframe></div>' : '';
-		};
+		return !empty($videoID) ? '<div class="oharaEmbed"><iframe width="'. $this->width .'" height="'. $this->height .'" src="//player.vimeo.com/video/'. $videoID .'" frameborder="0"></iframe></div>' : '';
 	}
 }
