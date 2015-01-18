@@ -12,7 +12,7 @@ if (!defined('SMF'))
 	die('Hacking attempt...');
 
 // Use composer!
-require_once ($boarddir .'/vendor/suki/ohara/src/Suki/Ohara.php');
+require_once ($sourcedir .'/Suki/Ohara.php');
 
 class OharaYTEmbed extends Suki\Ohara
 {
