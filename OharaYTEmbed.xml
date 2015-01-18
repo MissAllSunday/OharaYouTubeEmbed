@@ -8,11 +8,11 @@
 	<file name="$sourcedir/Post.php">
 		<operation>
 			<search position="replace"><![CDATA[if ($smcFunc['htmltrim'](strip_tags(parse_bbc($_POST['message'], false), '<img>')) === '' && (!allowedTo('admin_forum')]]></search>
-			<add><![CDATA[if ($smcFunc['htmltrim'](strip_tags(parse_bbc($_POST['message'], false), '<img><iframe>')) === '' && (!allowedTo('admin_forum')]]></add>
+			<add><![CDATA[if ($smcFunc['htmltrim'](strip_tags(parse_bbc($_POST['message'], false), '<img><iframe><div>')) === '' && (!allowedTo('admin_forum')]]></add>
 		</operation>
 		<operation>
 			<search position="replace"><![CDATA[if ($smcFunc['htmltrim'](strip_tags(parse_bbc($_POST['message'], false), '<img>')) === '')]]></search>
-			<add><![CDATA[if ($smcFunc['htmltrim'](strip_tags(parse_bbc($_POST['message'], false), '<img><iframe>')) === '')]]></add>
+			<add><![CDATA[if ($smcFunc['htmltrim'](strip_tags(parse_bbc($_POST['message'], false), '<img><iframe><div>')) === '')]]></add>
 		</operation>
 	</file>
 </modification>
