@@ -12,6 +12,9 @@ class OHVimeo extends OharaYTEmbed
 		'js_inline' => '',
 		'js_file' => '',
 		'regex' => '~(?<=[\s>\.(;\'"]|^)(?:https?:\/\/)?(?:www\.)?(?:player\.)?vimeo\.com\/(?:[a-z]*\/)*([0-9]{6,11})[?=&+%\w.-]*[/\w\-_\~%@\?;=#}\\\\]?~ix',
+		'before' => '[vimeo]',
+		'after' => '[/vimeo]',
+		'image' => 'vimeo',
 	);
 
 	public function __construct()

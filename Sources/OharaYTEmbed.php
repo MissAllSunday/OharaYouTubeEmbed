@@ -137,9 +137,9 @@ class OharaYTEmbed extends Suki\Ohara
 				$buttons[] = array(
 					'code' => $site->siteSettings['identifier'],
 					'description' => str_replace('{site}', $site->siteSettings['name'], $this->text('desc_generic')),
-					'before' => '[youtube]',
-					'after' => '[/youtube]',
-					'image' => 'youtube',
+					'before' => $site->siteSettings['before'],
+					'after' => $site->siteSettings['after'],
+					'image' => $site->siteSettings['image'],
 				);
 
 		if (!empty($buttons) && is_array($buttons))
