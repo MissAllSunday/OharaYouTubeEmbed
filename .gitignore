@@ -48,3 +48,7 @@ Thumbs.db
 /test.php
 /vendor/
 /.git/
+
+# Ohara class files #
+########################
+/Sources/Suki/
