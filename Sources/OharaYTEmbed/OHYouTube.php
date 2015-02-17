@@ -16,6 +16,7 @@ class OHYouTube extends OharaYTEmbed
 		'before' => '[youtube]',
 		'after' => '[/youtube]',
 		'image' => 'youtube',
+		'allowed_tag' => '',
 	);
 
 	public function __construct()

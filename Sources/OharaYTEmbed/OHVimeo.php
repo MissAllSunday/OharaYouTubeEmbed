@@ -15,6 +15,7 @@ class OHVimeo extends OharaYTEmbed
 		'before' => '[vimeo]',
 		'after' => '[/vimeo]',
 		'image' => 'vimeo',
+		'allowed_tag' => '',
 	);
 
 	public function __construct()
