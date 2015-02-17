@@ -160,8 +160,13 @@ class OharaYTEmbed extends Suki\Ohara
 
 	public function css()
 	{
+		global $context;
+
 		// The much needed css file.
 		loadCSSFile('oharaEmbed.css', array('force_current' => false, 'validate' => true));
+
+		// Add the iframe to the list of allowed tags.
+		$context['allowed_html_tags'][] = '<iframe>';
 
 		foreach (self::$sites as $site)
 			if (!empty($site) && is_object($site) && $this->setting('enable_'. $site->siteSettings['identifier']))
@@ -173,6 +178,10 @@ class OharaYTEmbed extends Suki\Ohara
 				// The js file is expected to be located at the default theme's script folder and needs to include its own extension!
 				if (!empty($site->siteSettings['js_file']))
 					loadJavascriptFile($site->siteSettings['js_file'], array('local' => true, 'default_theme' => true, 'defer' => true));
+
+				// Do this site wants to add their own unique tag? SMF already supports div and the mod adds iframe by default.
+				if (!empty($site->siteSettings['allowed_tag']))
+					$context['allowed_html_tags'][] = $site->siteSettings['allowed_tag'];
 			}
 	}
 
