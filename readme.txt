@@ -55,7 +55,7 @@ vimeo.com/groups/[Group name]/videos/[ID]
 - Add compatibility with SMF 2.1
 - Add a setting to disable auto-embedding.
 - Schema-less urls
-- One less file edit.
+- No file edits.
 - Add responsive iframes.
 
 [b]1.3 - August 23, 2014,[/b]
