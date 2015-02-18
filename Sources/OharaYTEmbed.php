@@ -73,7 +73,8 @@ class OharaYTEmbed extends Suki\Ohara
 
 		// Gotta include a setting for the sites. Make sure the txt string actually exists!
 		foreach (self::$sites as $site)
-			$config_vars[] = array('check', $this->name .'_enable_'. $site->siteSettings['identifier'], 'label' => str_replace('{site}', $site->siteSettings['name'], $this->text('enable_generic')));
+			if (!empty($site) && is_object($site))
+				$config_vars[] = array('check', $this->name .'_enable_'. $site->siteSettings['identifier'], 'label' => str_replace('{site}', $site->siteSettings['name'], $this->text('enable_generic')));
 
 		$config_vars[] = '';
 	}

@@ -17,7 +17,7 @@
 		<require-file name="Sources/OharaYTEmbed.php" destination="$sourcedir">The main class</require-file>
 		<require-file name="youtube.png" destination="$imagesdir/bbc" />
 		<require-file name="vimeo.png" destination="$imagesdir/bbc" />
-		<redirect url="index.php?action=admin;area=modsettings;sa=general" timeout="1000"></redirect>
+		<redirect url="index.php?action=admin;area=modsettings;sa=general" timeout="1000" />
 	</install>
 
 	<!-- Do note that Sources/Suki isn't deleted as it can be used by other mods. -->
@@ -28,7 +28,7 @@
 		<remove-file name="$languagedir/OharaYTEmbed.english.php" />
 		<remove-file name="$languagedir/OharaYTEmbed.english-utf8.php" />
 		<remove-file name="$languagefile/OharaYTEmbed.spanish_es" />
-		<remove-file name="$languagefile/OharaYTEmbed.spanish_es_utf8" />
+		<remove-file name="$languagefile/OharaYTEmbed.spanish_es-utf8" />
 		<remove-file name="$languagefile/OharaYTEmbed.spanish_latin-utf8" />
 		<remove-file name="$languagefile/OharaYTEmbed.spanish_latin" />
 		<remove-file name="$imagesdir/bbc/youtube.png" />
