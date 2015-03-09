@@ -45,7 +45,7 @@ class OharaYTEmbed extends Suki\Ohara
 	{
 		$directories = array_diff(scandir($this->sitesFolder), array('..', '.'));
 
-		if (empty(self::$sites) && !empty($directories) && is_array($directories))
+		if (empty(static::$sites) && !empty($directories) && is_array($directories))
 			foreach ($directories as $file)
 			{
 				// Does it exists?
@@ -53,11 +53,11 @@ class OharaYTEmbed extends Suki\Ohara
 				{
 					$filename = pathinfo($this->sitesFolder .'/'. $file, PATHINFO_FILENAME);
 					include_once $this->sitesFolder .'/'. $file;
-					self::$sites[$filename] = new $filename;
+					static::$sites[$filename] = new $filename;
 				}
 			}
 
-		return self::$sites;
+		return static::$sites;
 	}
 
 	//Don't bother on create a whole new page for this, let's use integrate_general_mod_settings ^o^.
@@ -72,7 +72,7 @@ class OharaYTEmbed extends Suki\Ohara
 		$config_vars[] = array('int', $this->name .'_height', 'subtext' => $this->text('height_sub'), 'size' => 3);
 
 		// Gotta include a setting for the sites. Make sure the txt string actually exists!
-		foreach (self::$sites as $site)
+		foreach (static::$sites as $site)
 			if (!empty($site) && is_object($site))
 				$config_vars[] = array('check', $this->name .'_enable_'. $site->siteSettings['identifier'], 'label' => str_replace('{site}', $site->siteSettings['name'], $this->text('enable_generic')));
 
@@ -88,7 +88,7 @@ class OharaYTEmbed extends Suki\Ohara
 		// Quick fix for PHP below 5.4.
 		$that = $this;
 
-		foreach (self::$sites as $site)
+		foreach (static::$sites as $site)
 			if (!empty($site) && is_object($site) && $this->setting('enable_'. $site->siteSettings['identifier']))
 			{
 				$codes[] = array(
@@ -133,7 +133,7 @@ class OharaYTEmbed extends Suki\Ohara
 
 		$buttons = array();
 
-		foreach (self::$sites as $site)
+		foreach (static::$sites as $site)
 			if (!empty($site) && is_object($site) && $this->setting('enable_'. $site->siteSettings['identifier']))
 				$buttons[] = array(
 					'code' => $site->siteSettings['identifier'],
@@ -154,7 +154,7 @@ class OharaYTEmbed extends Suki\Ohara
 			return;
 
 		// As always, the good old foreach saves the day!
-		foreach (self::$sites as $site)
+		foreach (static::$sites as $site)
 			if (!empty($site) && is_object($site) && $this->setting('enable_'. $site->siteSettings['identifier']))
 				$site->auto($message);
 	}
@@ -169,7 +169,7 @@ class OharaYTEmbed extends Suki\Ohara
 		// Add the iframe to the list of allowed tags.
 		$context['allowed_html_tags'][] = '<iframe>';
 
-		foreach (self::$sites as $site)
+		foreach (static::$sites as $site)
 			if (!empty($site) && is_object($site) && $this->setting('enable_'. $site->siteSettings['identifier']))
 			{
 				// The js file is expected to be located at the default theme's script folder and needs to include its own extension!
