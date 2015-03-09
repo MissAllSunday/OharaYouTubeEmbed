@@ -4,20 +4,20 @@
         "Read more about it at http://getcomposer.org/doc/01-basic-usage.md#composer-lock-the-lock-file",
         "This file is @generated automatically"
     ],
-    "hash": "44ba776564acb3d9c9e3149d207f55f8",
+    "hash": "d07b6104e49b293b88137204d3cab3e8",
     "packages": [
         {
             "name": "composer/installers",
-            "version": "v1.0.20",
+            "version": "v1.0.21",
             "source": {
                 "type": "git",
                 "url": "https://github.com/composer/installers.git",
-                "reference": "1bff8aa77a18f3616f468ed8000cf86a5725bac3"
+                "reference": "d64e23fce42a4063d63262b19b8e7c0f3b5e4c45"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/composer/installers/zipball/1bff8aa77a18f3616f468ed8000cf86a5725bac3",
-                "reference": "1bff8aa77a18f3616f468ed8000cf86a5725bac3",
+                "url": "https://api.github.com/repos/composer/installers/zipball/d64e23fce42a4063d63262b19b8e7c0f3b5e4c45",
+                "reference": "d64e23fce42a4063d63262b19b8e7c0f3b5e4c45",
                 "shasum": ""
             },
             "replace": {
@@ -63,6 +63,7 @@
                 "Thelia",
                 "WolfCMS",
                 "agl",
+                "aimeos",
                 "annotatecms",
                 "bitrix",
                 "cakephp",
@@ -98,24 +99,24 @@
                 "zend",
                 "zikula"
             ],
-            "time": "2015-01-11 03:51:11"
+            "time": "2015-02-18 17:17:01"
         },
         {
             "name": "suki/ohara",
-            "version": "dev-master",
+            "version": "v1.0.1",
             "source": {
                 "type": "git",
                 "url": "https://github.com/MissAllSunday/Ohara.git",
-                "reference": "ab703f88e89ffdcf3c9260c24d2a5df70a00a137"
+                "reference": "b7c23b9cd772aac5bfb3940e5e03e4e11cb9afec"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/MissAllSunday/Ohara/zipball/ab703f88e89ffdcf3c9260c24d2a5df70a00a137",
-                "reference": "ab703f88e89ffdcf3c9260c24d2a5df70a00a137",
+                "url": "https://api.github.com/repos/MissAllSunday/Ohara/zipball/b7c23b9cd772aac5bfb3940e5e03e4e11cb9afec",
+                "reference": "b7c23b9cd772aac5bfb3940e5e03e4e11cb9afec",
                 "shasum": ""
             },
             "require": {
-                "composer/installers": "1.0.*@dev",
+                "composer/installers": "~1.0",
                 "php": ">=5.3.0"
             },
             "type": "smf-module",
@@ -142,15 +143,13 @@
                 "SMF",
                 "modifications"
             ],
-            "time": "2014-12-19 21:10:15"
+            "time": "2015-03-09 17:35:15"
         }
     ],
     "packages-dev": [],
     "aliases": [],
     "minimum-stability": "stable",
-    "stability-flags": {
-        "suki/ohara": 20
-    },
+    "stability-flags": [],
     "prefer-stable": false,
     "platform": [],
     "platform-dev": []

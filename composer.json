@@ -1,6 +1,6 @@
 {
 	"name": "suki/oharayoutubeembed",
 	"require": {
-		"suki/ohara": "dev-master"
+		"suki/ohara": "~1.0"
 	}
 }
