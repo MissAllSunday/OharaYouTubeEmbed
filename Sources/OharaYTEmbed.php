@@ -63,8 +63,6 @@ class OharaYTEmbed extends Suki\Ohara
 	//Don't bother on create a whole new page for this, let's use integrate_general_mod_settings ^o^.
 	public function settings(&$config_vars)
 	{
-		global $txt;
-
 		$config_vars[] = $this->text('title');
 		$config_vars[] = array('check', $this->name .'_enable', 'subtext' => $this->text('enable_sub'));
 		$config_vars[] = array('check', $this->name .'_autoEmbed', 'subtext' => $this->text('autoEmbed_sub'));
