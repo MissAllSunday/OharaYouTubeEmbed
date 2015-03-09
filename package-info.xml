@@ -13,7 +13,7 @@
 		<code>addHooks.php</code>
 		<modification>OharaYTEmbed.xml</modification>
 		<require-dir name="Themes" destination="$boarddir">Theme and Language files</require-dir>
-		<require-dir name="Sources" destination="$boarddir">Source files</require-dir>
+		<require-file name="Sources/OharaYTEmbed.php" destination="$sourcedir">The main file</require-file>
 		<require-file name="youtube.gif" destination="$imagesdir/bbc" />
 		<require-file name="vimeo.gif" destination="$imagesdir/bbc" />
 		<redirect url="index.php?action=admin;area=modsettings;sa=general" timeout="1000"></redirect>
