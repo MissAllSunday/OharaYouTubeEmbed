@@ -147,8 +147,10 @@ class OharaYTEmbed extends Suki\Ohara
 
 	public function autoEmbed(&$message, &$smileys, &$cache_id, &$parse_tags)
 	{
-		// Mod is disabled or the user don't want to use autoEmbed.
-		if (!$this->enable('enable') || !$this->enable('autoEmbed'))
+		global $context;
+
+		// Mod is disabled or the user don't want to use autoEmbed or somebody else do not want this to happen.
+		if (!$this->enable('enable') || !$this->enable('autoEmbed') || !empty($context['ohara_disable']))
 			return;
 
 		// As always, the good old foreach saves the day!
