@@ -13,10 +13,12 @@ if (!defined('SMF'))
 
 function OYTE_bbc_add_code(&$codes)
 {
-	global $modSettings;
+	global $modSettings, $txt;
 
 	if (empty($modSettings['OYTE_master']))
 		return;
+
+	loadLanguage('OharaYTEmbed');
 
 	array_push($codes,
 		array(
@@ -25,18 +27,14 @@ function OYTE_bbc_add_code(&$codes)
 			'content' => '<div style="text-align:center;margin:auto;padding:5px;" class="youtube $1">
 				<iframe width="'. (empty($modSettings['OYTE_video_width']) ? '420' : $modSettings['OYTE_video_width']) .'" height="'. (empty($modSettings['OYTE_video_height']) ? '315' : $modSettings['OYTE_video_height']) .'" src="http://www.youtube.com/embed/$1" frameborder="0"></iframe>
 			</div>',
-			'validate' => create_function('&$tag, &$data, $disabled', '
-				global $txt;
-
-				loadLanguage(\'OharaYTEmbed\');
-
+			'validate' => function (&$tag, &$data, $disabled) use ($txt)
+			{
 				if (empty($data))
-					$data = $txt[\'OYTE_unvalid_link\'];
+					$data = $txt['OYTE_unvalid_link'];
 
 				else
-					$data = OYTE_Main(trim(strtr($data, array(\'<br />\' => \'\'))));
-
-			'),
+					$data = OYTE_Main(trim(strtr($data, array('<br />' => ''))));
+			},
 			'disabled_content' => '$1',
 			'block_level' => true,
 		),
@@ -46,18 +44,14 @@ function OYTE_bbc_add_code(&$codes)
 			'content' => '<div style="text-align:center;margin:auto;padding:5px;" class="youtube $1">
 				<iframe width="'. (empty($modSettings['OYTE_video_width']) ? '420' : $modSettings['OYTE_video_width']) .'" height="'. (empty($modSettings['OYTE_video_height']) ? '315' : $modSettings['OYTE_video_height']) .'" src="http://www.youtube.com/embed/$1" frameborder="0"></iframe>
 			</div>',
-			'validate' => create_function('&$tag, &$data, $disabled', '
-				global $txt;
-
-				loadLanguage(\'OharaYTEmbed\');
-
+			'validate' => function (&$tag, &$data, $disabled) use ($txt)
+			{
 				if (empty($data))
-					$data = $txt[\'OYTE_unvalid_link\'];
+					$data = $txt['OYTE_unvalid_link'];
 
 				else
-					$data = OYTE_Main(trim(strtr($data, array(\'<br />\' => \'\'))));
-
-			'),
+					$data = OYTE_Main(trim(strtr($data, array('<br />' => ''))));
+			},
 			'disabled_content' => '$1',
 			'block_level' => true,
 		),
@@ -67,18 +61,14 @@ function OYTE_bbc_add_code(&$codes)
 			'content' => '<div style="text-align:center;margin:auto;padding:5px;">
 				$1
 			</div>',
-			'validate' => create_function('&$tag, &$data, $disabled', '
-				global $txt;
-
-				loadLanguage(\'OharaYTEmbed\');
-
+			'validate' => function (&$tag, &$data, $disabled) use ($txt)
+			{
 				if (empty($data))
-					$data = $txt[\'OYTE_unvalid_link\'];
+					$data = $txt['OYTE_unvalid_link'];
 
 				else
-					$data = OYTE_Vimeo(trim(strtr($data, array(\'<br />\' => \'\'))));
-
-			'),
+					$data = OYTE_Vimeo(trim(strtr($data, array('<br />' => ''))));
+			},
 			'disabled_content' => '$1',
 			'block_level' => true,
 		)
