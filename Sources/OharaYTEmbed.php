@@ -29,6 +29,10 @@ function OYTE_bbc_add_code(&$codes)
 			</div>',
 			'validate' => function (&$tag, &$data, $disabled) use ($txt)
 			{
+				// This tag was disabled.
+				if (!empty($disabled['youtube']))
+					return;
+
 				if (empty($data))
 					$data = $txt['OYTE_unvalid_link'];
 
@@ -46,6 +50,10 @@ function OYTE_bbc_add_code(&$codes)
 			</div>',
 			'validate' => function (&$tag, &$data, $disabled) use ($txt)
 			{
+				// This tag was disabled.
+				if (!empty($disabled['yt']))
+					return;
+
 				if (empty($data))
 					$data = $txt['OYTE_unvalid_link'];
 
@@ -63,6 +71,10 @@ function OYTE_bbc_add_code(&$codes)
 			</div>',
 			'validate' => function (&$tag, &$data, $disabled) use ($txt)
 			{
+				// This tag was disabled.
+				if (!empty($disabled['vimeo']))
+					return;
+
 				if (empty($data))
 					$data = $txt['OYTE_unvalid_link'];
 
