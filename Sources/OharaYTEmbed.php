@@ -231,10 +231,10 @@ function OYTE_care(&$dummy)
 {
 	global $context, $settings;
 
-	if (isset($context['current_action']) && $context['current_action'] == 'credits')
+	if (!empty($context['current_action']) && $context['current_action'] == 'credits')
 		$context['copyrights']['mods'][] = '<a href="http://missallsunday.com" target="_blank" title="Free SMF mods">Ohara YouTube Embed mod &copy Suki</a>';
 
-	// Add our css and js files. Dear mod authors, if you're going to use $context['html_headers'] MAKE SURE you append your data .= instead of re-declaring the var! and don't forget to add a new line and proper indentation too!
+	// Add our css and js files. Dear and lovely mod authors, if you're going to use $context['html_headers'] MAKE SURE you append your data .= instead of re-declaring the var! and don't forget to add a new line and proper indentation too!
 	$context['html_headers'] .= '
 	<script type="text/javascript">!window.jQuery && document.write(unescape(\'%3Cscript src="http://code.jquery.com/jquery-1.9.1.min.js"%3E%3C/script%3E\'))</script>
 	<script type="text/javascript" src="'. $settings['default_theme_url'] .'/scripts/ohyoutube.js"></script>
