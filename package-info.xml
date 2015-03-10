@@ -33,5 +33,7 @@
 		<remove-file name="$languagefile/OharaYTEmbed.spanish_latin" />
 		<remove-file name="$imagesdir/bbc/youtube.png" />
 		<remove-file name="$imagesdir/bbc/vimeo.png" />
+		<remove-file name="$themedir/scripts/ohyoutube.js" />
+		<remove-file name="$themedir/css/oharaEmbed.css" />
 	</uninstall>
 </package-info>
