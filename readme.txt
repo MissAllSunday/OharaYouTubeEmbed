@@ -50,15 +50,18 @@ vimeo.com/groups/[Group name]/videos/[ID]
 
 [color=purple][b][size=12pt]Changelog[/size][/b][/color]
 
-[b]2.0 - August, 2014,[/b]
+[b]2.0 - March, 2015,[/b]
+- Full OOP approach using the Ohara helper class.
 - Drop compatibility with SMF 2.0.x
 - Add compatibility with SMF 2.1
 - Add a setting to disable auto-embedding.
+- Auto-embed regex improved
+- Added the option to disable the auto-embed feature via $context['ohara_disable'].
 - Schema-less urls
+- Change the way youtube videos are displayed, faster pages specially with multiple videos, thanks to Infernuza for the tip.
 - No file edits.
-- Add responsive iframes.
 
-[b]1.3 - August 23, 2014,[/b]
+[b]1.2.1 - March, 2015,[/b]
 - Added an enable/disable setting for auto-embedding.
 - Regex updates.
 - Usage of closures
