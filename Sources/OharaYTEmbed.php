@@ -62,9 +62,7 @@ function OYTE_bbc_add_code(&$codes)
 		array(
 			'tag' => 'vimeo',
 			'type' => 'unparsed_content',
-			'content' => '<div style="padding:5px;">
-				$1
-			</div>',
+			'content' => '$1',
 			'validate' => function (&$tag, &$data, $disabled) use ($txt)
 			{
 				// This tag was disabled.
@@ -147,15 +145,15 @@ function OYTE_Main($data)
 		$videoID = isset($matches[1]) ? $matches[1] : false;
 
 	/* Give another regex a chance */
-	elseif (empty($result) && preg_match('%(?:youtube(?:-nocookie)?\.com/(?:[^/]+/.+/|(?:v|e(?:mbed)?)/|.*[?&]v=)|youtu\.be/)([^"&?/ ]{11})%i', $data, $match))
+	elseif (empty($videoID) && preg_match('%(?:youtube(?:-nocookie)?\.com/(?:[^/]+/.+/|(?:v|e(?:mbed)?)/|.*[?&]v=)|youtu\.be/)([^"&?/ ]{11})%i', $data, $match))
 		$videoID = isset($match[1]) ? $match[1] : false;
 
 	/* No?, then one last chance, let PHPs native parse_url() function do the dirty work */
-	elseif (empty($result))
+	elseif (empty($videoID))
 	{
 		/* This relies on the url having ? and =, this is only an emergency check */
 		parse_str(parse_url($data, PHP_URL_QUERY), $videoID);
-		$videoID = isset($result['v']) ? $videoID['v'] : false;
+		$videoID = isset($videoID['v']) ? $videoID['v'] : false;
 	}
 
 	/* At this point, all tests had miserably failed */
@@ -164,7 +162,7 @@ function OYTE_Main($data)
 
 	// Got something!
 	else
-		$result = '<div class="oharaEmbed youtube" id="'. $result .'" style="width: '. (empty($modSettings['OYTE_video_width']) ? '420' : $modSettings['OYTE_video_width']) .'px; height: '. (empty($modSettings['OYTE_video_height']) ? '315' : $modSettings['OYTE_video_height']) .'px;"></div>';
+		$result = '<div class="youtube" id="'. $videoID .'" style="width: '. (empty($modSettings['OYTE_video_width']) ? '420' : $modSettings['OYTE_video_width']) .'px; height: '. (empty($modSettings['OYTE_video_height']) ? '315' : $modSettings['OYTE_video_height']) .'px;"></div>';
 
 	return $result;
 }
