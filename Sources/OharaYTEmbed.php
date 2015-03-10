@@ -95,6 +95,10 @@ class OharaYTEmbed extends Suki\Ohara
 					'content' => '$1',
 					'validate' => function (&$tag, &$data, $disabled) use ($that, $site)
 					{
+						// This BBC is currently disabled.
+						if (!empty($disabled[$site->siteSettings['identifier']]))
+							return;
+
 						$data = empty($data) ? str_replace('{site}', $site->siteSettings['name'], $that->text('unvalid_link')) : $site->content(trim(strtr($data, array('<br />' => ''))));
 					},
 					'disabled_content' => '$1',
@@ -109,6 +113,10 @@ class OharaYTEmbed extends Suki\Ohara
 						'content' => '$1',
 						'validate' => function (&$tag, &$data, $disabled) use ($that, $site)
 						{
+							// This extra tag is currently disabled.
+							if (!empty($disabled[$site->siteSettings['extra_tag']]))
+								return;
+						
 							$data = empty($data) ? str_replace('{site}', $site->siteSettings['name'], $that->text('unvalid_link')) : $site->content(trim(strtr($data, array('<br />' => ''))));
 						},
 						'disabled_content' => '$1',
