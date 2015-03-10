@@ -9,7 +9,7 @@ On install make sure to mark the "[b]Install in Other Themes[/b]" checkbox.
 
 [b]For SMF 2.0.x only[/b]
 
-[b]Version 1.2 and above requires [color=purple]PHP 5.3[/color] or greater[/b]
+[b]Version 1.2.x and above requires [color=purple]PHP 5.3[/color] or greater[/b]
 
 You can auto-embed any valid youtube or vimeo urls and the mod will automatically convert them to videos.
 
@@ -50,6 +50,11 @@ http://vimeo.com/album/[ID]
 
 
 [color=purple][b][size=12pt]Changelog[/size][/b][/color]
+
+[b]1.2.1 - March 09, 2015,[/b]
+- Added the option to disable the autoembed feature via $context['ohara_disable'].
+- Use closures instead of create_function()
+- Change the way youtube videos are displayed, faster pages specially with multiple videos, thanks to Infernuza for the tip.
 
 [b]1.2 - March 05, 2014,[/b]
 - Added auto-embed feature.

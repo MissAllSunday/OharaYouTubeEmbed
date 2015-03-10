@@ -5,7 +5,7 @@
 
 	<name>Ohara YouTube Embed</name>
 	<id>Suki:ohara_youtube_embed</id>
-	<version>1.2</version>
+	<version>1.2.1</version>
 	<type>modification</type>
 
 	<install for="2.0 - 2.0.99">
@@ -31,5 +31,7 @@
 		<remove-file name="$languagefir/OharaYTEmbed.spanish_latin" />
 		<remove-file name="$imagesdir/bbc/youtube.gif" />
 		<remove-file name="$imagesdir/bbc/vimeo.gif" />
+		<remove-file name="$themedir/scripts/ohyoutube.js" />
+		<remove-file name="$themedir/css/oharaEmbed.css" />
 	</uninstall>
 </package-info>
