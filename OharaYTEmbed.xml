@@ -8,7 +8,7 @@
 	<file name="$sourcedir/Post.php">
 	<operation>
 			<search position="replace"><![CDATA[<img>]]></search>
-			<add><![CDATA[<img><iframe>]]></add>
+			<add><![CDATA[<img><iframe><div>]]></add>
 		</operation>
 	</file>
 	<file name="$sourcedir/Subs.php">
