@@ -3,5 +3,40 @@
  @license http://www.mozilla.org/MPL/MPL-1.1.html
 */
 
-$(function(){function b(){$(".youtube").each(function(){$(this).css("background-image","url(http://i.ytimg.com/vi/"+this.id+"/sddefault.jpg)");$(this).append($("<div/>",{"class":"youtube_play"}));$(document).on("click","#"+this.id,function(a){a="https://www.youtube.com/embed/"+this.id+"?autoplay=1&autohide=1";$(this).data("params")&&(a+="&"+$(this).data("params"));a=$("<iframe/>",{frameborder:"0",src:a,width:$(this).width(),height:$(this).height()});$(this).replaceWith(a)})})}b();var c=function(a){for(var b=
-window.location.search.substring(1).split(";"),d=0;d<b.length;d++){var c=b[d].split("=");if(c[0]==a)return c[1]}}("action");if(c&&"post"==c)$("input[name=preview]").on("click",function(){setInterval(function(){b()},3E3)})});
+	function b(){
+		$('.youtube').each(function() {
+
+			imgsrc = getVidImage(this.id);
+			$(this).css('background-image', 'url(http://i.ytimg.com/vi/' + this.id + '/sddefault.jpg)');
+
+			// Overlay the Play icon to make it look like a video player
+			$(this).append($('<div/>', {'class': 'play'}));
+
+			$(document).delegate('#'+this.id, 'click', function() {
+				// Create an iFrame with autoplay set to true
+				var iframe_url = "https://www.youtube.com/embed/" + this.id + "?autoplay=1&autohide=1";
+				if ($(this).data('params')) iframe_url+='&'+$(this).data('params');
+
+				// The height and width of the iFrame should be the same as parent
+				var iframe = $('<iframe/>', {'frameborder': '0', 'src': iframe_url, 'width': $(this).width(), 'height': $(this).height() })
+
+				// Replace the YouTube thumbnail with YouTube HTML5 Player
+				$(this).replaceWith(iframe);
+			});
+		});
+	};
+
+	function getVidImage(youtubeID)
+	{
+		var index, len;
+		var imageTypes = ['default', 'hqdefault', 'mqdefault', 'sddefault', 'maxresdefault'];
+		for (index = 0, len = imageTypes.length; index < len; ++index) {
+			var imgsrc = 'http://i.ytimg.com/vi/'+ youtubeID +'/'+ imageTypes[index] +'.jpg';
+
+			if (imgsrc.width !=0){
+				break;
+			}
+		}
+
+		return imgsrc;
+	}
