@@ -2,7 +2,7 @@
 
 /*
  * @package Ohara Youtube Embed mod
- * @version 1.2
+ * @version 1.2.2
  * @author Jessica González <missallsunday@simplemachines.org>
  * @copyright Copyright (C) 2015 Jessica González
  * @license http://www.mozilla.org/MPL/MPL-1.1.html
@@ -162,7 +162,7 @@ function OYTE_Main($data)
 
 	// Got something!
 	else
-		$result = '<div class="youtube" id="'. $videoID .'" style="width: '. (empty($modSettings['OYTE_video_width']) ? '420' : $modSettings['OYTE_video_width']) .'px; height: '. (empty($modSettings['OYTE_video_height']) ? '315' : $modSettings['OYTE_video_height']) .'px;"></div>';
+		$result = '<div class="youtube" id="oh_'. $videoID .'" style="width: '. (empty($modSettings['OYTE_video_width']) ? '420' : $modSettings['OYTE_video_width']) .'px; height: '. (empty($modSettings['OYTE_video_height']) ? '315' : $modSettings['OYTE_video_height']) .'px;"></div>';
 
 	return $result;
 }
