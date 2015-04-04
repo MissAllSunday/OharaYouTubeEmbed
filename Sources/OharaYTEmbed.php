@@ -196,7 +196,7 @@ function OYTE_Vimeo($data)
 
 function OYTE_Preparse($message)
 {
-	global $context;
+	global $context, $modSettings;
 
 	// Gotta respect the master and the autoembed setting.
 	if (empty($modSettings['OYTE_master']) || empty($modSettings['OYTE_autoEmbed']))
@@ -209,7 +209,6 @@ function OYTE_Preparse($message)
 	// The extremely long regex...
 	$vimeo = '~(?<=[\s>\.(;\'"]|^)(?:https?\:\/\/)?(?:www\.)?vimeo.com\/(?:album\/|groups\/(.*?)\/|channels\/(.*?)\/)?[0-9]+\??[/\w\-_\~%@\?;=#}\\\\]?~';
 	$youtube = '~(?<=[\s>\.(;\'"]|^)(?:http|https):\/\/[\w\-_%@:|]?(?:www\.)?(?:youtu\.be/|youtube\.com(?:/embed/|/v/|/watch\?v=|/watch\?.+&v=))([\w-]{11})(?=[^\w-]|$)(?![?=&+%\w.-]*(?:[\'"][^<>]*>  | </a>  ))[?=&+%\w.-]*[/\w\-_\~%@\?;=#}\\\\]?~ix';
-
 
 	// Is this a YouTube video url?
 	$message = preg_replace_callback(
