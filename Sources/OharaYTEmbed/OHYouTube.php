@@ -95,6 +95,6 @@ class OHYouTube extends OharaYTEmbed
 
 	public function create($videoID)
 	{
-		return !empty($videoID) ? '<div class="oharaEmbed youtube" id="'. $videoID .'" style="width: '. $this->width .'px; height: '. $this->height .'px;"></div>' : '';
+		return !empty($videoID) ? '<div class="oharaEmbed youtube" id="oh_'. $videoID .'" style="width: '. $this->width .'px; height: '. $this->height .'px;"></div>' : '';
 	}
 }
