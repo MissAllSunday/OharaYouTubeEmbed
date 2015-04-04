@@ -51,6 +51,11 @@ http://vimeo.com/album/[ID]
 
 [color=purple][b][size=12pt]Changelog[/size][/b][/color]
 
+[b]1.2.2 - April 05, 2015,[/b]
+- Improve handling of youtube thumbnails.
+- Add a setting to enable/disable the autoembed feature.
+- Missed to check the master setting.
+
 [b]1.2.1 - March 09, 2015,[/b]
 - Added the option to disable the autoembed feature via $context['ohara_disable'].
 - Use closures instead of create_function()
