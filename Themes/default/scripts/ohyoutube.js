@@ -79,9 +79,11 @@
 		setTimeout(function(){oh_main()},3E3);
 	}
 
+$(function(){
 	oh_main();
 
 	if (oh_getUrl('post'))
 		$('input[name=preview]').on('click',function(){
 			oh_refresh();
 		});
+});
