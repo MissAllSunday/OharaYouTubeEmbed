@@ -131,7 +131,8 @@ function OYTE_Main($data)
 
 	loadLanguage('OharaYTEmbed');
 
-	if (empty($data))
+	// Gotta respect the master setting...
+	if (empty($data) || empty($modSettings['OYTE_master']))
 		return sprintf($txt['OYTE_unvalid_link'], 'youtube');
 
 	/* Set a local var for laziness */
@@ -172,7 +173,7 @@ function OYTE_Vimeo($data)
 {
 	global $modSettings, $txt, $sourcedir;
 
-	if (empty($data))
+	if (empty($data) || empty($modSettings['OYTE_master']))
 		return sprintf($txt['OYTE_unvalid_link'], 'vimeo');
 
 	loadLanguage('OharaYTEmbed');
@@ -196,6 +197,10 @@ function OYTE_Vimeo($data)
 function OYTE_Preparse($message)
 {
 	global $context;
+
+	// Gotta respect the master and the autoembed setting.
+	if (empty($modSettings['OYTE_master']) || empty($modSettings['OYTE_autoEmbed']))
+		return $message;
 
 	// Someone else might not like this!
 	if (empty($message) || !empty($context['ohara_disable']))
