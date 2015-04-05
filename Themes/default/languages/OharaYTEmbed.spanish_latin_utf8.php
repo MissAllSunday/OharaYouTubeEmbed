@@ -18,6 +18,7 @@ $txt['OYTE_video_width'] = 'Ancho del video:';
 $txt['OYTE_video_width_sub'] = 'Si se deja vacio se usará el valor por deault: 420.';
 $txt['OYTE_video_height'] = 'Altura del video:';
 $txt['OYTE_video_height_sub'] = 'Si se deja vacio se usará el valor por defecto: 315';
+$txt['OYTE_desc'] = 'Inserta un video desde youtube';
 $txt['OYTE_vimeo_desc'] = 'Inserta un video desde vimeo';
 $txt['OYTE_unvalid_link'] = 'No es una dirección de %s válida';
 $txt['OYTE_title'] = 'Ohara Youtube|Vimeo Embed mod';
