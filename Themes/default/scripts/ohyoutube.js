@@ -74,9 +74,10 @@
 		return false;
 	}
 
-	function oh_refresh()
+	function oh_refresh(waitTime)
 	{
-		setTimeout(function(){oh_main()},3E3);
+		waitTime = waitTime || 3000;
+		setTimeout(function(){oh_main()},waitTime);
 	}
 
 $(function(){
