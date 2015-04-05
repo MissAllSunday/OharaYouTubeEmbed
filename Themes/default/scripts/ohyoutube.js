@@ -13,7 +13,7 @@
 				imgWidth = $(this).width();
 
 			if (typeof imgsrc !== 'undefined'){
-				$(this).css({'background-image': 'url('+ imgsrc +')', 'background-size': 'cover'});
+				$(this).css({'background-image': 'url("'+ imgsrc +'")', 'background-size': 'cover'});
 			}
 
 			$(this).append($('<div/>', {'class': 'youtube_play'}));
@@ -23,7 +23,7 @@
 				if ($(this).data('params')) iframe_url+='&'+$(this).data('params');
 
 				// The height and width of the iFrame should be the same as parent
-				var iframe = $('<iframe/>', {'frameborder': '0', 'src': iframe_url, 'width': imgWidth, 'height': imgHeight })
+				var iframe = $('<iframe/>', {'frameborder': '0', 'src': iframe_url, 'width': imgWidth, 'height': imgHeight });
 
 				// Replace the YouTube thumbnail with YouTube HTML5 Player
 				$(this).replaceWith(iframe);
