@@ -52,8 +52,8 @@ http://vimeo.com/album/[ID]
 [color=purple][b][size=12pt]Changelog[/size][/b][/color]
 
 [b]1.2.2 - April 05, 2015,[/b]
-- Improve handling of youtube thumbnails.
-- Add a setting to enable/disable the autoembed feature.
+- Improve handling of youtube thumbnails and overall JS improvements.
+- Add a setting to enable/disable the autoembed feature. This was suppose to be added a long time ago but dunno why I forgot to do it...
 - Missed to check the master setting.
 
 [b]1.2.1 - March 09, 2015,[/b]
