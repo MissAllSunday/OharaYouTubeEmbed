@@ -243,7 +243,7 @@ function OYTE_care(&$dummy)
 	$context['html_headers'] .= '
 	<script type="text/javascript">!window.jQuery && document.write(unescape(\'%3Cscript src="http://code.jquery.com/jquery-1.9.1.min.js"%3E%3C/script%3E\'))</script>
 	<script type="text/javascript" src="'. $settings['default_theme_url'] .'/scripts/ohyoutube.js"></script>
-	<link rel="stylesheet" type="text/css" href="'. $settings['theme_url'] .'/css/oharaEmbed.css" />';
+	<link rel="stylesheet" type="text/css" href="'. $settings['default_theme_url'] .'/css/oharaEmbed.css" />';
 }
 
 	/* Slowly repeating
