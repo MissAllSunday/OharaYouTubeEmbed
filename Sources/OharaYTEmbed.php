@@ -21,6 +21,16 @@ class OharaYTEmbed extends Suki\Ohara
 	public $height;
 	public static $sites = array();
 
+	// Define the hooks we are going to use
+	protected $_availableHooks = array(
+		'credits' => 'integrate_credits',
+		'code' => 'integrate_bbc_codes',
+		'buttons' => 'integrate_bbc_buttons',
+		'settings' => 'integrate_general_mod_settings',
+		'embed' => 'integrate_pre_parsebbc',
+		'css' => 'integrate_load_theme',
+	);
+
 	public function __construct()
 	{
 		// Get yourself noted.
@@ -61,7 +71,7 @@ class OharaYTEmbed extends Suki\Ohara
 	}
 
 	//Don't bother on create a whole new page for this, let's use integrate_general_mod_settings ^o^.
-	public function settings(&$config_vars)
+	public function addSettings(&$config_vars)
 	{
 		$config_vars[] = $this->text('title');
 		$config_vars[] = array('check', $this->name .'_enable', 'subtext' => $this->text('enable_sub'));
@@ -77,7 +87,7 @@ class OharaYTEmbed extends Suki\Ohara
 		$config_vars[] = '';
 	}
 
-	public function code(&$codes)
+	public function addCode(&$codes)
 	{
 		// Mod is disabled.
 		if (!$this->enable('enable'))
@@ -116,7 +126,7 @@ class OharaYTEmbed extends Suki\Ohara
 							// This extra tag is currently disabled.
 							if (!empty($disabled[$site->siteSettings['extra_tag']]))
 								return;
-						
+
 							$data = empty($data) ? str_replace('{site}', $site->siteSettings['name'], $that->text('unvalid_link')) : $site->content(trim(strtr($data, array('<br />' => ''))));
 						},
 						'disabled_content' => '$1',
@@ -129,7 +139,7 @@ class OharaYTEmbed extends Suki\Ohara
 	}
 
 	//The bbc button.
-	public function button(&$dummy)
+	public function addButtons(&$dummy)
 	{
 		global $context;
 
@@ -153,7 +163,7 @@ class OharaYTEmbed extends Suki\Ohara
 			$context['bbc_tags'][count($context['bbc_tags']) - 1] = array_merge($context['bbc_tags'][count($context['bbc_tags']) - 1], $buttons);
 	}
 
-	public function autoEmbed(&$message, &$smileys, &$cache_id, &$parse_tags)
+	public function addEmbed(&$message, &$smileys, &$cache_id, &$parse_tags)
 	{
 		global $context;
 
@@ -167,7 +177,7 @@ class OharaYTEmbed extends Suki\Ohara
 				$site->auto($message);
 	}
 
-	public function css()
+	public function addCss()
 	{
 		global $context;
 
