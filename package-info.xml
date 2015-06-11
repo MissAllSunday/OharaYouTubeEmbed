@@ -8,12 +8,18 @@
 	<version>2.0</version>
 	<type>modification</type>
 
-	<install for="2.1 Beta 1, 2.1 - 2.1.99">
+	<install for="2.1 Beta 1, 2.1 Beta 2, 2.1 - 2.1.99">
 		<readme parsebbc="true">readme.txt</readme>
-		<code>addHooks.php</code>
+		<license type="inline" parsebbc="false">
+This Source Code Form is subject to the terms of the Mozilla Public
+License, v. 2.0. If a copy of the MPL was not distributed with this
+file, You can obtain one at http://mozilla.org/MPL/2.0/.
+		</license>
+		<hook function="OharaYTEmbed::runTimeHooks" hook="integrate_pre_load" file="$sourcedir/OharaYTEmbed.php" object="true"></hook>
+		<credits url="http://missallsunday.com" license="MPL 2.0" copyright="Suki" licenseurl="https://www.mozilla.org/MPL/2.0/">Ohara Embed mod</credits>
 		<require-dir name="Themes" destination="$boarddir">Theme and Language files</require-dir>
 		<require-dir name="Sources/OharaYTEmbed" destination="$sourcedir">Source files</require-dir>
-		<require-dir name="Sources/ohara" destination="$sourcedir">Helper class library</require-dir>
+		<require-dir name="Sources/ohara" destination="$sourcedir">Source library</require-dir>
 		<require-file name="Sources/OharaYTEmbed.php" destination="$sourcedir">The main class</require-file>
 		<require-file name="youtube.png" destination="$imagesdir/bbc" />
 		<require-file name="vimeo.png" destination="$imagesdir/bbc" />
@@ -21,8 +27,7 @@
 	</install>
 
 	<!-- Do note that Sources/ohara dir isn't deleted as it can be used by other mods. -->
-	<uninstall for="2.1 Beta 1, 2.1 - 2.1.99">
-		<code>removeHooks.php</code>
+	<uninstall for="2.1 Beta 1, 2.1 Beta 2, 2.1 - 2.1.99">
 		<remove-file name="$sourcedir/OharaYTEmbed.php" />
 		<remove-dir name="$sourcedir/OharaYTEmbed" />
 		<remove-file name="$languagedir/OharaYTEmbed.english.php" />
