@@ -23,7 +23,6 @@ class OharaYTEmbed extends Suki\Ohara
 
 	// Define the hooks we are going to use
 	protected $_availableHooks = array(
-		'credits' => 'integrate_credits',
 		'code' => 'integrate_bbc_codes',
 		'buttons' => 'integrate_bbc_buttons',
 		'settings' => 'integrate_general_mod_settings',
