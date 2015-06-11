@@ -32,10 +32,10 @@ file, You can obtain one at http://mozilla.org/MPL/2.0/.
 		<remove-dir name="$sourcedir/OharaYTEmbed" />
 		<remove-file name="$languagedir/OharaYTEmbed.english.php" />
 		<remove-file name="$languagedir/OharaYTEmbed.english-utf8.php" />
-		<remove-file name="$languagefile/OharaYTEmbed.spanish_es" />
-		<remove-file name="$languagefile/OharaYTEmbed.spanish_es-utf8" />
-		<remove-file name="$languagefile/OharaYTEmbed.spanish_latin-utf8" />
-		<remove-file name="$languagefile/OharaYTEmbed.spanish_latin" />
+		<remove-file name="$languagedir/OharaYTEmbed.spanish_es" />
+		<remove-file name="$languagedir/OharaYTEmbed.spanish_es-utf8" />
+		<remove-file name="$languagedir/OharaYTEmbed.spanish_latin-utf8" />
+		<remove-file name="$languagedir/OharaYTEmbed.spanish_latin" />
 		<remove-file name="$imagesdir/bbc/youtube.png" />
 		<remove-file name="$imagesdir/bbc/vimeo.png" />
 		<remove-file name="$themedir/scripts/ohyoutube.js" />
