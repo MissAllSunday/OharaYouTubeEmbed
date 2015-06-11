@@ -23,3 +23,4 @@ $txt['OharaYTEmbed_title'] = 'Ohara Embed mod';
 $txt['OharaYTEmbed_disabled_generic'] = 'El sitio {site} está desactivado';
 $txt['OharaYTEmbed_enable_generic'] = 'Activar {site}';
 $txt['OharaYTEmbed_desc_generic'] = 'Colocar un video de {site}';
+$txt['OharaYTEmbed_modName'] = 'Ohara (auto)Embed mod';
