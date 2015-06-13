@@ -16,6 +16,8 @@ License, v. 2.0. If a copy of the MPL was not distributed with this
 file, You can obtain one at http://mozilla.org/MPL/2.0/.
 		</license>
 		<hook function="OharaYTEmbed::runTimeHooks" hook="integrate_pre_load" file="$sourcedir/OharaYTEmbed.php" object="true"></hook>
+
+		<!-- DUH! WINNING! -->
 		<credits url="http://missallsunday.com" license="MPL 2.0" copyright="Suki" licenseurl="https://www.mozilla.org/MPL/2.0/">Ohara YouTube Embed mod</credits>
 		<require-dir name="Themes" destination="$boarddir">Theme and Language files</require-dir>
 		<require-dir name="Sources/OharaYTEmbed" destination="$sourcedir">Source files</require-dir>

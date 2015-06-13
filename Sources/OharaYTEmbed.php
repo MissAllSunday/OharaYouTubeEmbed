@@ -13,6 +13,7 @@ if (!defined('SMF'))
 
 // Use Ohara! manually :(
 require_once ($sourcedir .'/ohara/src/Suki/Ohara.php');
+require_once ($sourcedir .'/iOharaYTEmbed.php');
 
 class OharaYTEmbed extends Suki\Ohara
 {
@@ -62,7 +63,7 @@ class OharaYTEmbed extends Suki\Ohara
 				{
 					$filename = pathinfo($this->sitesFolder .'/'. $file, PATHINFO_FILENAME);
 					include_once $this->sitesFolder .'/'. $file;
-					static::$sites[$filename] = new $filename;
+					static::$sites[$filename] = new {$filename}($this);
 				}
 			}
 
@@ -81,7 +82,7 @@ class OharaYTEmbed extends Suki\Ohara
 		// Gotta include a setting for the sites. Make sure the txt string actually exists!
 		foreach (static::$sites as $site)
 			if (!empty($site) && is_object($site))
-				$config_vars[] = array('check', $this->name .'_enable_'. $site->siteSettings['identifier'], 'label' => str_replace('{site}', $site->siteSettings['name'], $this->text('enable_generic')));
+				$config_vars[] = array('check', $this->name .'_enable_'. $site->siteSettings['identifier'], 'label' => $this->parser($this->text('enable_generic'), array('site' => $site->siteSettings['name'])));
 
 		$config_vars[] = '';
 	}
@@ -205,14 +206,6 @@ class OharaYTEmbed extends Suki\Ohara
 				if (!empty($site->siteSettings['allowed_tag']))
 					$context['allowed_html_tags'][] = $site->siteSettings['allowed_tag'];
 			}
-	}
-
-	// DUH! WINNING!.
-	public function who()
-	{
-		global $context;
-
-		$context['copyrights']['mods'][] = '<a href="http://missallsunday.com" title="Free SMF Mods">Ohara Youtube and Vimeo (auto)embed mod &copy Suki</a>';
 	}
 }
 

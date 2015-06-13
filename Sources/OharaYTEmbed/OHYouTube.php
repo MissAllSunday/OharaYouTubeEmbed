@@ -11,8 +11,9 @@
 if (!defined('SMF'))
 	die('No direct access...');
 
-class OHYouTube extends OharaYTEmbed
+class OHYouTube implements iOharaYTEmbed
 {
+	protected $_app;
 	public $siteSettings = array(
 		'identifier' => 'youtube',
 		'name' => 'You Tube',
@@ -28,22 +29,19 @@ class OHYouTube extends OharaYTEmbed
 		'allowed_tag' => '',
 	);
 
-	public function __construct()
+	public function __construct($app)
 	{
-		$this->setRegistry();
-
-		// Get the default settings.
-		$this->defaultSettings();
+		$this->_app = $app;
 	}
 
 	public function content($data)
 	{
 		// Return a nice "invalid" message.
 		if (empty($data))
-			return str_replace('{site}', $this->siteSettings['name'], $that->text('invalid_link'));
+			return $this->invalid();
 
 		// Does this particular site is enabled? No? then just return what was given to us...
-		if (!$this->setting('enable_'. $this->siteSettings['identifier']))
+		if (!$this->_app->setting('enable_'. $this->siteSettings['identifier']))
 			return $data;
 
 		//Set a local var for laziness.
@@ -68,7 +66,7 @@ class OHYouTube extends OharaYTEmbed
 			$result = isset($result['v']) ? $result['v'] : false;
 		}
 
-		// At this point, all tests had miserably failed.
+		// At this point, all tests had miserably failed. 
 		if (empty($result))
 			return $data;
 
@@ -87,12 +85,13 @@ class OHYouTube extends OharaYTEmbed
 
 		$message = preg_replace_callback(
 			$this->siteSettings['regex'],
-			function ($matches) use($that) {
+			function ($matches) use($that)
+			{
 				if (!empty($matches) && !empty($matches[1]))
 					return $that->create($matches[1]);
 
 				else
-					return str_replace('{site}', $that->siteSettings['name'], $that->text('invalid_link'));
+					return $this->invalid();
 			},
 			$message
 		);
@@ -103,6 +102,11 @@ class OHYouTube extends OharaYTEmbed
 
 	public function create($videoID)
 	{
-		return !empty($videoID) ? '<div class="oharaEmbed youtube" id="oh_'. $videoID .'" style="width: '. $this->width .'px; height: '. $this->height .'px;"></div>' : '';
+		return !empty($videoID) ? '<div class="oharaEmbed youtube" id="oh_'. $videoID .'" style="width: '. $this->_app->width .'px; height: '. $this->_app->height .'px;"></div>' : '';
+	}
+
+	public function invalid()
+	{
+		return $this->_app->parser($this->_app->text('invalid_link'), array('site' => $this->siteSettings['name']));
 	}
 }
