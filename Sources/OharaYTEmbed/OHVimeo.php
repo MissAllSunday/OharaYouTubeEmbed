@@ -11,7 +11,7 @@
 if (!defined('SMF'))
 	die('No direct access...');
 
-class OHVimeo extends OharaYTEmbed
+class OHVimeo implements iOharaYTEmbed
 {
 	public $siteSettings = array(
 		'identifier' => 'vimeo',
@@ -27,24 +27,13 @@ class OHVimeo extends OharaYTEmbed
 		'allowed_tag' => '',
 	);
 
-	public function __construct()
+	public function __construct($app)
 	{
-		$this->setRegistry();
-
-		// Get the default settings.
-		$this->defaultSettings();
+		$this->_app = $app;
 	}
 
 	public function content($data)
 	{
-		// Return a nice "invalid" message.
-		if (empty($data))
-			return str_replace('{site}', $this->siteSettings['name'], $that->text('invalid_link'));
-
-		// Does this particular site is enabled? No? then just return what was given to us...
-		if (!$this->setting('enable_'. $this->siteSettings['identifier']))
-			return $data;
-
 		//Set a local var for laziness.
 		$result = '';
 
@@ -63,10 +52,10 @@ class OHVimeo extends OharaYTEmbed
 		else
 		{
 			// Need a function in a far far away file...
-			require_once($this->sourceDir .'/Subs-Package.php');
+			require_once($this->_app->sourceDir .'/Subs-Package.php');
 
 			// Construct the URL
-			$oembed = '//vimeo.com/api/oembed.json?url=' . rawurlencode($data) . '&width='. ($this->width) .'&height='. ($this->height);
+			$oembed = '//vimeo.com/api/oembed.json?url=' . rawurlencode($data) . '&width='. ($this->_app->width) .'&height='. ($this->_app->height);
 
 			//Attempts to fetch data from a URL, regardless of PHP's allow_url_fopen setting
 			$jsonArray = json_decode(fetch_web_data($oembed), true);
@@ -75,11 +64,11 @@ class OHVimeo extends OharaYTEmbed
 				return $jsonArray['html'];
 
 			else
-				return str_replace('{site}', $this->siteSettings['name'], $that->text('invalid_link'));
+				return $this->invalid();
 		}
 
 		// If we reach this place, it means everything else failed miserably...
-		return str_replace('{site}', $this->siteSettings['name'], $that->text('invalid_link'));
+		return $data;
 	}
 
 	public function auto(&$message)
@@ -93,12 +82,13 @@ class OHVimeo extends OharaYTEmbed
 
 		$message = preg_replace_callback(
 			$this->siteSettings['regex'],
-			function ($matches) use($that) {
+			function ($matches) use($that)
+			{
 				if (!empty($matches) && !empty($matches[1]))
 					return $that->create($matches[1]);
 
 				else
-					return str_replace('{site}', $that->siteSettings['name'], $that->text('invalid_link'));
+					return $this->invalid();
 			},
 			$message
 		);
@@ -109,6 +99,11 @@ class OHVimeo extends OharaYTEmbed
 
 	public function create($videoID)
 	{
-		return !empty($videoID) ? '<div class="oharaEmbed"><iframe width="'. $this->width .'" height="'. $this->height .'" src="//player.vimeo.com/video/'. $videoID .'" frameborder="0"></iframe></div>' : '';
+		return !empty($videoID) ? '<div class="oharaEmbed"><iframe width="'. $this->_app->width .'" height="'. $this->_app->height .'" src="//player.vimeo.com/video/'. $videoID .'" frameborder="0"></iframe></div>' : '';
+	}
+
+	public function invalid()
+	{
+		return $this->_app->parser($this->_app->text('invalid_link'), array('site' => $this->siteSettings['name']));
 	}
 }

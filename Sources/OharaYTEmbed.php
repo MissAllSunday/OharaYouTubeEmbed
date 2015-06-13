@@ -63,7 +63,7 @@ class OharaYTEmbed extends Suki\Ohara
 				{
 					$filename = pathinfo($this->sitesFolder .'/'. $file, PATHINFO_FILENAME);
 					include_once $this->sitesFolder .'/'. $file;
-					static::$sites[$filename] = new {$filename}($this);
+					static::$sites[$filename] = new $filename($this);
 				}
 			}
 
@@ -109,7 +109,7 @@ class OharaYTEmbed extends Suki\Ohara
 						if (!empty($disabled[$site->siteSettings['identifier']]))
 							return;
 
-						$data = empty($data) ? str_replace('{site}', $site->siteSettings['name'], $that->text('unvalid_link')) : $site->content(trim(strtr($data, array('<br />' => ''))));
+						$data = empty($data) ? $site->invalid() : $site->content(trim(strtr($data, array('<br />' => ''))));
 					},
 					'disabled_content' => '$1',
 					'block_level' => true,
@@ -127,7 +127,7 @@ class OharaYTEmbed extends Suki\Ohara
 							if (!empty($disabled[$site->siteSettings['extra_tag']]))
 								return;
 
-							$data = empty($data) ? str_replace('{site}', $site->siteSettings['name'], $that->text('unvalid_link')) : $site->content(trim(strtr($data, array('<br />' => ''))));
+							$data = empty($data) ? $site->invalid() : $site->content(trim(strtr($data, array('<br />' => ''))));
 						},
 						'disabled_content' => '$1',
 						'block_level' => true,

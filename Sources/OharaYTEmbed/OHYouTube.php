@@ -34,16 +34,9 @@ class OHYouTube implements iOharaYTEmbed
 		$this->_app = $app;
 	}
 
+	// The main class already checks for empty and calls invalid() so no need to check for those things again
 	public function content($data)
 	{
-		// Return a nice "invalid" message.
-		if (empty($data))
-			return $this->invalid();
-
-		// Does this particular site is enabled? No? then just return what was given to us...
-		if (!$this->_app->setting('enable_'. $this->siteSettings['identifier']))
-			return $data;
-
 		//Set a local var for laziness.
 		$result = '';
 
@@ -66,12 +59,8 @@ class OHYouTube implements iOharaYTEmbed
 			$result = isset($result['v']) ? $result['v'] : false;
 		}
 
-		// At this point, all tests had miserably failed. 
-		if (empty($result))
-			return $data;
-
-		// Got something, return it!.
-		return $this->create($result);
+		// At this point, all tests had miserably failed or we got something.
+		return empty($result) ? $data : $this->create($result);
 	}
 
 	public function auto(&$message)
