@@ -27,14 +27,6 @@ vimeo.com/channels/[channel name]/[ID]
 vimeo.com/groups/[Group name]/videos/[ID]
 [/code]
 
-[color=purple][b][size=12pt]License[/size][/b][/color]
-[pre]
- * This SMF modification is subject to the Mozilla Public License Version
- * 1.1 (the "License"); you may not use this SMF modification except in compliance with
- * the License. You may obtain a copy of the License at
- * http://www.mozilla.org/MPL/
- [/pre]
-
 
 [color=purple][b][size=12pt]Settings[/size][/b][/color]
 
@@ -50,7 +42,7 @@ vimeo.com/groups/[Group name]/videos/[ID]
 
 [color=purple][b][size=12pt]Changelog[/size][/b][/color]
 
-[b]2.0 - March, 2015,[/b]
+[b]2.0 - June, 2015,[/b]
 - Full OOP approach using the Ohara helper class.
 - Drop compatibility with SMF 2.0.x
 - Add compatibility with SMF 2.1
