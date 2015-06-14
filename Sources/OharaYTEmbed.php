@@ -153,7 +153,7 @@ class OharaYTEmbed extends Suki\Ohara
 			if (!empty($site) && is_object($site) && $this->setting('enable_'. $site->siteSettings['identifier']))
 				$buttons[] = array(
 					'code' => $site->siteSettings['identifier'],
-					'description' => str_replace('{site}', $site->siteSettings['name'], $this->text('desc_generic')),
+					'description' => $this->parser($this->text('desc_generic'), array('site' => $site->siteSettings['name'])),
 					'before' => $site->siteSettings['before'],
 					'after' => $site->siteSettings['after'],
 					'image' => $site->siteSettings['image'],
