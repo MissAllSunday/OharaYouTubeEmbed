@@ -52,36 +52,14 @@
 		return imgsrc;
 	};
 
-	function oh_getUrl(sParam)
-	{
-		var sPageURL = window.location.search.substring(1);
-
-		// SimpleSEF or pretty urls?
-		if (sPageURL.indexOf(sParam) > -1) {
-			return true;
-		}
-
-		var sURLVariables = sPageURL.split(';');
-		for (var i = 0; i < sURLVariables.length; i++)
-		{
-			var sParameterName = sURLVariables[i].split('=');
-			if (sParameterName[0] == sParam)
-			{
-				return true;
-			}
-		}
-
-		return false;
-	}
-
 	function oh_refresh()
 	{
 		setTimeout(function(){oh_main()},3E3);
 	}
 
+$(function() {
 	oh_main();
-
-	if (oh_getUrl('post'))
-		$('input[name=preview]').on('click',function(){
+	$('input[name=preview]').on('click',function(){
 			oh_refresh();
 		});
+});
