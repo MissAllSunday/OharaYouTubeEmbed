@@ -42,7 +42,15 @@ vimeo.com/groups/[Group name]/videos/[ID]
 
 [color=purple][b][size=12pt]Changelog[/size][/b][/color]
 
-[b]2.0 - June, 2015,[/b]
+[b]2.1 - June, 2015,[/b]
+- Use an updated Ohara class
+- JS no longer checks the url, it just looks for any preview button field
+- Site classes no longer extends the main class, they now implements iOharaYTEmbed.php interface
+- Don't return an empty or false var as it causes issues with SMF's parser
+- Added support for SMF 2.1 Beta 2
+- Added a minified version of ohyoutube.js
+
+[b]2.0 - March, 2015,[/b]
 - Full OOP approach using the Ohara helper class.
 - Drop compatibility with SMF 2.0.x
 - Add compatibility with SMF 2.1
