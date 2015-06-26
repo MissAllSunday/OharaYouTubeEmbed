@@ -32,6 +32,7 @@
 		<remove-file name="$imagesdir/bbc/youtube.gif" />
 		<remove-file name="$imagesdir/bbc/vimeo.gif" />
 		<remove-file name="$themedir/scripts/ohyoutube.js" />
+		<remove-file name="$themedir/scripts/ohyoutube.min.js" />
 		<remove-file name="$themedir/css/oharaEmbed.css" />
 	</uninstall>
 </package-info>
