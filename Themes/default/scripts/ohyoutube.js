@@ -19,7 +19,7 @@
 			$(this).append($('<div/>', {'class': 'youtube_play'}));
 
 			$('#oh_'+videoID).on('click', function() {
-				var iframe_url = 'https://www.youtube.com/embed/' + videoID + '?autoplay=1&autohide=1';
+				var iframe_url = '//www.youtube.com/embed/' + videoID + '?autoplay=1&autohide=1';
 				if ($(this).data('params')) iframe_url+='&'+$(this).data('params');
 
 				// The height and width of the iFrame should be the same as parent
@@ -37,7 +37,7 @@
 			index, len,
 			imageTypes = ['hqdefault', 'mqdefault', 'sddefault', 'maxresdefault'];
 		for (index = 0, len = imageTypes.length; index < len; ++index) {
-			imgsrc = 'http://i.ytimg.com/vi/'+ youtubeID +'/'+ imageTypes[index] +'.jpg';
+			imgsrc = '//i.ytimg.com/vi/'+ youtubeID +'/'+ imageTypes[index] +'.jpg';
 
 			if (imgsrc.width !=0){
 				break;
@@ -46,7 +46,7 @@
 
 		// Still no image, show the default one
 		if (imgsrc.width ==0){
-			imgsrc = 'http://i.ytimg.com/vi/'+ youtubeID +'/default.jpg';
+			imgsrc = '//i.ytimg.com/vi/'+ youtubeID +'/default.jpg';
 		}
 
 		return imgsrc;
