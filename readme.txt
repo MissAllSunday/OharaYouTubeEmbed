@@ -51,6 +51,11 @@ http://vimeo.com/album/[ID]
 
 [color=purple][b][size=12pt]Changelog[/size][/b][/color]
 
+[b]1.2.3 - June 26, 2015,[/b]
+- Added a minified js file.
+- Added support for using the youtube ID as param.
+- License change to MPL 2.0.
+
 [b]1.2.2 - April 05, 2015,[/b]
 - Force loading the oharaEmbed.css file from the default theme.
 - Add more options to show video preview images

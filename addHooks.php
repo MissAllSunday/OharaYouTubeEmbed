@@ -5,7 +5,7 @@
  * @version 1.2
  * @author Jessica González <missallsunday@simplemachines.org>
  * @copyright Copyright (C) 2015 Jessica González
- * @license http://www.mozilla.org/MPL/MPL-1.1.html
+ * @license http://www.mozilla.org/MPL/ MPL 2.0
  */
 
 if (file_exists(dirname(__FILE__) . '/SSI.php') && !defined('SMF'))
