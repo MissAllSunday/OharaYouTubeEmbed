@@ -139,11 +139,15 @@ function OYTE_Main($data)
 	$videoID = '';
 	$result = '';
 
+	// Check if the user provided the youtube ID
+	if (preg_match('/^[a-zA-z0-9_-]{11}$/', $data) > 0)
+		$videoID = $data;
+
 	 /* We all love Regex */
 	$pattern = '#^(?:https?://)?(?:www\.)?(?:youtu\.be/|youtube\.com(?:/embed/|/v/|/watch\?v=|/watch\?.+&v=))([\w-]{11})(?:.+)?$#x';
 
 	/* First attempt, pure regex */
-	if (preg_match($pattern, $data, $matches))
+	if (empty($videoID) && preg_match($pattern, $data, $matches))
 		$videoID = isset($matches[1]) ? $matches[1] : false;
 
 	/* Give another regex a chance */
