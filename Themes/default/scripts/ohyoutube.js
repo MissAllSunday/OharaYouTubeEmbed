@@ -13,7 +13,7 @@
 				imgWidth = $(this).width();
 
 			if (typeof imgsrc !== 'undefined'){
-				$(this).css({'background-image': 'url("'+ imgsrc +'")', 'background-size': 'cover'});
+				$(this).css({'background-image': 'url('+ imgsrc +')', 'background-size': 'cover'});
 			}
 
 			$(this).append($('<div/>', {'class': 'youtube_play'}));
@@ -23,7 +23,7 @@
 				if ($(this).data('params')) iframe_url+='&'+$(this).data('params');
 
 				// The height and width of the iFrame should be the same as parent
-				var iframe = $('<iframe/>', {'frameborder': '0', 'src': iframe_url, 'width': imgWidth, 'height': imgHeight });
+				var iframe = $('<iframe/>', {'frameborder': '0', 'src': iframe_url, 'width': imgWidth, 'height': imgHeight })
 
 				// Replace the YouTube thumbnail with YouTube HTML5 Player
 				$(this).replaceWith(iframe);
@@ -52,25 +52,14 @@
 		return imgsrc;
 	};
 
-	function oh_getUrl(sParam)
+	function oh_refresh()
 	{
-		var sPageURL = window.location.search.substring(1);
-
-		// Does it exists?
-		return sPageURL.indexOf(sParam) > -1 ? true : false;
+		setTimeout(function(){oh_main()},3E3);
 	}
 
-	function oh_refresh(waitTime)
-	{
-		waitTime = waitTime || 3000;
-		setTimeout(function(){oh_main()},waitTime);
-	}
-
-$(function(){
+$(function() {
 	oh_main();
-
-	if (oh_getUrl('post'))
-		$('input[name=preview]').on('click',function(){
+	$('input[name=preview]').on('click',function(){
 			oh_refresh();
 		});
 });
