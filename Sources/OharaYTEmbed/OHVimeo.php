@@ -88,7 +88,7 @@ class OHVimeo implements iOharaYTEmbed
 					return $that->create($matches[1]);
 
 				else
-					return $this->invalid();
+					return $that->invalid();
 			},
 			$message
 		);

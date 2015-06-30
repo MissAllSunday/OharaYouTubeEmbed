@@ -43,8 +43,12 @@ class OHYouTube implements iOharaYTEmbed
 		// We all love Regex.
 		$pattern = '#(?:https?:\/\/)?(?:www\.)?(?:youtu\.be/|youtube\.com(?:/embed/|/v/|/watch\?v=|/watch\?.+&v=))([\w-]{11})(?:.+)?$#x';
 
+		// Check if the user provided the youtube ID
+		if (preg_match('/^[a-zA-z0-9_-]{11}$/', $data) > 0)
+			$result = $data;
+
 		// First attempt, pure regex.
-		if (preg_match($pattern, $data, $matches))
+		if (empty($result) && preg_match($pattern, $data, $matches))
 			$result = isset($matches[1]) ? $matches[1] : false;
 
 		// Give another regex a chance.
@@ -80,7 +84,7 @@ class OHYouTube implements iOharaYTEmbed
 					return $that->create($matches[1]);
 
 				else
-					return $this->invalid();
+					return $that->invalid();
 			},
 			$message
 		);
