@@ -20,7 +20,7 @@ class OHYouTube implements iOharaYTEmbed
 		'code' => 'youtube',
 		'extra_tag' => 'yt',
 		'js_inline' => '',
-		'js_file' => 'ohyoutube.min.js',
+		'js_file' => 'ohyoutube.js',
 		'css_file' => '',
 		'regex' => '~(?<=[\s>\.(;\'"]|^)(?:http|https):\/\/[\w\-_%@:|]?(?:www\.)?(?:youtu\.be/|youtube\.com(?:/embed/|/v/|/watch\?v=|/watch\?.+&v=))([\w-]{11})(?=[^\w-]|$)(?![?=&+%\w.-]*(?:[\'"][^<>]*>  | </a>  ))[?=&+%\w.-]*[/\w\-_\~%@\?;=#}\\\\]?~ix',
 		'before' => '[youtube]',

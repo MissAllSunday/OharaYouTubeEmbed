@@ -57,11 +57,11 @@ class OHVimeo implements iOharaYTEmbed
 			// Construct the URL
 			$oembed = '//vimeo.com/api/oembed.json?url=' . rawurlencode($data) . '&width='. ($this->_app->width) .'&height='. ($this->_app->height);
 
-			//Attempts to fetch data from a URL, regardless of PHP's allow_url_fopen setting
+			// Attempts to fetch data from a URL, regardless of PHP's allow_url_fopen setting
 			$jsonArray = json_decode(fetch_web_data($oembed), true);
 
 			if (!empty($jsonArray) && is_array($jsonArray) && !empty($jsonArray['html']))
-				return $jsonArray['html'];
+				return str_replace('<iframe', '<iframe width="'. $this->_app->width .'" height="'. $this->_app->height .'"', $jsonArray['html']);
 
 			else
 				return $this->invalid();
