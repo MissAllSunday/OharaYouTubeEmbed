@@ -3,14 +3,27 @@
  @license http://www.mozilla.org/MPL/ MPL 2.0
 */
 
-	function oh_main(){
+	var _oh = function()
+	{
+		this.videoFrame = $('.oharaEmbed > iframe');
+		this.basedElement = $('.oharaEmbed').parent();
+		this.youtube = $('.youtube');
+		this.aspectRatio = this.basedElement.height / this.basedElement.width);
 
-		$('.youtube').each(function() {
+		this.main();
+		this.responsive();
+	};
+
+	_oh.prototype.main = function(){
+
+		$this = this;
+
+		this.youtube.each(function() {
 
 			var videoID = this.id.replace('oh_',''),
-				imgsrc = oh_getImage(videoID),
-				imgHeight = $(this).height(),
-				imgWidth = $(this).width();
+				imgsrc = $this.getImage(videoID),
+				imgHeight = $this.basedElement.height(),
+				imgWidth = $this.basedElement.width();
 
 			if (typeof imgsrc !== 'undefined'){
 				$(this).css({'background-image': 'url('+ imgsrc +')', 'background-size': 'cover'});
@@ -33,7 +46,34 @@
 		});
 	};
 
-	function oh_getImage(youtubeID)
+	_oh.prototype.responsive = function()
+	{
+		$this = this;
+
+		$(window).resize(function() {
+
+			var newWidth = $this.basedElement.width();
+
+			if (newWidth <= 600)
+				allVideos.each(function() {
+
+					var $el = $(this);
+					$el.width(newWidth).height(newWidth * $el.data('aspectRatio'));
+					$el.closest('.oharaEmbed').width(newWidth).height(newWidth * $el.data('aspectRatio'));
+
+				});
+
+		// Kick off one resize to fix all videos on page load
+		}).resize();
+	};
+
+	_oh.prototype.refresh = function()
+	{
+		setTimeout(function(){oh_main()},3E3);
+		setTimeout(function(){oh_responsive()},3E3);
+	};
+
+	_oh.prototype.getImage = function(youtubeID)
 	{
 		var imgsrc = '',
 			index, len,
@@ -49,43 +89,10 @@
 		// Still no image, show the default one
 		if (imgsrc.width ==0){
 			imgsrc = '//i.ytimg.com/vi/'+ youtubeID +'/default.jpg';
-		} 
+		}
 
 		return imgsrc;
 	};
-
-	function oh_refresh()
-	{
-		setTimeout(function(){oh_main()},3E3);
-		setTimeout(function(){oh_responsive()},3E3);
-	}
-
-	function oh_responsive()
-	{
-		var allVideos = $('.oharaEmbed > iframe'),
-			fluidEl = $('.oharaEmbed').parent();
-
-		allVideos.each(function() {
-
-			$(this).data('aspectRatio', this.height / this.width);
-		});
-
-		$(window).resize(function() {
-
-			var newWidth = fluidEl.width();
-
-			if (newWidth <= 600)
-				allVideos.each(function() {
-
-					var $el = $(this);
-					$el.width(newWidth).height(newWidth * $el.data('aspectRatio'));
-					$el.closest('.oharaEmbed').width(newWidth).height(newWidth * $el.data('aspectRatio'));
-
-				});
-
-		// Kick off one resize to fix all videos on page load
-		}).resize();
-	}
 
 $(function() {
 	oh_main();
