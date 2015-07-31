@@ -187,6 +187,10 @@ class OharaYTEmbed extends Suki\Ohara
 		// Add the iframe to the list of allowed tags.
 		$context['allowed_html_tags'][] = '<iframe>';
 
+		// Set a max width var to let the JS code know how to act and react!
+		addInlineJavascript('
+	var _ohWidth = '. $this->width .';');
+
 		foreach (static::$sites as $site)
 			if (!empty($site) && is_object($site) && $this->setting('enable_'. $site->siteSettings['identifier']))
 			{
