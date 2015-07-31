@@ -168,7 +168,7 @@ function OYTE_Main($data)
 
 	// Got something!
 	else
-		$result = '<div class="youtube" id="oh_'. $videoID .'" style="width: '. (empty($modSettings['OYTE_video_width']) ? '420' : $modSettings['OYTE_video_width']) .'px; height: '. (empty($modSettings['OYTE_video_height']) ? '315' : $modSettings['OYTE_video_height']) .'px;"></div>';
+		$result = '<div class="oharaEmbed youtube" id="oh_'. $videoID .'" style="width: '. (empty($modSettings['OYTE_video_width']) ? '420' : $modSettings['OYTE_video_width']) .'px; height: '. (empty($modSettings['OYTE_video_height']) ? '315' : $modSettings['OYTE_video_height']) .'px;"></div>';
 
 	return $result;
 }
@@ -192,7 +192,8 @@ function OYTE_Vimeo($data)
 	$jsonArray = json_decode(fetch_web_data($oembed), true);
 
 	if (!empty($jsonArray) && is_array($jsonArray) && !empty($jsonArray['html']))
-		return $jsonArray['html'];
+		str_replace('<iframe', '<iframe width="'. (empty($modSettings['OYTE_video_width']) ? '420' : $modSettings['OYTE_video_width']) .'" height="'. (empty($modSettings['OYTE_video_height']) ? '315' : $modSettings['OYTE_video_height']) .'"', $jsonArray['html']);
+
 
 	else
 		return sprintf($txt['OYTE_unvalid_link'], 'vimeo');
