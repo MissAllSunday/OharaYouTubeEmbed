@@ -50,7 +50,7 @@ file, You can obtain one at http://mozilla.org/MPL/2.0/.
 
 [color=purple][b][size=12pt]Changelog[/size][/b][/color]
 
-[b]1.2.3 - June 26, 2015,[/b]
+[b]1.2.4 - June 26, 2015,[/b]
 - Added a minified js file.
 - Added support for using the youtube ID as param.
 - License change to MPL 2.0.
