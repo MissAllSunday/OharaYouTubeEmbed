@@ -51,7 +51,8 @@ file, You can obtain one at http://mozilla.org/MPL/2.0/.
 [color=purple][b][size=12pt]Changelog[/size][/b][/color]
 [code]
 1.2.4 - August 2, 2015,
-- Added responsiveness to videos.
+- Added responsiveness to videos. This will only work on responsive themes.
+- Fixed an issue when two or more instances of the same video where posted, none of them would be played. 
 - Re-wrote the JS code to use prototypes.
 - Change the default size values to 480 x 270.
 
