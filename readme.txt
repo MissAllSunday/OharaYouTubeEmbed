@@ -49,13 +49,18 @@ file, You can obtain one at http://mozilla.org/MPL/2.0/.
 
 
 [color=purple][b][size=12pt]Changelog[/size][/b][/color]
+[code]
+1.2.4 - August 2, 2015,
+- Added responsiveness to videos.
+- Re-wrote the JS code to use prototypes.
+- Change the default size values to 480 x 270.
 
-[b]1.2.4 - June 26, 2015,[/b]
+1.2.3 - June 26, 2015,
 - Added a minified js file.
 - Added support for using the youtube ID as param.
 - License change to MPL 2.0.
 
-[b]1.2.2 - April 05, 2015,[/b]
+1.2.2 - April 05, 2015,
 - Force loading the oharaEmbed.css file from the default theme.
 - Add more options to show video preview images
 - Add support for previewing a message
@@ -63,24 +68,25 @@ file, You can obtain one at http://mozilla.org/MPL/2.0/.
 - Add a setting to enable/disable the autoembed feature. This was suppose to be added a long time ago but dunno why I forgot to do it...
 - Missed to check the master setting.
 
-[b]1.2.1 - March 09, 2015,[/b]
+1.2.1 - March 09, 2015,
 - Added the option to disable the autoembed feature via $context['ohara_disable'].
 - Use closures instead of create_function()
 - Change the way youtube videos are displayed, faster pages specially with multiple videos, thanks to Infernuza for the tip.
 
-[b]1.2 - March 05, 2014,[/b]
+1.2 - March 05, 2014,
 - Added auto-embed feature.
 - Add support for old [nobbc][yt][/yt][/nobbc] tags
 - Add support for [nobbc][vimeo][/vimeo][/nobbc]
 
-[b]1.1 - April 19, 2013,[/b]
+1.1 - April 19, 2013,
 - Fix the http/https url issue.
 - Fixed the parsing smiles after a video issue.
 - Fixed the pass by reference issue.
 - Updated the regex to include more valid urls.
 
-[b]1.0.1 - Dic 28, 2011,[/b]
+1.0.1 - Dic 28, 2011,
 -Fix the youtube redirect page error if you use the initial tag alone: [youtube]
 
-[b]1.0 - Sep 25, 2011,[/b]
+1.0 - Sep 25, 2011,
 -Initial Release
+[/code]
