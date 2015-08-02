@@ -192,7 +192,7 @@ function OYTE_Vimeo($data)
 	$jsonArray = json_decode(fetch_web_data($oembed), true);
 
 	if (!empty($jsonArray) && is_array($jsonArray) && !empty($jsonArray['html']))
-		str_replace('<iframe', '<iframe width="'. (empty($modSettings['OYTE_video_width']) ? '420' : $modSettings['OYTE_video_width']) .'" height="'. (empty($modSettings['OYTE_video_height']) ? '315' : $modSettings['OYTE_video_height']) .'"', $jsonArray['html']);
+		return '<div class="oharaEmbed vimeo">'. str_replace('<iframe', '<iframe width="'. (empty($modSettings['OYTE_video_width']) ? '420' : $modSettings['OYTE_video_width']) .'px" height="'. (empty($modSettings['OYTE_video_height']) ? '315' : $modSettings['OYTE_video_height']) .'px"', $jsonArray['html']) .'</div>';
 
 
 	else
@@ -239,13 +239,17 @@ function OYTE_Preparse($message)
 /* DUH! WINNING! */
 function OYTE_care(&$dummy)
 {
-	global $context, $settings;
+	global $context, $settings, $modSettings;
 
 	if (!empty($context['current_action']) && $context['current_action'] == 'credits')
 		$context['copyrights']['mods'][] = '<a href="http://missallsunday.com" target="_blank" title="Free SMF mods">Ohara YouTube Embed mod &copy Suki</a>';
 
 	// Add our css and js files. Dear and lovely mod authors, if you're going to use $context['html_headers'] MAKE SURE you append your data .= instead of re-declaring the var! and don't forget to add a new line and proper indentation too!
 	$context['html_headers'] .= '
+	<script type="text/javascript"><!-- // --><![CDATA[
+		var _ohWidth = '.(empty($modSettings['OYTE_video_width']) ? '420' : $modSettings['OYTE_video_width']).';
+		var _ohHeight = '.(empty($modSettings['OYTE_video_height']) ? '420' : $modSettings['OYTE_video_height']).';
+	// ]]></script>
 	<script type="text/javascript">!window.jQuery && document.write(unescape(\'%3Cscript src="//code.jquery.com/jquery-1.9.1.min.js"%3E%3C/script%3E\'))</script>
 	<script type="text/javascript" src="'. $settings['default_theme_url'] .'/scripts/ohyoutube.min.js"></script>
 	<link rel="stylesheet" type="text/css" href="'. $settings['default_theme_url'] .'/css/oharaEmbed.css" />';
