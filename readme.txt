@@ -42,15 +42,20 @@ vimeo.com/groups/[Group name]/videos/[ID]
 
 [color=purple][b][size=12pt]Changelog[/size][/b][/color]
 
-[b]2.1 - June, 2015,[/b]
+[code]
+2.1 - August, 2015,
 - Use an updated Ohara class
 - JS no longer checks the url, it just looks for any preview button field
 - Site classes no longer extends the main class, they now implements iOharaYTEmbed.php interface
 - Don't return an empty or false var as it causes issues with SMF's parser
 - Added support for SMF 2.1 Beta 2
 - Added a minified version of ohyoutube.js
+- Added responsiveness to videos. This will only work on responsive themes.
+- Fixed an issue when two or more instances of the same video where posted, none of them would be played. 
+- Re-wrote the JS code to use prototypes.
+- Change the default size values to 480 x 270.
 
-[b]2.0 - March, 2015,[/b]
+2.0 - March, 2015,
 - Full OOP approach using the Ohara helper class.
 - Drop compatibility with SMF 2.0.x
 - Add compatibility with SMF 2.1
@@ -61,31 +66,6 @@ vimeo.com/groups/[Group name]/videos/[ID]
 - Change the way youtube videos are displayed, faster pages specially with multiple videos, thanks to Infernuza for the tip.
 - No file edits.
 
-[b]1.2.1 - March, 2015,[/b]
-- Added an enable/disable setting for auto-embedding.
-- Regex updates.
-- Usage of closures
-- The auto embed feature now directly replaces the url with an iframe.
-- Using the universal embed code for vimeo urls, fall back to the oembed API.
-- $txt['OYTE_unvalid_link'] now uses  sprintf().
-- Added an extra file edit to make sure both places gets edited.
-- Schema-less urls.
-- Responsive iframes, only works if you're using a fully responsive theme.
-
-[b]1.2 - March 05, 2014,[/b]
-- Added auto-embed feature.
-- Add support for old [nobbc][yt][/yt][/nobbc] tags
-- Add support for [nobbc][vimeo][/vimeo][/nobbc]
-- Requires PHP 5.3 or greater.
-
-[b]1.1 - April 19, 2013,[/b]
-- Fix the http/https url issue.
-- Fixed the parsing smiles after a video issue.
-- Fixed the pass by reference issue.
-- Updated the regex to include more valid urls.
-
-[b]1.0.1 - Dic 28, 2011,[/b]
--Fix the youtube redirect page error if you use the initial tag alone: [youtube]
-
-[b]1.0 - Sep 25, 2011,[/b]
+1.0 - Sep 25, 2011,
 -Initial Release
+[/code]
