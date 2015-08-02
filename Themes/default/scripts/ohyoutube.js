@@ -6,9 +6,7 @@
 
 var _oh = function(){
 	this.masterDiv = $('.oharaEmbed');
-	this.videoFrame = $('.oharaEmbed > iframe');
 	this.basedElement = this.masterDiv.parent();
-	this.youtube = $('.youtube');
 	this.defaultWidth = typeof(_ohWidth) !== 'undefined' ? _ohWidth : 480;
 	this.defaultHeight = typeof(_ohHeight) !== 'undefined' ? _ohHeight : 270;
 	this.aspectRatio = this.defaultHeight / this.defaultWidth;
@@ -21,7 +19,7 @@ _oh.prototype.main = function(){
 
 	$this = this;
 
-	this.youtube.each(function(){
+	$('.youtube').each(function(){
 
 		var videoID = this.id.replace('oh_',''),
 			imgsrc = $this.getImage(videoID),
@@ -34,7 +32,7 @@ _oh.prototype.main = function(){
 
 		$(this).append($('<div/>', {'class': 'youtube_play'}));
 
-		$('#oh_'+videoID).one('click', function(){
+		$(this).one('click', function(){
 			var iframe_url = '//www.youtube.com/embed/' + videoID + '?autoplay=1&autohide=1';
 
 			if ($(this).data('params')){
@@ -47,6 +45,9 @@ _oh.prototype.main = function(){
 			// Append the YouTube HTML5 Player.
 			$(this).css({'background-image': 'none'}).append(iframe);
 			$(this).children('.youtube_play').css({'height': '0'});
+
+			// Gotta make sure the new iframe gets resized if needed.
+			$this.responsive();
 		});
 	});
 };
@@ -62,15 +63,15 @@ _oh.prototype.responsive = function()
 		var newHeight = (newWidth * $this.aspectRatio) <= $this.defaultHeight ? (newWidth * $this.aspectRatio) : $this.defaultHeight;
 
 		// If the new width is lower than the "default width" then apply some resizing. No? then go back to our default sizes
-		var applyResize = (newWidth <= ($this.defaultWidth));
+		var applyResize = (newWidth <= $this.defaultWidth),
+			applyWidth = !applyResize ? $this.defaultWidth : newWidth,
+			applyHeight = !applyResize ? $this.defaultHeight : newHeight;
 
-			// Gotta resize the master div.
-			$this.masterDiv.width(!applyResize ? $this.defaultWidth : newWidth).height(!applyResize ? $this.defaultHeight : newHeight);
-			$this.videoFrame.each(function(){
-
-				var $el = $(this);
-				$el.width(!applyResize ? $this.defaultWidth : newWidth).height(!applyResize ? $this.defaultHeight : newHeight);
-			});
+		// Gotta resize the master div.
+		$this.masterDiv.width(applyWidth).height(applyHeight);
+		$('.oharaEmbed > iframe').each(function(){
+			$(this).width(applyWidth).height(applyHeight);
+		});
 
 	// Kick off one resize to fix all videos on page load
 	}).resize();
