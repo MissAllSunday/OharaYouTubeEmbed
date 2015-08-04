@@ -1,13 +1,8 @@
-
 /* Default values for desktops */
 .oharaEmbed {
 	margin-left: auto ;
 	margin-right: auto ;
 	text-align:center;
-}
-
-/* You Tube custom css */
-.youtube {
 	background-position: center;
 	background-repeat: no-repeat;
 	background-color: #000;
@@ -15,6 +10,7 @@
 	transition: all 200ms ease-out;
 	cursor: pointer;
 }
+
 
 /* You Tube play button */
 .youtube .youtube_play {
@@ -25,9 +21,4 @@
 	opacity: .8;
 	filter: alpha(opacity=80);
 	transition: all 0.2s ease-out;
-}
-
-.youtube .play:hover {
-	opacity: 1;
-	filter: alpha(opacity=100);
 }
