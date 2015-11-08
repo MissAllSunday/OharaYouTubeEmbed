@@ -45,11 +45,11 @@ _oh.prototype.main = function(){
 			// Append the YouTube HTML5 Player.
 			$(this).css({'background-image': 'none'}).append(iframe);
 			$(this).children('.youtube_play').css({'height': '0'});
-
-			// Gotta make sure the new iframe gets resized if needed.
-			$this.responsive();
 		});
 	});
+
+	// Gotta make sure the new iframe gets resized if needed.
+	$this.responsive();
 };
 
 _oh.prototype.responsive = function()

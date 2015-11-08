@@ -95,7 +95,7 @@ class OHYouTube implements iOharaYTEmbed
 
 	public function create($videoID)
 	{
-		return !empty($videoID) ? '<div class="oharaEmbed youtube" id="oh_'. $videoID .'" style="width: '. $this->_app->width .'px; height: '. $this->_app->height .'px;"></div>' : '';
+		return !empty($videoID) ? '<div class="oharaEmbed youtube" data-ohara_'. $this->siteSettings['identifier'] .'="'. $videoID .'" id="oh_'. $videoID .'" style="width: '. $this->_app->width .'px; height: '. $this->_app->height .'px;"></div>' : '';
 	}
 
 	public function invalid()
