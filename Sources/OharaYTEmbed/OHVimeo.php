@@ -54,7 +54,7 @@ class OHVimeo implements iOharaYTEmbed
 			$filtered = array_intersect_key($jsonArray, array_flip($whiteList));
 
 			// Get a more generic name.
-			$filtered['image'] = $filtered['thumbnail_url'];
+			$filtered['imageUrl'] = $filtered['thumbnail_url'];
 			unset($filtered['thumbnail_url']);
 
 			return $this->create($filtered);

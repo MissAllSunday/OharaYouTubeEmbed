@@ -96,14 +96,21 @@ _oh.prototype.refresh = function(){
 
 _oh.prototype.getVimeoImage(site, videoElement)
 {
-	// The thumbnail url is already included in site or at leasts thats the expected behaviour.
-	if (typeof site.thumbnail_url !== 'undefined'){
-		videoElement.css({'background-image': 'url('+ site.thumbnail_url +')', 'background-size': 'cover'});
+	// The image url is already included in site or at least thats the expected behaviour.
+	if (typeof site.imageUrl !== 'undefined'){
+		videoElement.css({'background-image': 'url('+ site.imageUrl +')', 'background-size': 'cover'});
 	}
 };
 
 _oh.prototype.getYoutubeImage(site, videoElement)
 {
+	// The image url is already included in site or at least thats the expected behaviour.
+	if (typeof site.imageUrl !== 'undefined'){
+		videoElement.css({'background-image': 'url('+ site.imageUrl +')', 'background-size': 'cover'});
+
+		return;
+	}
+
 	var imgsrc = '',
 		index, len,
 		imageTypes = ['hqdefault', 'mqdefault', 'sddefault', 'maxresdefault'];

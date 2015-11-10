@@ -87,7 +87,7 @@ class OHYouTube implements iOharaYTEmbed
 				if (!empty($cResult['status'] && $cResult['status'] == 'ok')
 				{
 					$params['title'] = $cResult['title'];
-					$params['image'] = (!empty($cResult['iurl'] ? $cResult['iurl'] : $cResult['iurlsd']);
+					$params['imageUrl'] = (!empty($cResult['iurl'] ? $cResult['iurl'] : $cResult['iurlsd']);
 				}
 
 			return $this->create($params);
