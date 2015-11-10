@@ -8,7 +8,7 @@
 	<version>2.1</version>
 	<type>modification</type>
 
-	<install for="2.1 Beta 3, 2.1 - 2.1.99">
+	<install for="2.1 Beta 2, 2.1 Beta 3, 2.1 - 2.1.99">
 		<readme parsebbc="true">readme.txt</readme>
 		<license type="inline" parsebbc="false">
 This Source Code Form is subject to the terms of the Mozilla Public
@@ -23,14 +23,16 @@ file, You can obtain one at http://mozilla.org/MPL/2.0/.
 		<require-dir name="Sources/OharaYTEmbed" destination="$sourcedir">Source files</require-dir>
 		<require-dir name="Sources/ohara" destination="$sourcedir">Source library</require-dir>
 		<require-file name="Sources/OharaYTEmbed.php" destination="$sourcedir">The main class</require-file>
+		<require-file name="Sources/iOharaYTEmbed.php" destination="$sourcedir">Sites interface</require-file>
 		<require-file name="youtube.png" destination="$imagesdir/bbc" />
 		<require-file name="vimeo.png" destination="$imagesdir/bbc" />
 		<redirect url="index.php?action=admin;area=modsettings;sa=general" timeout="1000" />
 	</install>
 
 	<!-- Do note that Sources/ohara dir isn't deleted as it can be used by other mods. -->
-	<uninstall for="2.1 Beta 1, 2.1 Beta 2, 2.1 - 2.1.99">
+	<uninstall for="2.1 Beta 2, 2.1 Beta 3, 2.1 - 2.1.99">
 		<remove-file name="$sourcedir/OharaYTEmbed.php" />
+		<remove-file name="$sourcedir/iOharaYTEmbed.php" />
 		<remove-dir name="$sourcedir/OharaYTEmbed" />
 		<remove-file name="$languagedir/OharaYTEmbed.english.php" />
 		<remove-file name="$languagedir/OharaYTEmbed.english-utf8.php" />

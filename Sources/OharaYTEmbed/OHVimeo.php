@@ -41,7 +41,7 @@ class OHVimeo implements iOharaYTEmbed
 	public function content($data)
 	{
 		// If the ID was provided, turn it into a generic url.
-		if (is_numeric($data)
+		if (is_numeric($data))
 			$data = '//vimeo.com/'. $data;
 
 		// Need a function in a far far away file...

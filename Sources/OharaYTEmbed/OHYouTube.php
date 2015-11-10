@@ -70,7 +70,7 @@ class OHYouTube implements iOharaYTEmbed
 		}
 
 		// Got something, lets attempt to retreive the video title and some other info too.
-		if (!empty($result)
+		if (!empty($result))
 		{
 			// Need a function in a far far away file...
 			require_once($this->_app->sourceDir .'/Subs-Package.php');
@@ -89,11 +89,11 @@ class OHYouTube implements iOharaYTEmbed
 			parse_str($content, $cResult);
 
 			// Some videos has weird restrictions.
-			if (!empty($cResult)
-				if (!empty($cResult['status'] && $cResult['status'] == 'ok')
+			if (!empty($cResult))
+				if (!empty($cResult['status'] && $cResult['status'] == 'ok'))
 				{
 					$params['title'] = $cResult['title'];
-					$params['imageUrl'] = (!empty($cResult['iurl'] ? $cResult['iurl'] : $cResult['iurlsd']);
+					$params['imageUrl'] = (!empty($cResult['iurl'] ? $cResult['iurl'] : $cResult['iurlsd']));
 				}
 
 			return $this->create($params);
