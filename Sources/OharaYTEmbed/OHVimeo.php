@@ -90,9 +90,12 @@ class OHVimeo implements iOharaYTEmbed
 		unset($that);
 	}
 
-	public function create($videoID)
+	public function create($params = array()
 	{
-		return !empty($videoID) ? '<div class="oharaEmbed"><iframe width="'. $this->_app->width .'" height="'. $this->_app->height .'" src="//player.vimeo.com/video/'. $videoID .'" frameborder="0"></iframe></div>' : '';
+		// Make sure not to use any unvalid params.
+		$paramsJson = !empty($params) ? json_encode($params) : '{}';
+
+		return !empty($params) ? '<div class="oharaEmbed vimeo" data-ohara_'. $this->siteSettings['identifier'] .'="'. $paramsJson .'" id="oh_'. $params['videoID'] .'" style="width: '. $this->_app->width .'px; height: '. $this->_app->height .'px;"></div>' : '';
 	}
 
 	public function invalid()
