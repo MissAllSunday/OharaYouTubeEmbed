@@ -93,9 +93,12 @@ class OHYouTube implements iOharaYTEmbed
 		unset($that);
 	}
 
-	public function create($videoID)
+	public function create($params = array())
 	{
-		return !empty($videoID) ? '<div class="oharaEmbed youtube" data-ohara_'. $this->siteSettings['identifier'] .'="'. $videoID .'" id="oh_'. $videoID .'" style="width: '. $this->_app->width .'px; height: '. $this->_app->height .'px;"></div>' : '';
+		// Make sure not to use any unvalid params.
+		$paramsJson = !empty($params) ? json_encode($params) : '{}';
+
+		return !empty($videoID) ? '<div class="oharaEmbed youtube" data-ohara_'. $this->siteSettings['identifier'] .'="'. $paramsJson .'" id="oh_'. $params['videoID'] .'" style="width: '. $this->_app->width .'px; height: '. $this->_app->height .'px;"></div>' : '';
 	}
 
 	public function invalid()

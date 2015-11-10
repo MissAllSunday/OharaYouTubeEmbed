@@ -15,37 +15,78 @@ var _oh = function(){
 	this.responsive();
 };
 
+_oh.prototype.getIframe(site)
+{
+	return $('<iframe/>', {'frameborder': '0', 'src': site.baseUrl, 'width': this.defaultWidth, 'height': this.defaultHeight});
+};
+
+_oh.prototype.createVideo(site, videoElement)
+{
+	$this = this;
+	videoElement.append($('<div/>', {'class': 'oharaEmbed_play'}));
+
+	videoElement.one('click', function(){
+
+		// Append the YouTube HTML5 Player.
+		videoElement.children('.oharaEmbed_play').css({'height': '0'});
+		videoElement.css({'background-image': 'none'}).append($this.getIframe(site);
+	});
+}
+
+_oh.prototype.getVimeoImage(site, videoElement)
+{
+	// The thumbnail url is already included in site or at leasts thats the expected behaviour.
+	if (typeof site.thumbnail_url !== 'undefined'){
+		videoElement.css({'background-image': 'url('+ site.thumbnail_url +')', 'background-size': 'cover'});
+	}
+}
+
+_oh.prototype.getYoutubeImage(site, videoElement)
+{
+	var imgsrc = '',
+		index, len,
+		imageTypes = ['hqdefault', 'mqdefault', 'sddefault', 'maxresdefault'];
+	for (index = 0, len = imageTypes.length; index < len; ++index) {
+		imgsrc = '//i.ytimg.com/vi/'+ youtubeID +'/'+ imageTypes[index] +'.jpg';
+
+		if (imgsrc.width !=0){
+			break;
+		}
+	}
+
+	// Still no image, show the default one
+	if (imgsrc.width ==0){
+		imgsrc = '//i.ytimg.com/vi/'+ youtubeID +'/default.jpg';
+	}
+
+	if (typeof imgsrc !== 'undefined'){
+		videoElement.css({'background-image': 'url('+ imgsrc +')', 'background-size': 'cover'});
+	}
+}
+
 _oh.prototype.main = function(){
 
 	$this = this;
 
-	$('.youtube').each(function(){
+	// Get all registered sites.
+	$.each(_ohSites, function(index, site) {
+			$(site.cssID).each(function(){
 
-		var videoID = this.id.replace('oh_',''),
-			imgsrc = $this.getImage(videoID),
-			imgHeight = $this.basedElement.height(),
-			imgWidth = $this.basedElement.width();
+				site.videoElement = $(this);
 
-		if (typeof imgsrc !== 'undefined'){
-			$(this).css({'background-image': 'url('+ imgsrc +')', 'background-size': 'cover'});
-		}
+				// Get and gather all we need!
+				site = $.extend(site, videoElement.data('ohara_'+ site.identifier));
+				site.baseUrl = site.baseUrl.replace('{videoID}', site.videoID);
 
-		$(this).append($('<div/>', {'class': 'youtube_play'}));
+				// Check if the site has a custom function to use.
+				getImage = typeof site.getImage === 'string' ? _oh[site.getImage] : site.getImage;
 
-		$(this).one('click', function(){
-			var iframe_url = '//www.youtube.com/embed/' + videoID + '?autoplay=1&autohide=1';
+				// Now get an image preview and perhaps a title too!
+				getImage(site, videoElement);
 
-			if ($(this).data('params')){
-				iframe_url+='&'+$(this).data('params');
-			}
-
-			// The height and width of the iFrame should be the same as parent
-			var iframe = $('<iframe/>', {'frameborder': '0', 'src': iframe_url, 'width': imgWidth, 'height': imgHeight});
-
-			// Append the YouTube HTML5 Player.
-			$(this).css({'background-image': 'none'}).append(iframe);
-			$(this).children('.youtube_play').css({'height': '0'});
-		});
+				// Finally, create the actual video's HTML. @todo make it possible for sites to use their own create function.
+				$this.videoCreate(site, videoElement;
+			});
 	});
 
 	// Gotta make sure the new iframe gets resized if needed.
@@ -81,27 +122,6 @@ _oh.prototype.refresh = function(){
 	$this = this;
 	setTimeout(function(){$this.main();},3E3);
 	setTimeout(function(){$this.responsive();},3E3);
-};
-
-_oh.prototype.getImage = function(youtubeID)
-{
-	var imgsrc = '',
-		index, len,
-		imageTypes = ['hqdefault', 'mqdefault', 'sddefault', 'maxresdefault'];
-	for (index = 0, len = imageTypes.length; index < len; ++index) {
-		imgsrc = '//i.ytimg.com/vi/'+ youtubeID +'/'+ imageTypes[index] +'.jpg';
-
-		if (imgsrc.width !=0){
-			break;
-		}
-	}
-
-	// Still no image, show the default one
-	if (imgsrc.width ==0){
-		imgsrc = '//i.ytimg.com/vi/'+ youtubeID +'/default.jpg';
-	}
-
-	return imgsrc;
 };
 
 (function( $ ) {
