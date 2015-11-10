@@ -17,7 +17,7 @@ interface iOharaYTEmbed
 
 	public function auto(&$message);
 
-	public function create($videoID);
+	public function create($params);
 
 	public function invalid();
 }

@@ -8,7 +8,7 @@
 	<version>2.1</version>
 	<type>modification</type>
 
-	<install for="2.1 Beta 3, 2.1 Beta 2, 2.1 - 2.1.99">
+	<install for="2.1 Beta 3, 2.1 - 2.1.99">
 		<readme parsebbc="true">readme.txt</readme>
 		<license type="inline" parsebbc="false">
 This Source Code Form is subject to the terms of the Mozilla Public

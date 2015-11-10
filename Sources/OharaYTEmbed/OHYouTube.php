@@ -48,7 +48,7 @@ class OHYouTube implements iOharaYTEmbed
 			$result = $data;
 
 		// First attempt, pure regex.
-		if (empty($result) && preg_match($pattern, $data, $matches))
+		elseif (empty($result) && preg_match($pattern, $data, $matches))
 			$result = isset($matches[1]) ? $matches[1] : false;
 
 		// Give another regex a chance.
@@ -63,8 +63,39 @@ class OHYouTube implements iOharaYTEmbed
 			$result = isset($result['v']) ? $result['v'] : false;
 		}
 
+		// Got something, lets attempt to retreive the video title and some other info too.
+		if (!empty($result)
+		{
+			// Need a function in a far far away file...
+			require_once($this->_app->sourceDir .'/Subs-Package.php');
+
+			// Default values.
+			$params = array(
+				'video_id' => $result,
+				'title' => '',
+			);
+
+			// Construct the URL
+			$oembed = '//youtube.com/get_video_info?video_id=' . $result;
+			$content = '';
+			$cResult = array();
+			$content = fetch_web_data($oembed);
+			parse_str($content, $cResult);
+
+			// Some videos has weird restrictions.
+			if (!empty($cResult)
+				if (!empty($cResult['status'] && $cResult['status'] == 'ok')
+				{
+					$params['title'] = $cResult['title'];
+					$params['image'] = (!empty($cResult['iurl'] ? $cResult['iurl'] : $cResult['iurlsd']);
+				}
+
+			return $this->create($params);
+		}
+
 		// At this point, all tests had miserably failed or we got something.
-		return empty($result) ? $data : $this->create($result);
+		else
+			return $data;
 	}
 
 	public function auto(&$message)
@@ -81,7 +112,7 @@ class OHYouTube implements iOharaYTEmbed
 			function ($matches) use($that)
 			{
 				if (!empty($matches) && !empty($matches[1]))
-					return $that->create($matches[1]);
+					return $that->content($matches[1]);
 
 				else
 					return $that->invalid();
@@ -98,7 +129,7 @@ class OHYouTube implements iOharaYTEmbed
 		// Make sure not to use any unvalid params.
 		$paramsJson = !empty($params) ? json_encode($params) : '{}';
 
-		return !empty($params) ? '<div class="oharaEmbed youtube" data-ohara_'. $this->siteSettings['identifier'] .'="'. $paramsJson .'" id="oh_'. $params['videoID'] .'" style="width: '. $this->_app->width .'px; height: '. $this->_app->height .'px;"></div>' : '';
+		return !empty($params) ? '<div class="oharaEmbed vimeo" data-ohara_'. $this->siteSettings['identifier'] .'="'. $paramsJson .'" id="oh_'. $this->siteSettings['identifier'] .'_'. $params['videoID'] .'" style="width: '. $this->_app->width .'px; height: '. $this->_app->height .'px;"></div>' : '';
 	}
 
 	public function invalid()

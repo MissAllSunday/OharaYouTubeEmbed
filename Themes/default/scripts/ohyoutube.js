@@ -45,7 +45,7 @@ _oh.prototype.main = function(){
 
 				// Get and gather all we need!
 				site = $.extend(site, videoElement.data('ohara_'+ site.identifier));
-				site.baseUrl = site.baseUrl.replace('{videoID}', site.videoID);
+				site.baseUrl = site.baseUrl.replace('{video_id}', site.video_id);
 
 				// Check if the site has a custom function to use.
 				getImage = typeof site.getImage === 'string' ? _oh[site.getImage] : site.getImage;

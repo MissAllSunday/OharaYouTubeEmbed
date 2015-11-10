@@ -34,7 +34,9 @@ class OHVimeo implements iOharaYTEmbed
 
 	public function content($data)
 	{
-		// Use vimeo's API.
+		// If the ID was provided, turn it into a generic url.
+		if (is_numeric($data)
+			$data = '//vimeo.com/'. $data;
 
 		// Need a function in a far far away file...
 		require_once($this->_app->sourceDir .'/Subs-Package.php');
@@ -47,12 +49,13 @@ class OHVimeo implements iOharaYTEmbed
 
 		if (!empty($jsonArray) && is_array($jsonArray))
 		{
-			// We use camelCase ;)
-			$jsonArray['videoId'] = $jsonArray['video_id'];
-
 			// The API returns too much stuff! easier to just whitelist what we want ;)
-			$whiteList = array('title', 'videoId', 'thumbnail_url');
+			$whiteList = array('title', 'video_id', 'thumbnail_url');
 			$filtered = array_intersect_key($jsonArray, array_flip($whiteList));
+
+			// Get a more generic name.
+			$filtered['image'] = $filtered['thumbnail_url'];
+			unset($filtered['thumbnail_url']);
 
 			return $this->create($filtered);
 		}
@@ -78,7 +81,7 @@ class OHVimeo implements iOharaYTEmbed
 			function ($matches) use($that)
 			{
 				if (!empty($matches) && !empty($matches[1]))
-					return $that->create($matches[1]);
+					return $that->content($matches[1]);
 
 				else
 					return $that->invalid();
@@ -90,12 +93,12 @@ class OHVimeo implements iOharaYTEmbed
 		unset($that);
 	}
 
-	public function create($params = array()
+	public function create($params = array())
 	{
 		// Make sure not to use any unvalid params.
 		$paramsJson = !empty($params) ? json_encode($params) : '{}';
 
-		return !empty($params) ? '<div class="oharaEmbed vimeo" data-ohara_'. $this->siteSettings['identifier'] .'="'. $paramsJson .'" id="oh_'. $params['videoID'] .'" style="width: '. $this->_app->width .'px; height: '. $this->_app->height .'px;"></div>' : '';
+		return !empty($params) ? '<div class="oharaEmbed vimeo" data-ohara_'. $this->siteSettings['identifier'] .'="'. $paramsJson .'" id="oh_'. $this->siteSettings['identifier'] .'_'. $params['videoID'] .'" style="width: '. $this->_app->width .'px; height: '. $this->_app->height .'px;"></div>' : '';
 	}
 
 	public function invalid()
