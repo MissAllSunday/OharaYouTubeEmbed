@@ -34,38 +34,31 @@ class OHVimeo implements iOharaYTEmbed
 
 	public function content($data)
 	{
-		//Set a local var for laziness.
-		$result = '';
+		// Use vimeo's API.
 
-		// First try, pure regex.
-		$pattern = '/(?:https?:\/\/)?(?:www\.)?(?:player\.)?vimeo\.com\/(?:[a-z]*\/)*([0-9]{6,11})[?]?.*/';
+		// Need a function in a far far away file...
+		require_once($this->_app->sourceDir .'/Subs-Package.php');
 
-		// Get the video ID.
-		if (preg_match($pattern, $data, $matches))
-			$videoID = isset($matches[1]) ? $matches[1] : false;
+		// Construct the URL
+		$oembed = '//vimeo.com/api/oembed.json?url=' . rawurlencode($data) . '&width='. ($this->_app->width) .'&height='. ($this->_app->height);
 
-		// Got anything?
-		if (!empty($videoID) && ctype_digit($videoID))
-			return $this->create($videoID);
+		// Attempts to fetch data from a URL, regardless of PHP's allow_url_fopen setting
+		$jsonArray = json_decode(fetch_web_data($oembed), true);
 
-		// Nope? then fall back to vimeo's API.
-		else
+		if (!empty($jsonArray) && is_array($jsonArray))
 		{
-			// Need a function in a far far away file...
-			require_once($this->_app->sourceDir .'/Subs-Package.php');
+			// We use camelCase ;)
+			$jsonArray['videoId'] = $jsonArray['video_id'];
 
-			// Construct the URL
-			$oembed = '//vimeo.com/api/oembed.json?url=' . rawurlencode($data) . '&width='. ($this->_app->width) .'&height='. ($this->_app->height);
+			// The API returns too much stuff! easier to just whitelist what we want ;)
+			$whiteList = array('title', 'videoId', 'thumbnail_url');
+			$filtered = array_intersect_key($jsonArray, array_flip($whiteList));
 
-			// Attempts to fetch data from a URL, regardless of PHP's allow_url_fopen setting
-			$jsonArray = json_decode(fetch_web_data($oembed), true);
-
-			if (!empty($jsonArray) && is_array($jsonArray) && !empty($jsonArray['html']))
-				return str_replace('<iframe', '<iframe width="'. $this->_app->width .'" height="'. $this->_app->height .'"', $jsonArray['html']);
-
-			else
-				return $this->invalid();
+			return $this->create($filtered);
 		}
+
+		else
+			return $this->invalid();
 
 		// If we reach this place, it means everything else failed miserably...
 		return $data;
