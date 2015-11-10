@@ -190,7 +190,8 @@ class OharaYTEmbed extends Suki\Ohara
 		// Set a max width var to let the JS code know how to act and react!
 		addInlineJavascript('
 	var _ohWidth = '. $this->width .';
-	var _ohHeight = '. $this->height .';');
+	var _ohHeight = '. $this->height .';
+	var _ohSites = {};');
 
 		foreach (static::$sites as $site)
 			if (!empty($site) && is_object($site) && $this->setting('enable_'. $site->siteSettings['identifier']))

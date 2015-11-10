@@ -19,7 +19,13 @@ class OHYouTube implements iOharaYTEmbed
 		'name' => 'You Tube',
 		'code' => 'youtube',
 		'extra_tag' => 'yt',
-		'js_inline' => '',
+		'js_inline' => '
+	_ohSites.push({
+		identifier: "youtube",
+		baseUrl: "//www.youtube.com/watch?v={video_id}",
+		getImage: "getYoutubeImage"
+	});
+	',
 		'js_file' => 'ohyoutube.min.js',
 		'css_file' => '',
 		'regex' => '~(?<=[\s>\.(;\'"]|^)(?:http|https):\/\/[\w\-_%@:|]?(?:www\.)?(?:youtu\.be/|youtube\.com(?:/embed/|/v/|/watch\?v=|/watch\?.+&v=))([\w-]{11})(?=[^\w-]|$)(?![?=&+%\w.-]*(?:[\'"][^<>]*>  | </a>  ))[?=&+%\w.-]*[/\w\-_\~%@\?;=#}\\\\]?~ix',
