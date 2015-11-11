@@ -138,54 +138,28 @@ _oh.prototype.getYoutubeImage = function(video)
 // Add support for the editor.
 $.sceditor.plugins.bbcode.bbcode.set(
 	'youtube', {
-		tags: {
-			attach: {
-				src: null
-			}
-		},
-		allowsEmpty: true,
-		quoteType: $.sceditor.BBCodeParser.QuoteType.never,
-		format: function (element, content) {
+			allowsEmpty: true,
+			tags: {
+				iframe: {
+					'data-youtube-id': null
+				},
+			},
+			format: function (element, content) {
+				element = element.attr('data-youtube-id');
 
-			return '[youtube]' + content + '[/youtube]';
-		},
-		html: function (token, attrs, content) {
-			if (match = content.match(/(^[a-zA-z0-9_-]{11})$/) || content.match(/(?:https?:\/\/)?(?:www\.)?(?:youtu\.be\/|youtube\.com(?:\/embed\/|\/v\/|\/watch\?v=|\/watch\?.+&v=))([\w-]{11})(?:.+)?$/) || content.match(/(?:youtube(?:-nocookie)?\.com\/(?:[^\/]+\/.+\/|(?:v|e(?:mbed)?)\/|.*[?&]v=)|youtu\.be\/)([^"&?\/ ]{11})/)) {
+				return element ? '[youtube]' + element + '[/youtube]' : content;
+			},
+			html: function (token, attrs, content) {
+				if (match = content.match(/(^[a-zA-z0-9_-]{11})$/) || content.match(/(?:https?:\/\/)?(?:www\.)?(?:youtu\.be\/|youtube\.com(?:\/embed\/|\/v\/|\/watch\?v=|\/watch\?.+&v=))([\w-]{11})(?:.+)?$/) || content.match(/(?:youtube(?:-nocookie)?\.com\/(?:[^\/]+\/.+\/|(?:v|e(?:mbed)?)\/|.*[?&]v=)|youtu\.be\/)([^"&?\/ ]{11})/)) {
 
-				return '<iframe frameborder="0" src="//www.youtube.com/embed/'+ match[1] +'?autoplay=0&autohide=1" allowfullscreen class="oharaEmbedIframe" style="width: 420px; height: 315px;"></iframe>';
-			}
+					return '<iframe frameborder="0" src="//www.youtube.com/embed/'+ match[1] +'?autoplay=0&autohide=1" data-youtube-id="'+ content +'" allowfullscreen class="oharaEmbedIframe" style="width: 420px; height: 315px;"></iframe>';
+				}
 
-			else{
-				return content;
-			}
-		}
-	}
-);
-
-$.sceditor.plugins.bbcode.bbcode.set(
-	'vimeo', {
-		tags: {
-			attach: {
-				src: null
-			}
-		},
-		allowsEmpty: true,
-		quoteType: $.sceditor.BBCodeParser.QuoteType.never,
-		format: function (element, content) {
-
-			return '[vimeo]' + content + '[/vimeo]';
-		},
-		html: function (token, attrs, content) {
-			if (match = content.match(/(^\d+$)$/) || content.match(/(?:https?:\/\/)?(?:www\.)?(?:player\.)?vimeo\.com\/(?:[a-z]*\/)*([0-9]{6,11})[?]?.*/)) {
-
-				return '<iframe frameborder="0" src="//player.vimeo.com/video/'+ match[1] +'?autoplay=0" allowfullscreen class="oharaEmbedIframe" style="width: 420px; height: 315px;"></iframe>';
-			}
-
-			else{
-				return content;
+				else{
+					return content;
+				}
 			}
 		}
-	}
 );
 
 (function( $ ) {
