@@ -185,9 +185,6 @@ class OharaYTEmbed extends Suki\Ohara
 		loadCSSFile('oharaEmbed.css', array('force_current' => false, 'validate' => true));
 		loadJavascriptFile('ohvideos.js', array('local' => true, 'default_theme' => true, 'defer' => true));
 
-		// Add the iframe to the list of allowed tags.
-		$context['allowed_html_tags'][] = '<iframe>';
-
 		// Set a max width var to let the JS code know how to act and react!
 		addInlineJavascript('
 	var _ohWidth = '. $this->width .';
