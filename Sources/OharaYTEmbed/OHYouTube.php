@@ -22,7 +22,7 @@ class OHYouTube implements iOharaYTEmbed
 		'js_inline' => '
 	_ohSites.push({
 		identifier: "youtube",
-		baseUrl: "https://www.youtube.com/embed/{video_id}?autoplay=1&autohide=1",
+		baseUrl: "//www.youtube.com/embed/{video_id}?autoplay=1&autohide=1",
 		getImage: "getYoutubeImage"
 	});
 	',
@@ -82,7 +82,7 @@ class OHYouTube implements iOharaYTEmbed
 			);
 
 			// Construct the URL
-			$oembed = 'http://youtube.com/get_video_info?video_id=' . $result;
+			$oembed = 'https://youtube.com/get_video_info?video_id=' . $result;
 			$content = '';
 			$cResult = array();
 			$content = fetch_web_data($oembed);
