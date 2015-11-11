@@ -135,6 +135,29 @@ _oh.prototype.getYoutubeImage = function(video)
 	}
 };
 
+// Add support for the editor.
+$.sceditor.plugins.bbcode.bbcode.set(
+	'youtube', {
+		tags: {
+			attach: {
+				src: null
+			}
+		},
+		allowsEmpty: true,
+		quoteType: $.sceditor.BBCodeParser.QuoteType.never,
+		html: function (token, attrs, content) {
+			if (match = content.match(/(?:https?:\/\/)?(?:www\.)?(?:youtu\.be\/|youtube\.com(?:\/embed\/|\/v\/|\/watch\?v=|\/watch\?.+&v=))([\w-]{11})(?:.+)?$/) || content.match(/(?:youtube(?:-nocookie)?\.com\/(?:[^\/]+\/.+\/|(?:v|e(?:mbed)?)\/|.*[?&]v=)|youtu\.be\/)([^"&?\/ ]{11})/)) {
+
+				return '<iframe frameborder="0" src="https://www.youtube.com/embed/'+ match[1] +'?autoplay=0&autohide=1" allowfullscreen="" class="oharaEmbedIframe" style="width: 420px; height: 315px;"></iframe>';
+			}
+
+			else{
+				return content;
+			}
+		}
+	}
+);
+
 (function( $ ) {
 	$(function() {
 		var _ohObject = new _oh();
