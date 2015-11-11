@@ -22,11 +22,11 @@ class OHYouTube implements iOharaYTEmbed
 		'js_inline' => '
 	_ohSites.push({
 		identifier: "youtube",
-		baseUrl: "//www.youtube.com/watch?v={video_id}",
+		baseUrl: "https://www.youtube.com/embed/{video_id}?autoplay=1&autohide=1",
 		getImage: "getYoutubeImage"
 	});
 	',
-		'js_file' => 'ohyoutube.min.js',
+		'js_file' => '',
 		'css_file' => '',
 		'regex' => '~(?<=[\s>\.(;\'"]|^)(?:http|https):\/\/[\w\-_%@:|]?(?:www\.)?(?:youtu\.be/|youtube\.com(?:/embed/|/v/|/watch\?v=|/watch\?.+&v=))([\w-]{11})(?=[^\w-]|$)(?![?=&+%\w.-]*(?:[\'"][^<>]*>  | </a>  ))[?=&+%\w.-]*[/\w\-_\~%@\?;=#}\\\\]?~ix',
 		'before' => '[youtube]',
@@ -82,7 +82,7 @@ class OHYouTube implements iOharaYTEmbed
 			);
 
 			// Construct the URL
-			$oembed = '//youtube.com/get_video_info?video_id=' . $result;
+			$oembed = 'http://youtube.com/get_video_info?video_id=' . $result;
 			$content = '';
 			$cResult = array();
 			$content = fetch_web_data($oembed);
@@ -93,7 +93,7 @@ class OHYouTube implements iOharaYTEmbed
 				if (!empty($cResult['status'] && $cResult['status'] == 'ok'))
 				{
 					$params['title'] = $cResult['title'];
-					$params['imageUrl'] = (!empty($cResult['iurl'] ? $cResult['iurl'] : $cResult['iurlsd']));
+					$params['imageUrl'] = !empty($cResult['iurl']) ? $cResult['iurl'] : $cResult['iurlsd'];
 				}
 
 			return $this->create($params);
@@ -135,7 +135,7 @@ class OHYouTube implements iOharaYTEmbed
 		// Make sure not to use any unvalid params.
 		$paramsJson = !empty($params) ? json_encode($params) : '{}';
 
-		return !empty($params) ? '<div class="oharaEmbed vimeo" data-ohara_'. $this->siteSettings['identifier'] .'="'. $paramsJson .'" id="oh_'. $this->siteSettings['identifier'] .'_'. $params['videoID'] .'" style="width: '. $this->_app->width .'px; height: '. $this->_app->height .'px;"></div>' : '';
+		return !empty($params) ? '<div class="oharaEmbed '. $this->siteSettings['identifier'] .'" data-ohara_'. $this->siteSettings['identifier'] .'=\''. $paramsJson .'\' id="oh_'. $this->siteSettings['identifier'] .'_'. $params['video_id'] .'" style="width: '. $this->_app->width .'px; height: '. $this->_app->height .'px;"></div>' : '';
 	}
 
 	public function invalid()

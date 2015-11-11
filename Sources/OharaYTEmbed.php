@@ -183,6 +183,7 @@ class OharaYTEmbed extends Suki\Ohara
 
 		// The much needed css file.
 		loadCSSFile('oharaEmbed.css', array('force_current' => false, 'validate' => true));
+		loadJavascriptFile('ohvideos.js', array('local' => true, 'default_theme' => true, 'defer' => true));
 
 		// Add the iframe to the list of allowed tags.
 		$context['allowed_html_tags'][] = '<iframe>';
@@ -191,7 +192,7 @@ class OharaYTEmbed extends Suki\Ohara
 		addInlineJavascript('
 	var _ohWidth = '. $this->width .';
 	var _ohHeight = '. $this->height .';
-	var _ohSites = {};');
+	var _ohSites = [];');
 
 		foreach (static::$sites as $site)
 			if (!empty($site) && is_object($site) && $this->setting('enable_'. $site->siteSettings['identifier']))
@@ -206,7 +207,7 @@ class OharaYTEmbed extends Suki\Ohara
 
 				// Is there any inline or JS file to be loaded? Please be sure to add a new line at the beginning and end of your string and to follow proper indent style too!
 				if (!empty($site->siteSettings['js_inline']))
-					addInlineJavascript($site->siteSettings['js_inline'], true);
+					addInlineJavascript($site->siteSettings['js_inline']);
 
 				// Do this site wants to add their own unique tag? SMF already supports div and the mod adds iframe by default.
 				if (!empty($site->siteSettings['allowed_tag']))

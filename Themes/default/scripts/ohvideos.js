@@ -15,23 +15,12 @@ var _oh = function(){
 	this.responsive();
 };
 
-_oh.prototype.getIframe(site)
+_oh.prototype.getIframe = function(site)
 {
-	return $('<iframe/>', {'frameborder': '0', 'src': site.baseUrl, 'width': this.defaultWidth, 'height': this.defaultHeight, 'title': (typeof site.title !== 'undefined' ? site.title : '')});
+	iframe = $('<iframe/>', {'frameborder': '0', 'src': site.baseUrl, 'width': this.defaultWidth, 'height': this.defaultHeight, 'allowfullscreen': '', 'class': 'oharaEmbedIframe'});
+
+	return iframe;
 };
-
-_oh.prototype.createVideo(site, videoElement)
-{
-	$this = this;
-	videoElement.append($('<div/>', {'class': 'oharaEmbed_play'}));
-
-	videoElement.one('click', function(){
-
-		// Append the YouTube HTML5 Player.
-		videoElement.children('.oharaEmbed_play').css({'height': '0'});
-		videoElement.css({'background-image': 'none'}).append($this.getIframe(site);
-	});
-}
 
 _oh.prototype.main = function(){
 
@@ -39,27 +28,41 @@ _oh.prototype.main = function(){
 
 	// Get all registered sites.
 	$.each(_ohSites, function(index, site) {
-			$(site.cssID).each(function(){
+			$('.' + site.identifier).each(function(index, video){
 
-				site.videoElement = $(this);
+				video.domElement = $(this);
 
 				// Get and gather all we need!
-				site = $.extend(site, videoElement.data('ohara_'+ site.identifier));
-				site.baseUrl = site.baseUrl.replace('{video_id}', site.video_id);
+				video = $.extend(video, video.domElement.data('ohara_'+ site.identifier));
+				video.baseUrl = site.baseUrl.replace('{video_id}', video.video_id);
 
 				// Check if the site has a custom function to use.
-				getImage = typeof site.getImage === 'string' ? _oh[site.getImage] : site.getImage;
+				getImage = typeof site.getImage === 'string' ? $this[site.getImage] : site.getImage;
 
 				// Now get an image preview and perhaps a title too!
-				getImage(site, videoElement);
+				getImage(video);
 
 				// Finally, create the actual video's HTML. @todo make it possible for sites to use their own create function.
-				$this.videoCreate(site, videoElement;
+				$this.videoCreate(video);
 			});
 	});
 
 	// Gotta make sure the new iframe gets resized if needed.
 	$this.responsive();
+};
+
+_oh.prototype.videoCreate = function(video){
+
+	$this = this;
+	video.domElement.append($('<div/>', {'class': 'oharaEmbed_play'}));
+
+	$(video.domElement).on('click', function() {
+
+		// Replace the video thumbnail with a HTML5 Player.
+		$(this).html($this.getIframe(video));
+
+		$this.responsive();
+	});
 };
 
 _oh.prototype.responsive = function()
@@ -79,11 +82,11 @@ _oh.prototype.responsive = function()
 
 		// Gotta resize the master div.
 		$this.masterDiv.width(applyWidth).height(applyHeight);
-		$('.oharaEmbed > iframe').each(function(){
+		$('iframe.oharaEmbedIframe').each(function(){
 			$(this).width(applyWidth).height(applyHeight);
 		});
 
-	// Kick off one resize to fix all videos on page load
+	// Kick off one resize to fix all videos on page load.
 	}).resize();
 };
 
@@ -94,19 +97,19 @@ _oh.prototype.refresh = function(){
 };
 
 
-_oh.prototype.getVimeoImage(site, videoElement)
+_oh.prototype.getVimeoImage = function(video)
 {
 	// The image url is already included in site or at least thats the expected behaviour.
-	if (typeof site.imageUrl !== 'undefined'){
-		videoElement.css({'background-image': 'url('+ site.imageUrl +')', 'background-size': 'cover'});
+	if (typeof video.imageUrl !== 'undefined'){
+		video.domElement.css({'background-image': 'url('+ video.imageUrl +')', 'background-size': 'cover'});
 	}
 };
 
-_oh.prototype.getYoutubeImage(site, videoElement)
+_oh.prototype.getYoutubeImage = function(video)
 {
-	// The image url is already included in site or at least thats the expected behaviour.
-	if (typeof site.imageUrl !== 'undefined'){
-		videoElement.css({'background-image': 'url('+ site.imageUrl +')', 'background-size': 'cover'});
+	// The image url is already included in video or at least thats the expected behaviour.
+	if (typeof video.imageUrl !== 'undefined'){
+		video.domElement.css({'background-image': 'url('+ video.imageUrl +')', 'background-size': 'cover'});
 
 		return;
 	}
@@ -115,7 +118,7 @@ _oh.prototype.getYoutubeImage(site, videoElement)
 		index, len,
 		imageTypes = ['hqdefault', 'mqdefault', 'sddefault', 'maxresdefault'];
 	for (index = 0, len = imageTypes.length; index < len; ++index) {
-		imgsrc = '//i.ytimg.com/vi/'+ youtubeID +'/'+ imageTypes[index] +'.jpg';
+		imgsrc = '//i.ytimg.com/vi/'+ video.video_id +'/'+ imageTypes[index] +'.jpg';
 
 		if (imgsrc.width !=0){
 			break;
@@ -124,11 +127,11 @@ _oh.prototype.getYoutubeImage(site, videoElement)
 
 	// Still no image, show the default one
 	if (imgsrc.width ==0){
-		imgsrc = '//i.ytimg.com/vi/'+ youtubeID +'/default.jpg';
+		imgsrc = '//i.ytimg.com/vi/'+ video.video_id +'/default.jpg';
 	}
 
 	if (typeof imgsrc !== 'undefined'){
-		videoElement.css({'background-image': 'url('+ imgsrc +')', 'background-size': 'cover'});
+		video.domElement.css({'background-image': 'url('+ imgsrc +')', 'background-size': 'cover'});
 	}
 };
 

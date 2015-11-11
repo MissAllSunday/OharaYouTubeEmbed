@@ -21,7 +21,7 @@ class OHVimeo implements iOharaYTEmbed
 		'js_inline' => '
 	_ohSites.push({
 		identifier: "vimeo",
-		baseUrl: "//player.vimeo.com/video/{video_id}",
+		baseUrl: "//player.vimeo.com/video/{video_id}?autoplay=1",
 		getImage: "getVimeoImage"
 	});
 	',
@@ -48,7 +48,7 @@ class OHVimeo implements iOharaYTEmbed
 		require_once($this->_app->sourceDir .'/Subs-Package.php');
 
 		// Construct the URL
-		$oembed = '//vimeo.com/api/oembed.json?url=' . rawurlencode($data) . '&width='. ($this->_app->width) .'&height='. ($this->_app->height);
+		$oembed = 'https://vimeo.com/api/oembed.json?url=' . rawurlencode($data) . '&width='. ($this->_app->width) .'&height='. ($this->_app->height);
 
 		// Attempts to fetch data from a URL, regardless of PHP's allow_url_fopen setting
 		$jsonArray = json_decode(fetch_web_data($oembed), true);
@@ -104,7 +104,7 @@ class OHVimeo implements iOharaYTEmbed
 		// Make sure not to use any unvalid params.
 		$paramsJson = !empty($params) ? json_encode($params) : '{}';
 
-		return !empty($params) ? '<div class="oharaEmbed vimeo" data-ohara_'. $this->siteSettings['identifier'] .'="'. $paramsJson .'" id="oh_'. $this->siteSettings['identifier'] .'_'. $params['videoID'] .'" style="width: '. $this->_app->width .'px; height: '. $this->_app->height .'px;"></div>' : '';
+		return !empty($params) ? '<div class="oharaEmbed '. $this->siteSettings['identifier'] .'" data-ohara_'. $this->siteSettings['identifier'] .'=\''. $paramsJson .'\' id="oh_'. $this->siteSettings['identifier'] .'_'. $params['video_id'] .'" style="width: '. $this->_app->width .'px; height: '. $this->_app->height .'px;"></div>' : '';
 	}
 
 	public function invalid()
