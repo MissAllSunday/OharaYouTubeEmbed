@@ -43,13 +43,15 @@ vimeo.com/groups/[Group name]/videos/[ID]
 [color=purple][b][size=12pt]Changelog[/size][/b][/color]
 
 [code]
-2.1 - August, 2015,
-- Use an updated Ohara class
+2.1 - Nov, 2015,
+- Shows video titles when available.
+- Works with SMF's 2.1 WYSIWYG editor.
+- Use an updated Ohara class.
 - JS no longer checks the url, it just looks for any preview button field
 - Site classes no longer extends the main class, they now implements iOharaYTEmbed.php interface
 - Don't return an empty or false var as it causes issues with SMF's parser
-- Added support for SMF 2.1 Beta 2
-- Added a minified version of ohyoutube.js
+- Added support for SMF 2.1 Beta 3
+- Added a minified version of ohvideos.js
 - Added responsiveness to videos. This will only work on responsive themes.
 - Fixed an issue when two or more instances of the same video where posted, none of them would be played. 
 - Re-wrote the JS code to use prototypes.
