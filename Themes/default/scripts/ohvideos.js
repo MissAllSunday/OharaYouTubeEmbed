@@ -42,6 +42,9 @@ _oh.prototype.main = function(){
 				// Now get an image preview and perhaps a title too!
 				getImage(video);
 
+				// If the vidoe has a title, apply it.
+				$this.titleCreate(video);
+
 				// Finally, create the actual video's HTML. @todo make it possible for sites to use their own create function.
 				$this.videoCreate(video);
 			});
@@ -49,6 +52,17 @@ _oh.prototype.main = function(){
 
 	// Gotta make sure the new iframe gets resized if needed.
 	$this.responsive();
+};
+
+_oh.prototype.titleCreate = function(video){
+
+	if (video.title.length === 0 || !video.title.trim()){
+		return;
+	}
+
+	title = $('<div/>', {'class': 'oharaEmbed_title'}).html(video.title);
+
+	video.domElement.append(title);
 };
 
 _oh.prototype.videoCreate = function(video){
@@ -125,7 +139,7 @@ _oh.prototype.getYoutubeImage = function(video)
 		}
 	}
 
-	// Still no image, show the default one
+	// Still no image, show the default one.
 	if (imgsrc.width ==0){
 		imgsrc = '//i.ytimg.com/vi/'+ video.video_id +'/default.jpg';
 	}
