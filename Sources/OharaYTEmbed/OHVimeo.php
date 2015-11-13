@@ -85,7 +85,7 @@ class OHVimeo implements iOharaYTEmbed
 			function ($matches) use($that)
 			{
 				if (!empty($matches) && !empty($matches[1]))
-					return '[vimeo]'.$matches[1] .'[/vimeo]';
+					return $that->content($matches[1]);
 
 				else
 					return $that->invalid();

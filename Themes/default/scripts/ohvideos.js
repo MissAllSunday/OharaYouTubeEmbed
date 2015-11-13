@@ -36,17 +36,34 @@ _oh.prototype.main = function(){
 				video = $.extend(video, video.domElement.data('ohara_'+ site.identifier));
 				video.baseUrl = site.baseUrl.replace('{video_id}', video.video_id);
 
-				// Check if the site has a custom function to use.
-				getImage = typeof site.getImage === 'string' ? $this[site.getImage] : site.getImage;
+				// Now get an image preview.
+				generateImage = (typeof site.getImage === 'string' ? $this[site.getImage] : site.getImage);
+				generateImage(video);
 
-				// Now get an image preview and perhaps a title too!
-				getImage(video);
+				if (typeof site.createTitle == 'function'){
+					site.createTitle($this, video);
+				}
 
-				// If the vidoe has a title, apply it.
-				$this.titleCreate(video);
+				else{
+					$this.createTitle(video);
+				}
 
-				// Finally, create the actual video's HTML. @todo make it possible for sites to use their own create function.
-				$this.videoCreate(video);
+				// Finally, create the actual video's HTML.
+				if (typeof site.createVideo == 'function'){
+					site.createVideo($this, video);
+				}
+
+				else{
+					video.domElement.append($('<div/>', {'class': 'oharaEmbed_play'}));
+
+					$(video.domElement).on('click', function() {
+
+						// Replace the video thumbnail with a HTML5 Player.
+						$(this).html($this.getIframe(video));
+
+						$this.responsive();
+					});
+				}
 			});
 	});
 
@@ -54,7 +71,8 @@ _oh.prototype.main = function(){
 	$this.responsive();
 };
 
-_oh.prototype.titleCreate = function(video){
+
+_oh.prototype.createTitle = function(video){
 
 	if (video.title.length === 0 || !video.title.trim()){
 		return;
@@ -63,20 +81,6 @@ _oh.prototype.titleCreate = function(video){
 	title = $('<div/>', {'class': 'oharaEmbed_title'}).html(video.title);
 
 	video.domElement.append(title);
-};
-
-_oh.prototype.videoCreate = function(video){
-
-	$this = this;
-	video.domElement.append($('<div/>', {'class': 'oharaEmbed_play'}));
-
-	$(video.domElement).on('click', function() {
-
-		// Replace the video thumbnail with a HTML5 Player.
-		$(this).html($this.getIframe(video));
-
-		$this.responsive();
-	});
 };
 
 _oh.prototype.responsive = function()
