@@ -21,8 +21,8 @@ class OHVimeo implements iOharaYTEmbed
 		'js_inline' => '
 	_ohSites.push({
 		identifier: "vimeo",
-		baseUrl: "//player.vimeo.com/video/{video_id}?autoplay=1",
-		getImage: "getVimeoImage"
+		embedUrl: "//player.vimeo.com/video/{video_id}?autoplay=1",
+		requestUrl: "https://vimeo.com/{video_id}"
 	});
 	',
 		'css_file' => '',

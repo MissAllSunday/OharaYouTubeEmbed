@@ -22,8 +22,8 @@ class OHYouTube implements iOharaYTEmbed
 		'js_inline' => '
 	_ohSites.push({
 		identifier: "youtube",
-		baseUrl: "//www.youtube.com/embed/{video_id}?autoplay=1&autohide=1",
-		getImage: "getYoutubeImage"
+		embedUrl: "//www.youtube.com/embed/{video_id}?autoplay=1&autohide=1",
+		requestUrl: "https://www.youtube.com/watch?v={video_id}"
 	});
 	',
 		'js_file' => '',
@@ -72,29 +72,11 @@ class OHYouTube implements iOharaYTEmbed
 		// Got something, lets attempt to retreive the video title and some other info too.
 		if (!empty($result))
 		{
-			// Need a function in a far far away file...
-			require_once($this->_app->sourceDir .'/Subs-Package.php');
-
 			// Default values.
 			$params = array(
 				'video_id' => $result,
 				'title' => '',
 			);
-
-			// Construct the URL
-			$oembed = 'https://youtube.com/get_video_info?video_id=' . $result;
-			$content = '';
-			$cResult = array();
-			$content = fetch_web_data($oembed);
-			parse_str($content, $cResult);
-
-			// Some videos has weird restrictions.
-			if (!empty($cResult))
-				if (!empty($cResult['status'] && $cResult['status'] == 'ok'))
-				{
-					$params['title'] = $cResult['title'];
-					$params['imageUrl'] = !empty($cResult['iurl']) ? $cResult['iurl'] : $cResult['iurlsd'];
-				}
 
 			return $this->create($params);
 		}

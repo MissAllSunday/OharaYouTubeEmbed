@@ -15,9 +15,9 @@ var _oh = function(){
 	this.responsive();
 };
 
-_oh.prototype.getIframe = function(site)
+_oh.prototype.getIframe = function(video)
 {
-	iframe = $('<iframe/>', {'frameborder': '0', 'src': site.baseUrl, 'width': this.defaultWidth, 'height': this.defaultHeight, 'allowfullscreen': '', 'class': 'oharaEmbedIframe'});
+	iframe = $('<iframe/>', {'frameborder': '0', 'src': video.embedUrl, 'width': this.defaultWidth, 'height': this.defaultHeight, 'allowfullscreen': '', 'class': 'oharaEmbedIframe'});
 
 	return iframe;
 };
@@ -34,18 +34,16 @@ _oh.prototype.main = function(){
 
 				// Get and gather all we need!
 				video = $.extend(video, video.domElement.data('ohara_'+ site.identifier));
-				video.baseUrl = site.baseUrl.replace('{video_id}', video.video_id);
+				video.embedUrl = site.embedUrl.replace('{video_id}', video.video_id);
+				video.requestUrl = site.requestUrl.replace('{video_id}', video.video_id);
 
-				// Now get an image preview.
-				generateImage = (typeof site.getImage === 'string' ? $this[site.getImage] : site.getImage);
-				generateImage(video);
-
-				if (typeof site.createTitle == 'function'){
-					site.createTitle($this, video);
+				// Allow each site to use their own function.
+				if (typeof site.getData == 'function'){
+					site.getData($this, video);
 				}
 
 				else{
-					$this.createTitle(video);
+					$this.getData(video);
 				}
 
 				// Finally, create the actual video's HTML.
@@ -71,16 +69,15 @@ _oh.prototype.main = function(){
 	$this.responsive();
 };
 
+_oh.prototype.getData = function(video){
+	$.getJSON('https://noembed.com/embed',
+		{format: 'json', url: video.requestUrl}, function (data) {
 
-_oh.prototype.createTitle = function(video){
+		title = $('<div/>', {'class': 'oharaEmbed_title'}).html(data.title);
 
-	if (video.title.length === 0 || !video.title.trim()){
-		return;
-	}
-
-	title = $('<div/>', {'class': 'oharaEmbed_title'}).html(video.title);
-
-	video.domElement.append(title);
+		video.domElement.css({'background-image': 'url('+ data.thumbnail_url +')', 'background-size': 'cover'});
+		video.domElement.append(title);
+	});
 };
 
 _oh.prototype.responsive = function()
@@ -112,45 +109,6 @@ _oh.prototype.refresh = function(){
 	$this = this;
 	setTimeout(function(){$this.main();},3E3);
 	setTimeout(function(){$this.responsive();},3E3);
-};
-
-
-_oh.prototype.getVimeoImage = function(video)
-{
-	// The image url is already included in site or at least thats the expected behaviour.
-	if (typeof video.imageUrl !== 'undefined'){
-		video.domElement.css({'background-image': 'url('+ video.imageUrl +')', 'background-size': 'cover'});
-	}
-};
-
-_oh.prototype.getYoutubeImage = function(video)
-{
-	// The image url is already included in video or at least thats the expected behaviour.
-	if (typeof video.imageUrl !== 'undefined'){
-		video.domElement.css({'background-image': 'url('+ video.imageUrl +')', 'background-size': 'cover'});
-
-		return;
-	}
-
-	var imgsrc = '',
-		index, len,
-		imageTypes = ['hqdefault', 'mqdefault', 'sddefault', 'maxresdefault'];
-	for (index = 0, len = imageTypes.length; index < len; ++index) {
-		imgsrc = '//i.ytimg.com/vi/'+ video.video_id +'/'+ imageTypes[index] +'.jpg';
-
-		if (imgsrc.width !=0){
-			break;
-		}
-	}
-
-	// Still no image, show the default one.
-	if (imgsrc.width ==0){
-		imgsrc = '//i.ytimg.com/vi/'+ video.video_id +'/default.jpg';
-	}
-
-	if (typeof imgsrc !== 'undefined'){
-		video.domElement.css({'background-image': 'url('+ imgsrc +')', 'background-size': 'cover'});
-	}
 };
 
 // Add support for the editor.
