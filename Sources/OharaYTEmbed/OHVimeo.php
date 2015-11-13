@@ -26,7 +26,7 @@ class OHVimeo implements iOharaYTEmbed
 	});
 	',
 		'css_file' => '',
-		'regex' => '~(?<=[\s>\.(;\'"]|^)(?:https?:\/\/)?(?:www\.)?(?:player\.)?vimeo\.com\/(?:[a-z]*\/)*([0-9]{6,11})[?=&+%\w.-]*[/\w\-_\~%@\?;=#}\\\\]?~ix',
+		'regex' => '~(?<=[\s>\.(;\'"]|^)((?:https?:\/\/)(?:www\.)?(?:player\.)?vimeo\.com\/(?:[a-z]*\/)*([0-9]{6,11})(?:\/[\w\-_\~%\.@!,\?&;=#(){}+:\'\\\\]*)*[\/\w\-_\~%@\?;=#}\\\\]?)~ix',
 		'before' => '[vimeo]',
 		'after' => '[/vimeo]',
 		'image' => 'vimeo',
@@ -38,10 +38,11 @@ class OHVimeo implements iOharaYTEmbed
 		$this->_app = $app;
 	}
 
+
 	public function content($data)
 	{
 		// If the ID was provided, turn it into a generic url.
-		if (is_numeric($data))
+		if (is_numeric(trim($data)))
 			$data = '//vimeo.com/'. $data;
 
 		// Need a function in a far far away file...
@@ -68,9 +69,6 @@ class OHVimeo implements iOharaYTEmbed
 
 		else
 			return $this->invalid();
-
-		// If we reach this place, it means everything else failed miserably...
-		return $data;
 	}
 
 	public function auto(&$message)
@@ -87,7 +85,7 @@ class OHVimeo implements iOharaYTEmbed
 			function ($matches) use($that)
 			{
 				if (!empty($matches) && !empty($matches[1]))
-					return $that->content($matches[1]);
+					return '[vimeo]'.$matches[1] .'[/vimeo]';
 
 				else
 					return $that->invalid();

@@ -162,6 +162,32 @@ $.sceditor.plugins.bbcode.bbcode.set(
 		}
 );
 
+$.sceditor.plugins.bbcode.bbcode.set(
+	'vimeo', {
+			allowsEmpty: true,
+			tags: {
+				iframe: {
+					'data-vimeo-id': null
+				},
+			},
+			format: function (element, content) {
+				element = element.attr('data-vimeo-id');
+
+				return element ? '[vimeo]' + element + '[/vimeo]' : content;
+			},
+			html: function (token, attrs, content) {
+				if (match = content.match(/(^\d+$)/) || content.match(/(?:https?:\/\/)?(?:www\.)?(?:player\.)?vimeo\.com\/(?:[a-z]*\/)*([0-9]{6,11})[?]?.*/)) {
+
+					return '<iframe frameborder="0" src="//player.vimeo.com/video/'+ match[1] +'?autoplay=0" data-vimeo-id="'+ content +'" allowfullscreen class="oharaEmbedIframe" style="width: 420px; height: 315px;"></iframe>';
+				}
+
+				else{
+					return content;
+				}
+			}
+		}
+);
+
 (function( $ ) {
 	$(function() {
 		var _ohObject = new _oh();
