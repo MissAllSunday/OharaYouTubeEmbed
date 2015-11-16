@@ -24,7 +24,7 @@ _oh.prototype.getIframe = function(video)
 
 _oh.prototype.main = function(){
 
-	$this = this;
+	_ohMain = this;
 
 	// Get all registered sites.
 	$.each(_ohSites, function(index, site) {
@@ -39,16 +39,16 @@ _oh.prototype.main = function(){
 
 				// Allow each site to use their own function.
 				if (typeof site.getData == 'function'){
-					site.getData($this, video);
+					site.getData(_ohMain, video);
 				}
 
 				else{
-					$this.getData(video);
+					_ohMain.getData(video);
 				}
 
 				// Finally, create the actual video's HTML.
 				if (typeof site.createVideo == 'function'){
-					site.createVideo($this, video);
+					site.createVideo(_ohMain, video);
 				}
 
 				else{
@@ -59,14 +59,14 @@ _oh.prototype.main = function(){
 						// Replace the video thumbnail with a HTML5 Player.
 						$(this).html($this.getIframe(video));
 
-						$this.responsive();
+						_ohMain.responsive();
 					});
 				}
 			});
 	});
 
 	// Gotta make sure the new iframe gets resized if needed.
-	$this.responsive();
+	_ohMain.responsive();
 };
 
 _oh.prototype.getData = function(video){
@@ -82,21 +82,21 @@ _oh.prototype.getData = function(video){
 
 _oh.prototype.responsive = function()
 {
-	$this = this;
+	_ohResponsive = this;
 
 	$(window).resize(function(){
 
 		// Get the new width and height.
-		var newWidth = $this.basedElement.width();
-		var newHeight = (newWidth * $this.aspectRatio) <= $this.defaultHeight ? (newWidth * $this.aspectRatio) : $this.defaultHeight;
+		var newWidth = _ohResponsive.basedElement.width();
+		var newHeight = (newWidth * _ohResponsive.aspectRatio) <= _ohResponsive.defaultHeight ? (newWidth * _ohResponsive.aspectRatio) : _ohResponsive.defaultHeight;
 
 		// If the new width is lower than the "default width" then apply some resizing. No? then go back to our default sizes
-		var applyResize = (newWidth <= $this.defaultWidth),
-			applyWidth = !applyResize ? $this.defaultWidth : newWidth,
-			applyHeight = !applyResize ? $this.defaultHeight : newHeight;
+		var applyResize = (newWidth <= _ohResponsive.defaultWidth),
+			applyWidth = !applyResize ? _ohResponsive.defaultWidth : newWidth,
+			applyHeight = !applyResize ? _ohResponsive.defaultHeight : newHeight;
 
 		// Gotta resize the master div.
-		$this.masterDiv.width(applyWidth).height(applyHeight);
+		_ohResponsive.masterDiv.width(applyWidth).height(applyHeight);
 		$('iframe.oharaEmbedIframe').each(function(){
 			$(this).width(applyWidth).height(applyHeight);
 		});
@@ -105,11 +105,19 @@ _oh.prototype.responsive = function()
 	}).resize();
 };
 
-_oh.prototype.refresh = function(){
-	$this = this;
-	setTimeout(function(){$this.main();},3E3);
-	setTimeout(function(){$this.responsive();},3E3);
+_oh.prototype.refresh = function(timeWait){
+	timeWait = typeof timeWait !== 'undefined' ? timeWait : 3E3;
+	_ohRefresh = this;
+	setTimeout(function(){_ohRefresh.main();},timeWait);
+	setTimeout(function(){_ohRefresh.responsive();},timeWait);
 };
+
+function oh_refresh(timeWait)
+{
+	var _ohObject = _ohObject || new _oh();
+
+		_ohObject.refresh();
+}
 
 // Add support for the editor.
 if (typeof $.sceditor !== 'undefined')
@@ -169,7 +177,6 @@ if (typeof $.sceditor !== 'undefined')
 (function( $ ) {
 	$(function() {
 		var _ohObject = new _oh();
-
 		$('input[name=preview]').on('click',function(){
 			_ohObject.refresh();
 		});
