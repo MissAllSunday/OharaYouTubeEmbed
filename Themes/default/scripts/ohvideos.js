@@ -54,10 +54,10 @@ _oh.prototype.main = function(){
 				else{
 					video.domElement.append($('<div/>', {'class': 'oharaEmbed_play'}));
 
-					$(video.domElement).on('click', function() {
+					video.domElement.on('click', function() {
 
 						// Replace the video thumbnail with a HTML5 Player.
-						$(this).html($this.getIframe(video));
+						$(this).html(_ohMain.getIframe(video));
 
 						_ohMain.responsive();
 					});
