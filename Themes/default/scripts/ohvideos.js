@@ -176,8 +176,10 @@ if (typeof $.sceditor !== 'undefined')
 }
 (function( $ ) {
 	$(function() {
-		var _ohObject = new _oh();
-		$('input[name=preview]').on('click',function(){
+		var _ohObject = new _oh(),
+			_ohQuickEdit;
+
+		$(document).on('click', 'input[name=preview], input[name=post]', function(){
 			_ohObject.refresh();
 		});
 	});
