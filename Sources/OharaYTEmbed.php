@@ -206,7 +206,7 @@ class OharaYTEmbed extends Suki\Ohara
 				if (!empty($site->siteSettings['js_inline']))
 					addInlineJavascript($site->siteSettings['js_inline']);
 
-				// Do this site wants to add their own unique tag? SMF already supports div and the mod adds iframe by default.
+				// Do this site wants to add their own unique tag? SMF already supports div by default.
 				if (!empty($site->siteSettings['allowed_tag']))
 					$context['allowed_html_tags'][] = $site->siteSettings['allowed_tag'];
 			}
