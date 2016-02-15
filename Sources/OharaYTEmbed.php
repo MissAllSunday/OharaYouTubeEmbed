@@ -4,7 +4,7 @@
  * @package Ohara Youtube Embed mod
  * @version 2.1
  * @author Jessica González <missallsunday@simplemachines.org>
- * @copyright Copyright (C) 2015 Jessica González
+ * @copyright Copyright (c) 2016 Jessica González
  * @license http://www.mozilla.org/MPL/ MPL 2.0
  */
 
@@ -22,14 +22,7 @@ class OharaYTEmbed extends Suki\Ohara
 	public $height;
 	public static $sites = array();
 
-	// Define the hooks we are going to use
-	protected $_availableHooks = array(
-		'code' => 'integrate_bbc_codes',
-		'buttons' => 'integrate_bbc_buttons',
-		'settings' => 'integrate_general_mod_settings',
-		'embed' => 'integrate_pre_parsebbc',
-		'css' => 'integrate_load_theme',
-	);
+	protected $_useConfig = true;
 
 	public function __construct()
 	{
@@ -41,12 +34,15 @@ class OharaYTEmbed extends Suki\Ohara
 
 		// Get a list of all available sites.
 		$this->getSites();
+
+		// Set our css bits.
+		$this->addCss();
 	}
 
 	public function defaultSettings()
 	{
-		$this->width = $this->enable('width') ? $this->setting('width') : '420';
-		$this->height = $this->enable('height') ? $this->setting('height') : '315';
+		$this->width = $this->enable('width') ? $this->setting('width') : 480;
+		$this->height = $this->enable('height') ? $this->setting('height') : 270;
 
 		$this->sitesFolder = $this->sourceDir . '/'. $this->name;
 	}

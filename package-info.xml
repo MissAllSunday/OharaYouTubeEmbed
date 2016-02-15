@@ -26,6 +26,7 @@ file, You can obtain one at http://mozilla.org/MPL/2.0/.
 		<require-file name="Sources/iOharaYTEmbed.php" destination="$sourcedir">Sites interface</require-file>
 		<require-file name="youtube.png" destination="$imagesdir/bbc" />
 		<require-file name="vimeo.png" destination="$imagesdir/bbc" />
+		<require-file name="_configOharaYTEmbed.json" destination="$boarddir">json config file</require-file>
 		<redirect url="index.php?action=admin;area=modsettings;sa=general" timeout="1000" />
 	</install>
 
@@ -46,5 +47,6 @@ file, You can obtain one at http://mozilla.org/MPL/2.0/.
 		<remove-file name="$themedir/scripts/ohvideos.js" />
 		<remove-file name="$themedir/scripts/ohvideos.min.js" />
 		<remove-file name="$themedir/css/oharaEmbed.css" />
+		<remove-file name="$boarddir/_configOharaYTEmbed.json" />
 	</uninstall>
 </package-info>
