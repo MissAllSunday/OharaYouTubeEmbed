@@ -15,12 +15,12 @@ This Source Code Form is subject to the terms of the Mozilla Public
 License, v. 2.0. If a copy of the MPL was not distributed with this
 file, You can obtain one at http://mozilla.org/MPL/2.0/.
 		</license>
-		<hook function="OharaYTEmbed::runTimeHooks" hook="integrate_pre_load" file="$sourcedir/OharaYTEmbed.php" object="true"></hook>
+		<hook function="OharaYTEmbed::runTimeHooks" hook="integrate_load_theme" file="$sourcedir/OharaYTEmbed.php" object="true"></hook>
 
 		<!-- DUH! WINNING! -->
 		<credits url="http://missallsunday.com" license="MPL 2.0" copyright="Suki" licenseurl="https://www.mozilla.org/MPL/2.0/">Ohara YouTube Embed mod</credits>
 		<require-dir name="Themes" destination="$boarddir">Theme and Language files</require-dir>
-		<require-dir name="Sources/OharaYTEmbed" destination="$sourcedir">Source files</require-dir>
+		<require-dir name="Sources/OharaYTEmbed" destination="$sourcedir">Source library</require-dir>
 		<require-dir name="Sources/ohara" destination="$sourcedir">Source library</require-dir>
 		<require-file name="Sources/OharaYTEmbed.php" destination="$sourcedir">The main class</require-file>
 		<require-file name="Sources/iOharaYTEmbed.php" destination="$sourcedir">Sites interface</require-file>
@@ -31,7 +31,7 @@ file, You can obtain one at http://mozilla.org/MPL/2.0/.
 
 	<!-- Do note that Sources/ohara dir isn't deleted as it can be used by other mods. -->
 	<uninstall for="2.1 Beta 2, 2.1 Beta 3, 2.1 - 2.1.99">
-		<hook function="OharaYTEmbed::runTimeHooks" hook="integrate_pre_load" file="$sourcedir/OharaYTEmbed.php" object="true" reverse="true" />
+		<hook function="OharaYTEmbed::runTimeHooks" hook="integrate_load_theme" file="$sourcedir/OharaYTEmbed.php" object="true" reverse="true" />
 		<remove-file name="$sourcedir/OharaYTEmbed.php" />
 		<remove-file name="$sourcedir/iOharaYTEmbed.php" />
 		<remove-dir name="$sourcedir/OharaYTEmbed" />
