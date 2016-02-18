@@ -5,7 +5,7 @@
 
 	<name>Ohara YouTube Embed</name>
 	<id>Suki:ohara_youtube_embed</id>
-	<version>1.2.4</version>
+	<version>1.2.5</version>
 	<type>modification</type>
 
 	<install for="2.0 - 2.0.99">
@@ -16,6 +16,7 @@
 		<require-file name="Sources/OharaYTEmbed.php" destination="$sourcedir">The main file</require-file>
 		<require-file name="youtube.gif" destination="$imagesdir/bbc" />
 		<require-file name="vimeo.gif" destination="$imagesdir/bbc" />
+		<require-file name="gifv.gif" destination="$imagesdir/bbc" />
 		<redirect url="index.php?action=admin;area=modsettings;sa=general" timeout="1000"></redirect>
 	</install>
 
@@ -31,6 +32,7 @@
 		<remove-file name="$languagedir/OharaYTEmbed.spanish_latin" />
 		<remove-file name="$imagesdir/bbc/youtube.gif" />
 		<remove-file name="$imagesdir/bbc/vimeo.gif" />
+		<remove-file name="$imagesdir/bbc/gifv.gif" />
 		<remove-file name="$themedir/scripts/ohyoutube.js" />
 		<remove-file name="$themedir/scripts/ohyoutube.min.js" />
 		<remove-file name="$themedir/css/oharaEmbed.css" />

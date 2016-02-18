@@ -3,7 +3,7 @@
 
 <modification xmlns="http://www.simplemachines.org/xml/modification" xmlns:smf="http://www.simplemachines.org/">
 	<id>Suki:ohara_youtube_embed</id>
-	<version>1.2.4</version>
+	<version>1.2.5</version>
 
 	<file name="$sourcedir/Post.php">
 		<operation>
@@ -12,7 +12,7 @@
 		</operation>
 		<operation>
 			<search position="replace"><![CDATA[<img>]]></search>
-			<add><![CDATA[<img><iframe><div>]]></add>
+			<add><![CDATA[<img><iframe><video><div>]]></add>
 		</operation>
 	</file>
 	<file name="$sourcedir/Subs.php">

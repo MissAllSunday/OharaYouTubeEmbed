@@ -1,5 +1,5 @@
 [center][color=purple][size=5][b]Ohara YouTube Embed [/b][/size][/color]
-[b]Author:[/b] [url=http://missallsunday.com]Miss All Sunday[/url][/center]
+[b]Author:[/b] [url=http://missallsunday.com]Suki[/url][/center]
 
 [color=red][b][size=16pt]Attention:[/size][/b][/color]
 On install make sure to mark the "[b]Install in Other Themes[/b]" checkbox.
@@ -11,9 +11,9 @@ On install make sure to mark the "[b]Install in Other Themes[/b]" checkbox.
 
 [b]Version 1.2.x and above requires [color=purple]PHP 5.3[/color] or greater[/b]
 
-You can auto-embed any valid youtube or vimeo urls and the mod will automatically convert them to videos.
+You can auto-embed any valid youtube, imgur/gifv or vimeo urls and the mod will automatically convert them to videos.
 
-This mod will also add a BBC tag:  [nobbc][youtube][/youtube] and [vimeo][/vimeo][/nobbc]  where you can post your youtube or vimeo urls and it will be converted to a video directly in the message.
+This mod will also add a BBC tag:  [nobbc][youtube][/youtube], [gifv][/gifv] and [vimeo][/vimeo][/nobbc]  where you can post your youtube or vimeo urls and it will be converted to a video directly in the message.
 
 You can enable/disable the mod as well as set the width and height for the videos, currently the mod support the following youtube and vimeo urls:
 
@@ -50,6 +50,10 @@ file, You can obtain one at http://mozilla.org/MPL/2.0/.
 
 [color=purple][b][size=12pt]Changelog[/size][/b][/color]
 [code]
+1.2.5 - February 18, 2015,
+- Added support for imgur gifv format
+- Move the css and js calls to integrate_load_theme hook.
+
 1.2.4 - August 2, 2015,
 - Added responsiveness to videos. This will only work on responsive themes.
 - Fixed an issue when two or more instances of the same video where posted, none of them would be played. 

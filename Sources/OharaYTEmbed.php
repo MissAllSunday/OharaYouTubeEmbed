@@ -2,9 +2,9 @@
 
 /*
  * @package Ohara Youtube Embed mod
- * @version 1.2.4
+ * @version 1.2.5
  * @author Jessica González <missallsunday@simplemachines.org>
- * @copyright Copyright (C) 2015 Jessica González
+ * @copyright Copyright (C) 2016 Jessica González
  * @license http://www.mozilla.org/MPL/ MPL 2.0
  */
 
@@ -77,11 +77,30 @@ function OYTE_bbc_add_code(&$codes)
 			},
 			'disabled_content' => '$1',
 			'block_level' => true,
+		),
+		array(
+			'tag' => 'gifv',
+			'type' => 'unparsed_content',
+			'content' => '$1',
+			'validate' => function (&$tag, &$data, $disabled) use ($txt)
+			{
+				// This tag was disabled.
+				if (!empty($disabled['gifv']))
+					return;
+
+				if (empty($data))
+					$data = $txt['OYTE_unvalid_link'];
+
+				else
+					$data = OYTE_Gifv(trim(strtr($data, array('<br />' => ''))));
+			},
+			'disabled_content' => '$1',
+			'block_level' => true,
 		)
 	);
 }
 
- /* The bbc button */
+ // The bbc button.
 function OYTE_bbc_add_button(&$buttons)
 {
 	global $txt, $modSettings;
@@ -107,9 +126,16 @@ function OYTE_bbc_add_button(&$buttons)
 		'description' => $txt['OYTE_vimeo_desc'],
 	);
 
+	$buttons[count($buttons) - 1][] =array(
+		'image' => 'gifv',
+		'code' => 'gifv',
+		'before' => '[gifv]',
+		'after' => '[/gifv]',
+		'description' => $txt['OYTE_gifv_desc'],
+	);
 }
 
-/* Don't bother on create a whole new page for this, let's use integrate_general_mod_settings ^o^ */
+// Don't bother on create a whole new page for this, let's use integrate_general_mod_settings ^o^.
 function OYTE_settings(&$config_vars)
 {
 	global $txt;
@@ -124,7 +150,7 @@ function OYTE_settings(&$config_vars)
 	$config_vars[] = '';
 }
 
-/* Take the url, take the video ID and return the embed code */
+// Take the url, take the video ID and return the embed code.
 function OYTE_Main($data)
 {
 	global $modSettings, $txt;
@@ -135,7 +161,7 @@ function OYTE_Main($data)
 	if (empty($data) || empty($modSettings['OYTE_master']))
 		return sprintf($txt['OYTE_unvalid_link'], 'youtube');
 
-	/* Set a local var for laziness */
+	// Set a local var for laziness.
 	$videoID = '';
 	$result = '';
 
@@ -143,26 +169,26 @@ function OYTE_Main($data)
 	if (preg_match('/^[a-zA-z0-9_-]{11}$/', $data) > 0)
 		$videoID = $data;
 
-	 /* We all love Regex */
+	// We all love Regex.
 	$pattern = '#^(?:https?://)?(?:www\.)?(?:youtu\.be/|youtube\.com(?:/embed/|/v/|/watch\?v=|/watch\?.+&v=))([\w-]{11})(?:.+)?$#x';
 
-	/* First attempt, pure regex */
+	// First attempt, pure regex.
 	if (empty($videoID) && preg_match($pattern, $data, $matches))
 		$videoID = isset($matches[1]) ? $matches[1] : false;
 
-	/* Give another regex a chance */
+	// Give another regex a chance.
 	elseif (empty($videoID) && preg_match('%(?:youtube(?:-nocookie)?\.com/(?:[^/]+/.+/|(?:v|e(?:mbed)?)/|.*[?&]v=)|youtu\.be/)([^"&?/ ]{11})%i', $data, $match))
 		$videoID = isset($match[1]) ? $match[1] : false;
 
-	/* No?, then one last chance, let PHPs native parse_url() function do the dirty work */
+	// No?, then one last chance, let PHPs native parse_url() function do the dirty work.
 	elseif (empty($videoID))
 	{
-		/* This relies on the url having ? and =, this is only an emergency check */
+		// This relies on the url having ? and =, this is only an emergency check.
 		parse_str(parse_url($data, PHP_URL_QUERY), $videoID);
 		$videoID = isset($videoID['v']) ? $videoID['v'] : false;
 	}
 
-	/* At this point, all tests had miserably failed */
+	// At this point, all tests had miserably failed.
 	if (empty($videoID))
 		return sprintf($txt['OYTE_unvalid_link'], 'youtube');
 
@@ -194,9 +220,43 @@ function OYTE_Vimeo($data)
 	if (!empty($jsonArray) && is_array($jsonArray) && !empty($jsonArray['html']))
 		return '<div class="oharaEmbed vimeo">'. str_replace('<iframe', '<iframe width="'. (empty($modSettings['OYTE_video_width']) ? '480' : $modSettings['OYTE_video_width']) .'px" height="'. (empty($modSettings['OYTE_video_height']) ? '270' : $modSettings['OYTE_video_height']) .'px"', $jsonArray['html']) .'</div>';
 
-
 	else
 		return sprintf($txt['OYTE_unvalid_link'], 'vimeo');
+}
+
+function OYTE_Gifv($data)
+{
+	global $modSettings, $txt;
+
+	loadLanguage('OharaYTEmbed');
+
+	// Gotta respect the master setting...
+	if (empty($data) || empty($modSettings['OYTE_master']))
+		return sprintf($txt['OYTE_unvalid_link'], 'youtube');
+
+	// Set a local var for laziness.
+	$videoID = '';
+	$result = '';
+
+	// We all love Regex.
+	$pattern = '/^(?:https?:\/\/)?(?:www\.)?i\.imgur\.com\/([a-z0-9]+)\.gifv/i';
+
+	// First attempt, pure regex.
+	if (empty($videoID) && preg_match($pattern, $data, $matches))
+		$videoID = isset($matches[1]) ? $matches[1] : false;
+
+
+	// At this point, all tests had miserably failed.
+	if (empty($videoID))
+		return sprintf($txt['OYTE_unvalid_link'], 'gifv');
+
+	// Got something!
+	else
+		$result = '<video preload="auto" autoplay="autoplay" loop="loop" style="max-width: '. (empty($modSettings['OYTE_video_width']) ? '480' : $modSettings['OYTE_video_width']) .'px; min-height: '. (empty($modSettings['OYTE_video_height']) ? '270' : $modSettings['OYTE_video_height']) .'px;" src="//i.imgur.com/'. $videoID .'.webm">
+	<source src="//i.imgur.com/'. $videoID .'.webm" type="video/webm"></source>
+</video>';
+
+	return $result;
 }
 
 function OYTE_Preparse($message)
@@ -214,6 +274,8 @@ function OYTE_Preparse($message)
 	// The extremely long regex...
 	$vimeo = '~(?<=[\s>\.(;\'"]|^)(?:https?\:\/\/)?(?:www\.)?vimeo.com\/(?:album\/|groups\/(.*?)\/|channels\/(.*?)\/)?[0-9]+\??[/\w\-_\~%@\?;=#}\\\\]?~';
 	$youtube = '~(?<=[\s>\.(;\'"]|^)(?:http|https):\/\/[\w\-_%@:|]?(?:www\.)?(?:youtu\.be/|youtube\.com(?:/embed/|/v/|/watch\?v=|/watch\?.+&v=))([\w-]{11})(?=[^\w-]|$)(?![?=&+%\w.-]*(?:[\'"][^<>]*>  | </a>  ))[?=&+%\w.-]*[/\w\-_\~%@\?;=#}\\\\]?~ix';
+
+	$gifv = '~(?<=[\s>\.(;\'"]|^)(?:http|https):\/\/[\w\-_%@:|]?(?:www\.)?i\.imgur\.com\/([a-z0-9]+)\.gifv(?=[^\w-]|$)(?![?=&+%\w.-]*(?:[\'"][^<>]*>  | <\/a>  ))[?=&+%\w.-]*[\/\w\-_\~%@\?;=#}\\\\]?~ix';
 
 	// Is this a YouTube video url?
 	$message = preg_replace_callback(
@@ -233,10 +295,19 @@ function OYTE_Preparse($message)
 		$message
 	);
 
+	// imgur gifv format.
+	$message = preg_replace_callback(
+		$gifv,
+		function ($matches) {
+			return '[gifv]'. $matches[0] .'[/gifv]';
+		},
+		$message
+	);
+
 	return $message;
 }
 
-/* DUH! WINNING! */
+// DUH! WINNING!.
 function OYTE_care(&$dummy)
 {
 	global $context, $settings, $modSettings;

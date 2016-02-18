@@ -2,9 +2,9 @@
 
 /*
  * @package Ohara Youtube Embed mod
- * @version 1.2.4
+ * @version 1.2.5
  * @author Jessica González <missallsunday@simplemachines.org>
- * @copyright Copyright (C) 2015 Jessica González
+ * @copyright Copyright (C) 2016 Jessica González
  * @license http://www.mozilla.org/MPL/ MPL 2.0
  */
 
@@ -21,7 +21,7 @@ $hooks = array(
 	'integrate_bbc_codes' => 'OYTE_bbc_add_code',
 	'integrate_bbc_buttons' => 'OYTE_bbc_add_button',
 	'integrate_general_mod_settings' => 'OYTE_settings',
-	'integrate_menu_buttons' => 'OYTE_care', // Yes, a whole hook function for a copyright...
+	'integrate_load_theme' => 'OYTE_care', // Yes, a whole hook function for a copyright...
 );
 
 foreach ($hooks as $hook => $function)

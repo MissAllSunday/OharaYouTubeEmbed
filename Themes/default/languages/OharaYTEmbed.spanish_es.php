@@ -2,9 +2,9 @@
 
 /*
  * @package Ohara Youtube Embed mod
- * @version 1.2.4
+ * @version 1.2.5
  * @author Jessica Gonzalez <missallsunday@simplemachines.org>
- * @copyright Copyright (C) 2015 Jessica Gonzalez
+ * @copyright Copyright (C) 2016 Jessica Gonzalez
  * @license http://www.mozilla.org/MPL/ MPL 2.0
  */
 
@@ -20,5 +20,6 @@ $txt['OYTE_video_height'] = 'Altura del video:';
 $txt['OYTE_video_height_sub'] = 'Si se deja vacio se usar&aacute; el valor por defecto: 270';
 $txt['OYTE_desc'] = 'Inserta un video desde youtube';
 $txt['OYTE_vimeo_desc'] = 'Inserta un video desde vimeo';
+$txt['OYTE_gifv_desc'] = 'Inserta un gifv de imgur';
 $txt['OYTE_unvalid_link'] = 'No es una direcci&oacute;n de %s v&aacute;lida';
 $txt['OYTE_title'] = 'Ohara Youtube|Vimeo Embed mod';
