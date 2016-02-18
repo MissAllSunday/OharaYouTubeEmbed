@@ -18,7 +18,7 @@ $hooks = array(
 	'integrate_bbc_codes' => 'OYTE_bbc_add_code',
 	'integrate_bbc_buttons' => 'OYTE_bbc_add_button',
 	'integrate_general_mod_settings' => 'OYTE_settings',
-	'integrate_menu_buttons' => 'OYTE_care', // Yes, a whole hook function for a copyright...
+	'integrate_load_theme' => 'OYTE_css',
 );
 
 foreach ($hooks as $hook => $function)

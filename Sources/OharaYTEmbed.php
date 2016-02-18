@@ -98,6 +98,8 @@ function OYTE_bbc_add_code(&$codes)
 			'block_level' => true,
 		)
 	);
+
+	OYTE_care();
 }
 
  // The bbc button.
@@ -307,13 +309,9 @@ function OYTE_Preparse($message)
 	return $message;
 }
 
-// DUH! WINNING!.
-function OYTE_care(&$dummy)
+function OYTE_css()
 {
 	global $context, $settings, $modSettings;
-
-	if (!empty($context['current_action']) && $context['current_action'] == 'credits')
-		$context['copyrights']['mods'][] = '<a href="http://missallsunday.com" target="_blank" title="Free SMF mods">Ohara YouTube Embed mod &copy Suki</a>';
 
 	// Add our css and js files. Dear and lovely mod authors, if you're going to use $context['html_headers'] MAKE SURE you append your data .= instead of re-declaring the var! and don't forget to add a new line and proper indentation too!
 	$context['html_headers'] .= '
@@ -324,6 +322,15 @@ function OYTE_care(&$dummy)
 	<script type="text/javascript">!window.jQuery && document.write(unescape(\'%3Cscript src="//code.jquery.com/jquery-1.9.1.min.js"%3E%3C/script%3E\'))</script>
 	<script type="text/javascript" src="'. $settings['default_theme_url'] .'/scripts/ohyoutube.min.js"></script>
 	<link rel="stylesheet" type="text/css" href="'. $settings['default_theme_url'] .'/css/oharaEmbed.css" />';
+}
+
+// DUH! WINNING!
+function OYTE_care()
+{
+	global $context;
+
+	if (!empty($context['current_action']) && $context['current_action'] == 'credits')
+		$context['copyrights']['mods'][] = '<a href="http://missallsunday.com" target="_blank" title="Free SMF mods">Ohara YouTube Embed mod &copy Suki</a>';
 }
 
 	/* Slowly repeating
