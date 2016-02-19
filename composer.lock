@@ -107,16 +107,16 @@
         },
         {
             "name": "suki/ohara",
-            "version": "v1.0.5",
+            "version": "v1.0.6",
             "source": {
                 "type": "git",
                 "url": "https://github.com/MissAllSunday/Ohara.git",
-                "reference": "73aa0737ac7ad5e48e3da0b2a3c20e32d5fa59ee"
+                "reference": "add94c34277dcc696058b0180aaa684af18ef811"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/MissAllSunday/Ohara/zipball/73aa0737ac7ad5e48e3da0b2a3c20e32d5fa59ee",
-                "reference": "73aa0737ac7ad5e48e3da0b2a3c20e32d5fa59ee",
+                "url": "https://api.github.com/repos/MissAllSunday/Ohara/zipball/add94c34277dcc696058b0180aaa684af18ef811",
+                "reference": "add94c34277dcc696058b0180aaa684af18ef811",
                 "shasum": ""
             },
             "require": {
@@ -147,7 +147,7 @@
                 "SMF",
                 "modifications"
             ],
-            "time": "2016-02-15 17:21:47"
+            "time": "2016-02-16 00:48:02"
         }
     ],
     "packages-dev": [],

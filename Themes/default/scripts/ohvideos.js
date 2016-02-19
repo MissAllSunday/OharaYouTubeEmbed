@@ -30,6 +30,10 @@ _oh.prototype.main = function(){
 	$.each(_ohSites, function(index, site) {
 			$('.' + site.identifier).each(function(index, video){
 
+				// No JS witchcraft? fine then!
+				if (typeof site.noJS !== "undefined")
+					return false;
+
 				video.domElement = $(this);
 
 				// Get and gather all we need!

@@ -12,6 +12,13 @@
 	position: relative;
 }
 
+/* imgur gifv */
+div.gifv
+{
+	background-color: transparent;
+	cursor: auto;
+}
+
 /* Title stuff */
 .oharaEmbed_title
 {
