@@ -50,7 +50,7 @@ file, You can obtain one at http://mozilla.org/MPL/2.0/.
 
 [color=purple][b][size=12pt]Changelog[/size][/b][/color]
 [code]
-1.2.5 - February 18, 2015,
+1.2.5 - February 18, 2016,
 - Added support for imgur gifv format
 - Move the css and js calls to integrate_load_theme hook.
 

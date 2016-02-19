@@ -3,8 +3,8 @@
 /*
  * @package Ohara Youtube Embed mod
  * @version 1.2.5
- * @author Jessica Gonz·lez <missallsunday@simplemachines.org>
- * @copyright Copyright (C) 2016 Jessica Gonz·lez
+ * @author Jessica Gonz√°lez <missallsunday@simplemachines.org>
+ * @copyright Copyright (C) 2016 Jessica Gonz√°lez
  * @license http://www.mozilla.org/MPL/ MPL 2.0
  */
 
@@ -234,7 +234,7 @@ function OYTE_Gifv($data)
 
 	// Gotta respect the master setting...
 	if (empty($data) || empty($modSettings['OYTE_master']))
-		return sprintf($txt['OYTE_unvalid_link'], 'youtube');
+		return sprintf($txt['OYTE_unvalid_link'], 'gifv');
 
 	// Set a local var for laziness.
 	$videoID = '';
@@ -254,7 +254,7 @@ function OYTE_Gifv($data)
 
 	// Got something!
 	else
-		$result = '<video preload="auto" autoplay="autoplay" loop="loop" style="max-width: '. (empty($modSettings['OYTE_video_width']) ? '480' : $modSettings['OYTE_video_width']) .'px; min-height: '. (empty($modSettings['OYTE_video_height']) ? '270' : $modSettings['OYTE_video_height']) .'px;" src="//i.imgur.com/'. $videoID .'.webm">
+		$result = '<video preload="auto" autoplay="autoplay" loop="loop" style="max-width: '. (empty($modSettings['OYTE_video_width']) ? '480' : $modSettings['OYTE_video_width']) .'px; max-height: '. (empty($modSettings['OYTE_video_height']) ? '270' : $modSettings['OYTE_video_height']) .'px;" src="//i.imgur.com/'. $videoID .'.webm">
 	<source src="//i.imgur.com/'. $videoID .'.webm" type="video/webm"></source>
 </video>';
 
