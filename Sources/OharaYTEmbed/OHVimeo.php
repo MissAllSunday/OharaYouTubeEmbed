@@ -33,6 +33,21 @@ class OHVimeo implements iOharaYTEmbed
 		'allowed_tag' => '',
 	);
 
+	/**
+	 * An array holding all available tests for this particular site.
+	 * The expected key is the, well, the expected result :P, the optimal and normal return value of {@link create()}
+	 * The original key is itself an array containing all links to test against.
+	 * Al tests uses the default width and height values: 480, 270.
+	 * @access public
+	 * @var array
+	 */
+	public $siteTests = array(
+		'expected' => '<div class="oharaEmbed vimeo" data-ohara_vimeo=\'{"title":"Pancake","video_id":42078826,"imageUrl":"https:\/\/i.vimeocdn.com\/video\/291805065_295x166.jpg"}\' id="oh_vimeo_42078826" style="width: 480px; height: 270px;"></div>',
+		'original' => array(
+			'https://vimeo.com/42078826',
+		),
+	);
+
 	public function __construct($app)
 	{
 		$this->_app = $app;

@@ -35,6 +35,23 @@ class OHYouTube implements iOharaYTEmbed
 		'allowed_tag' => '',
 	);
 
+	/**
+	 * An array holding all available tests for this particular site.
+	 * The expected key is the, well, the expected result :P, the optimal and normal return value of {@link create()}
+	 * The original key is itself an array containing all links to test against.
+	 * Al tests uses the default width and height values: 480, 270.
+	 * @access public
+	 * @var array
+	 */
+	public $siteTests = array(
+		'expected' => '<div class="oharaEmbed youtube" data-ohara_youtube=\'{"video_id":"sDj72zqZakE","title":""}\' id="oh_youtube_sDj72zqZakE" style="width: 480px; height: 270px;"></div>',
+		'original' => array(
+			'https://youtu.be/sDj72zqZakE',
+			'https://www.youtube.com/watch?v=sDj72zqZakE',
+			'http://www.youtube.com/watch?feature=player_embedded&v=sDj72zqZakE',
+		),
+	);
+
 	public function __construct($app)
 	{
 		$this->_app = $app;

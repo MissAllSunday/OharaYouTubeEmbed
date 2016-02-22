@@ -33,6 +33,21 @@ class OHGifv implements iOharaYTEmbed
 		'allowed_tag' => '',
 	);
 
+	/**
+	 * An array holding all available tests for this particular site.
+	 * The expected key is the, well, the expected result :P, the optimal and normal return value of {@link create()}
+	 * The original key is itself an array containing all links to test against.
+	 * Al tests uses the default width and height values: 480, 270.
+	 * @access public
+	 * @var array
+	 */
+	public $siteTests = array(
+		'expected' => '<div class="oharaEmbed gifv" data-ohara_gifv=\'{"video_id":"A61SaA1","title":""}\' id="oh_gifv_A61SaA1" style="width: 480px; height: 270px;"><video preload="auto" autoplay="autoplay" loop="loop" style="max-width: 480px; max-height: 270px;" src="//i.imgur.com/A61SaA1.webm"><source src="//i.imgur.com/A61SaA1.webm" type="video/webm"></source></video></div>',
+		'original' => array(
+			'http://i.imgur.com/joGlU0z.gifv',
+		),
+	);
+
 	public function __construct($app)
 	{
 		$this->_app = $app;
@@ -99,8 +114,7 @@ class OHGifv implements iOharaYTEmbed
 		// Make sure not to use any unvalid params.
 		$paramsJson = !empty($params) ? json_encode($params) : '{}';
 
-		return !empty($params) ? '<div class="oharaEmbed '. $this->siteSettings['identifier'] .'" data-ohara_'. $this->siteSettings['identifier'] .'=\''. $paramsJson .'\' id="oh_'. $this->siteSettings['identifier'] .'_'. $params['video_id'] .'" style="width: '. $this->_app->width .'px; height: '. $this->_app->height .'px;"><video preload="auto" autoplay="autoplay" loop="loop" style="max-width: '. $this->_app->width .'px; max-height: '. $this->_app->height .'px;" src="//i.imgur.com/'. $params['video_id'] .'.webm">
-	<source src="//i.imgur.com/'. $params['video_id'] .'.webm" type="video/webm"></source>
+		return !empty($params) ? '<div class="oharaEmbed '. $this->siteSettings['identifier'] .'" data-ohara_'. $this->siteSettings['identifier'] .'=\''. $paramsJson .'\' id="oh_'. $this->siteSettings['identifier'] .'_'. $params['video_id'] .'" style="width: '. $this->_app->width .'px; height: '. $this->_app->height .'px;"><video preload="auto" autoplay="autoplay" loop="loop" style="max-width: '. $this->_app->width .'px; max-height: '. $this->_app->height .'px;" src="//i.imgur.com/'. $params['video_id'] .'.webm"><source src="//i.imgur.com/'. $params['video_id'] .'.webm" type="video/webm"></source>
 </video></div>' : '';
 	}
 
