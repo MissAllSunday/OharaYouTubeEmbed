@@ -42,7 +42,7 @@ class OHGifv implements iOharaYTEmbed
 	 * @var array
 	 */
 	public $siteTests = array(
-		'expected' => '<div class="oharaEmbed gifv" data-ohara_gifv=\'{"video_id":"A61SaA1","title":""}\' id="oh_gifv_A61SaA1" style="width: 480px; height: 270px;"><video preload="auto" autoplay="autoplay" loop="loop" style="max-width: 480px; max-height: 270px;" src="//i.imgur.com/A61SaA1.webm"><source src="//i.imgur.com/A61SaA1.webm" type="video/webm"></source></video></div>',
+		'expected' => '<div class="oharaEmbed gifv" data-ohara_gifv="%7B%22video_id%22%3A%22joGlU0z%22%2C%22title%22%3A%22%22%7D" id="oh_gifv_joGlU0z" style="width: 480px; height: 270px;"><video preload="auto" autoplay="autoplay" loop="loop" style="max-width: 480px; max-height: 270px;" src="//i.imgur.com/joGlU0z.webm"><source src="//i.imgur.com/joGlU0z.webm" type="video/webm"></source></video></div>',
 		'original' => array(
 			'http://i.imgur.com/joGlU0z.gifv',
 		),
@@ -114,8 +114,7 @@ class OHGifv implements iOharaYTEmbed
 		// Make sure not to use any unvalid params.
 		$paramsJson = !empty($params) ? json_encode($params) : '{}';
 
-		return !empty($params) ? '<div class="oharaEmbed '. $this->siteSettings['identifier'] .'" data-ohara_'. $this->siteSettings['identifier'] .'=\''. $paramsJson .'\' id="oh_'. $this->siteSettings['identifier'] .'_'. $params['video_id'] .'" style="width: '. $this->_app->width .'px; height: '. $this->_app->height .'px;"><video preload="auto" autoplay="autoplay" loop="loop" style="max-width: '. $this->_app->width .'px; max-height: '. $this->_app->height .'px;" src="//i.imgur.com/'. $params['video_id'] .'.webm"><source src="//i.imgur.com/'. $params['video_id'] .'.webm" type="video/webm"></source>
-</video></div>' : '';
+		return !empty($params) ? '<div class="oharaEmbed '. $this->siteSettings['identifier'] .'" data-ohara_'. $this->siteSettings['identifier'] .'="'. urlencode($paramsJson) .'" id="oh_'. $this->siteSettings['identifier'] .'_'. $params['video_id'] .'" style="width: '. $this->_app->width .'px; height: '. $this->_app->height .'px;"><video preload="auto" autoplay="autoplay" loop="loop" style="max-width: '. $this->_app->width .'px; max-height: '. $this->_app->height .'px;" src="//i.imgur.com/'. $params['video_id'] .'.webm"><source src="//i.imgur.com/'. $params['video_id'] .'.webm" type="video/webm"></source></video></div>' : '';
 	}
 
 	public function invalid()

@@ -42,7 +42,7 @@ class OHVimeo implements iOharaYTEmbed
 	 * @var array
 	 */
 	public $siteTests = array(
-		'expected' => '<div class="oharaEmbed vimeo" data-ohara_vimeo=\'{"title":"Pancake","video_id":42078826,"imageUrl":"https:\/\/i.vimeocdn.com\/video\/291805065_295x166.jpg"}\' id="oh_vimeo_42078826" style="width: 480px; height: 270px;"></div>',
+		'expected' => '<div class="oharaEmbed vimeo" data-ohara_vimeo="%7B%22title%22%3A%22Pancake%22%2C%22video_id%22%3A42078826%2C%22imageUrl%22%3A%22https%3A%5C%2F%5C%2Fi.vimeocdn.com%5C%2Fvideo%5C%2F291805065_295x166.jpg%22%7D" id="oh_vimeo_42078826" style="width: 480px; height: 270px;"></div>',
 		'original' => array(
 			'https://vimeo.com/42078826',
 		),
@@ -117,7 +117,7 @@ class OHVimeo implements iOharaYTEmbed
 		// Make sure not to use any unvalid params.
 		$paramsJson = !empty($params) ? json_encode($params) : '{}';
 
-		return !empty($params) ? '<div class="oharaEmbed '. $this->siteSettings['identifier'] .'" data-ohara_'. $this->siteSettings['identifier'] .'=\''. $paramsJson .'\' id="oh_'. $this->siteSettings['identifier'] .'_'. $params['video_id'] .'" style="width: '. $this->_app->width .'px; height: '. $this->_app->height .'px;"></div>' : '';
+		return !empty($params) ? '<div class="oharaEmbed '. $this->siteSettings['identifier'] .'" data-ohara_'. $this->siteSettings['identifier'] .'="'. urlencode($paramsJson) .'" id="oh_'. $this->siteSettings['identifier'] .'_'. $params['video_id'] .'" style="width: '. $this->_app->width .'px; height: '. $this->_app->height .'px;"></div>' : '';
 	}
 
 	public function invalid()

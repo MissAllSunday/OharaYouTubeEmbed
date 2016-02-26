@@ -37,7 +37,7 @@ _oh.prototype.main = function(){
 				video.domElement = $(this);
 
 				// Get and gather all we need!
-				video = $.extend(video, video.domElement.data('ohara_'+ site.identifier));
+				video = $.extend(video, $.parseJSON(decodeURIComponent(video.domElement.data('ohara_'+ site.identifier))));
 				video.embedUrl = site.embedUrl.replace('{video_id}', video.video_id);
 				video.requestUrl = site.requestUrl.replace('{video_id}', video.video_id);
 

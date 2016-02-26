@@ -28,7 +28,7 @@ class OHYouTube implements iOharaYTEmbed
 	',
 		'js_file' => '',
 		'css_file' => '',
-		'regex' => '~(?<=[\s>\.(;\'"]|^)(?:http|https):\/\/[\w\-_%@:|]?(?:www\.)?(?:youtu\.be/|youtube\.com(?:/embed/|/v/|/watch\?v=|/watch\?.+&v=))([\w-]{11})(?=[^\w-]|$)(?![?=&+%\w.-]*(?:[\'"][^<>]*>  | </a>  ))[?=&+%\w.-]*[/\w\-_\~%@\?;=#}\\\\]?~ix',
+		'regex' => '~(?<=[\s>\.(;\'"]|^)(?:http|https):\/\/[\w\-_%@:|]?(?:www\.)?(?:youtu\.be\/|youtube\.com(?:\/embed\/|\/v\/|\/watch\?v=|\/watch\?.+&v=))([\w-]{11})(?=[^\w-]|$)(?![?=&+%\w.-]*(?:[\'"][^<>]*>  | <\/a>  ))[?=&+%\w.-]*[\/\w\-_\~%@\?;=#}\\\\]?~ix',
 		'before' => '[youtube]',
 		'after' => '[/youtube]',
 		'image' => 'youtube',
@@ -44,7 +44,7 @@ class OHYouTube implements iOharaYTEmbed
 	 * @var array
 	 */
 	public $siteTests = array(
-		'expected' => '<div class="oharaEmbed youtube" data-ohara_youtube=\'{"video_id":"sDj72zqZakE","title":""}\' id="oh_youtube_sDj72zqZakE" style="width: 480px; height: 270px;"></div>',
+		'expected' => '<div class="oharaEmbed youtube" data-ohara_youtube="%7B%22video_id%22%3A%22sDj72zqZakE%22%2C%22title%22%3A%22%22%7D" id="oh_youtube_sDj72zqZakE" style="width: 480px; height: 270px;"></div>',
 		'original' => array(
 			'https://youtu.be/sDj72zqZakE',
 			'https://www.youtube.com/watch?v=sDj72zqZakE',
@@ -134,7 +134,7 @@ class OHYouTube implements iOharaYTEmbed
 		// Make sure not to use any unvalid params.
 		$paramsJson = !empty($params) ? json_encode($params) : '{}';
 
-		return !empty($params) ? '<div class="oharaEmbed '. $this->siteSettings['identifier'] .'" data-ohara_'. $this->siteSettings['identifier'] .'=\''. $paramsJson .'\' id="oh_'. $this->siteSettings['identifier'] .'_'. $params['video_id'] .'" style="width: '. $this->_app->width .'px; height: '. $this->_app->height .'px;"></div>' : '';
+		return !empty($params) ? '<div class="oharaEmbed '. $this->siteSettings['identifier'] .'" data-ohara_'. $this->siteSettings['identifier'] .'="'. urlencode($paramsJson) .'" id="oh_'. $this->siteSettings['identifier'] .'_'. $params['video_id'] .'" style="width: '. $this->_app->width .'px; height: '. $this->_app->height .'px;"></div>' : '';
 	}
 
 	public function invalid()
