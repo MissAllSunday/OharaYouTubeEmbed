@@ -58,7 +58,7 @@ class OharaYTEmbed extends Suki\Ohara
 				if (file_exists($this->sitesFolder .'/'. $file))
 				{
 					$filename = pathinfo($this->sitesFolder .'/'. $file, PATHINFO_FILENAME);
-					include_once $this->sitesFolder .'/'. $file;
+					require_once $this->sitesFolder .'/'. $file;
 					static::$sites[$filename] = new $filename($this);
 				}
 			}
@@ -178,8 +178,8 @@ class OharaYTEmbed extends Suki\Ohara
 		global $context;
 
 		// The much needed css file.
-		loadCSSFile('oharaEmbed.css', array('force_current' => false, 'validate' => true));
-		loadJavascriptFile('ohvideos.min.js', array('local' => true, 'default_theme' => true, 'defer' => true));
+		loadCSSFile('oharaEmbed.css', array('force_current' => false, 'validate' => true, 'minimize' => true));
+		loadJavascriptFile('ohvideos.min.js', array('local' => true, 'default_theme' => true, 'defer' => true, 'minimize' => true));
 
 		// Set a max width var to let the JS code know how to act and react!
 		addInlineJavascript('
@@ -192,17 +192,17 @@ class OharaYTEmbed extends Suki\Ohara
 			{
 				// The js file is expected to be located at the default theme's script folder and needs to include its own extension!
 				if (!empty($site->siteSettings['js_file']))
-					loadJavascriptFile($site->siteSettings['js_file'], array('local' => true, 'default_theme' => true, 'defer' => true));
+					loadJavascriptFile($site->siteSettings['js_file'], array('local' => true, 'default_theme' => true, 'defer' => true, 'minimize' => true));
 
 				// The css file is expected to be located at the default theme's script folder and needs to include its own extension!
 				if (!empty($site->siteSettings['css_file']))
-					loadCSSFile($site->siteSettings['css_file'], array('force_current' => false, 'validate' => true));
+					loadCSSFile($site->siteSettings['css_file'], array('force_current' => false, 'validate' => true, 'minimize' => true));
 
 				// Is there any inline or JS file to be loaded? Please be sure to add a new line at the beginning and end of your string and to follow proper indent style too!
 				if (!empty($site->siteSettings['js_inline']))
 					addInlineJavascript($site->siteSettings['js_inline']);
 
-				// Do this site wants to add their own unique tag? SMF already supports div by default.
+				// Does this site wants to add their own unique HTML tag? SMF already supports div by default.
 				if (!empty($site->siteSettings['allowed_tag']))
 					$context['allowed_html_tags'][] = $site->siteSettings['allowed_tag'];
 			}
