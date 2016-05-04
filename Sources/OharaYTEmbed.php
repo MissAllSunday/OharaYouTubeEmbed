@@ -179,7 +179,7 @@ class OharaYTEmbed extends Suki\Ohara
 
 		// The much needed css file.
 		loadCSSFile('oharaEmbed.css', array('force_current' => false, 'validate' => true, 'minimize' => true));
-		loadJavascriptFile('ohvideos.min.js', array('local' => true, 'default_theme' => true, 'defer' => true, 'minimize' => true));
+		loadJavascriptFile('ohvideos.js', array('local' => true, 'default_theme' => true, 'defer' => true, 'minimize' => true));
 
 		// Set a max width var to let the JS code know how to act and react!
 		addInlineJavascript('
