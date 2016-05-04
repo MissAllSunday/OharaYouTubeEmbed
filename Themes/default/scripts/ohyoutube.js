@@ -1,7 +1,7 @@
 /*
  Copyright (C) 2016 Jessica González
  @license http://www.mozilla.org/MPL/ MPL 2.0
- @version 1.2.5
+ @version 1.2.6
 */
 
 var _oh = function(){
@@ -40,7 +40,7 @@ _oh.prototype.main = function(){
 			}
 
 			// The height and width of the iFrame should be the same as parent
-			var iframe = $('<iframe/>', {'frameborder': '0', 'src': iframe_url, 'width': imgWidth, 'height': imgHeight});
+			var iframe = $('<iframe/>', {'frameborder': '0', 'src': iframe_url, 'width': imgWidth, 'height': imgHeight, 'allowfullscreen': ''});
 
 			// Append the YouTube HTML5 Player.
 			$(this).css({'background-image': 'none'}).append(iframe);
