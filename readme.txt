@@ -50,8 +50,10 @@ file, You can obtain one at http://mozilla.org/MPL/2.0/.
 
 [color=purple][b][size=12pt]Changelog[/size][/b][/color]
 [code]
-1.2.6 - May 4 18, 2016,
+1.2.6 - May 29, 2016,
 - Add support for full screen videos.
+- Remove multiple calls to this.responsive().
+- Check the width and height of parent div before applying changes.
 
 1.2.5 - February 18, 2016,
 - Added support for imgur gifv format
