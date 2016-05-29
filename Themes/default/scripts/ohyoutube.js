@@ -17,39 +17,40 @@ var _oh = function(){
 
 _oh.prototype.main = function(){
 
-	$this = this;
+	var $this = this;
 
 	$('.youtube').each(function(){
 
-		var videoID = this.id.replace('oh_',''),
-			imgsrc = $this.getImage(videoID),
-			imgHeight = $this.basedElement.height(),
-			imgWidth = $this.basedElement.width();
+		var _element = $(this);
+			_element.videoID = this.id.replace('oh_','');
+			_element.imgsrc = $this.getImage(_element.videoID);
+			_element.imgHeight = $this.basedElement.height();
+			_element.imgWidth = $this.basedElement.width();
 
-		if (typeof imgsrc !== 'undefined'){
-			$(this).css({'background-image': 'url('+ imgsrc +')', 'background-size': 'cover'});
+		if (typeof _element.imgsrc !== 'undefined'){
+			_element.css({'background-image': 'url('+ _element.imgsrc +')', 'background-size': 'cover'});
 		}
 
-		$(this).append($('<div/>', {'class': 'youtube_play'}));
+		_element.append($('<div/>', {'class': 'youtube_play'}));
 
-		$(this).one('click', function(){
-			var iframe_url = '//www.youtube.com/embed/' + videoID + '?autoplay=1&autohide=1';
+		_element.one('click', function(){
+			var iframe_url = '//www.youtube.com/embed/' + _element.videoID + '?autoplay=1&autohide=1';
 
-			if ($(this).data('params')){
-				iframe_url+='&'+$(this).data('params');
+			if (_element.data('params')){
+				iframe_url+='&'+ _element.data('params');
 			}
 
 			// The height and width of the iFrame should be the same as parent
-			var iframe = $('<iframe/>', {'frameborder': '0', 'src': iframe_url, 'width': imgWidth, 'height': imgHeight, 'allowfullscreen': ''});
+			var iframe = $('<iframe/>', {'frameborder': '0', 'src': iframe_url, 'width': _element.imgWidth, 'height': _element.imgHeight, 'allowfullscreen': 'allowfullscreen'});
 
 			// Append the YouTube HTML5 Player.
-			$(this).css({'background-image': 'none'}).append(iframe);
-			$(this).children('.youtube_play').css({'height': '0'});
-
-			// Gotta make sure the new iframe gets resized if needed.
-			$this.responsive();
+			_element.css({'background-image': 'none'}).append(iframe);
+			_element.children('.youtube_play').css({'height': '0'});
 		});
 	});
+
+	// Gotta make sure the new iframe gets resized if needed.
+	$this.responsive();
 };
 
 _oh.prototype.responsive = function()
@@ -58,9 +59,8 @@ _oh.prototype.responsive = function()
 
 	$(window).resize(function(){
 
-		// Get the new width and height.
 		var newWidth = $this.basedElement.width();
-		var newHeight = (newWidth * $this.aspectRatio) <= $this.defaultHeight ? (newWidth * $this.aspectRatio) : $this.defaultHeight;
+			newHeight = (newWidth * $this.aspectRatio) <= $this.defaultHeight ? (newWidth * $this.aspectRatio) : $this.defaultHeight;
 
 		// If the new width is lower than the "default width" then apply some resizing. No? then go back to our default sizes
 		var applyResize = (newWidth <= $this.defaultWidth),
