@@ -67,6 +67,12 @@ _oh.prototype.responsive = function()
 			applyWidth = !applyResize ? $this.defaultWidth : newWidth,
 			applyHeight = !applyResize ? $this.defaultHeight : newHeight;
 
+		// Gotta check the applied width and height is actually something!
+		if (applyWidth <= 0 && applyHeight <= 0) {
+			applyWidth = $this.defaultWidth;
+			applyHeight = $this.defaultHeight;
+		}
+
 		// Gotta resize the master div.
 		$this.masterDiv.width(applyWidth).height(applyHeight);
 		$('.oharaEmbed > iframe').each(function(){
