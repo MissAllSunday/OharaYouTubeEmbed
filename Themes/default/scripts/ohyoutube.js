@@ -1,7 +1,7 @@
 /*
  Copyright (C) 2016 Jessica González
  @license http://www.mozilla.org/MPL/ MPL 2.0
- @version 1.2.6
+ @version 1.2.7
 */
 
 var _oh = function(){
@@ -10,6 +10,8 @@ var _oh = function(){
 	this.defaultWidth = typeof(_ohWidth) !== 'undefined' ? _ohWidth : 480;
 	this.defaultHeight = typeof(_ohHeight) !== 'undefined' ? _ohHeight : 270;
 	this.aspectRatio = this.defaultHeight / this.defaultWidth;
+	this.basedWidth = this.basedElement.width() >= this.defaultWidth ? this.defaultWidth : this.basedElement.width();
+	this.basedHeight = this.basedElement.height() >= this.defaultHeight ? this.defaultHeight : this.basedElement.height();
 
 	this.main();
 	this.responsive();
@@ -24,8 +26,8 @@ _oh.prototype.main = function(){
 		var _element = $(this);
 			_element.videoID = this.id.replace('oh_','');
 			_element.imgsrc = $this.getImage(_element.videoID);
-			_element.imgHeight = $this.basedElement.height();
-			_element.imgWidth = $this.basedElement.width();
+			_element.imgHeight = $this.basedHeight;
+			_element.imgWidth = $this.basedWidth;
 
 		if (typeof _element.imgsrc !== 'undefined'){
 			_element.css({'background-image': 'url('+ _element.imgsrc +')', 'background-size': 'cover'});
