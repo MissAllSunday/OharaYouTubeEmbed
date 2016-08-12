@@ -254,7 +254,7 @@ function OYTE_Gifv($data)
 
 	// Got something!
 	else
-		$result = '<video preload="auto" autoplay="autoplay" loop="loop" style="max-width: '. (empty($modSettings['OYTE_video_width']) ? '480' : $modSettings['OYTE_video_width']) .'px; max-height: '. (empty($modSettings['OYTE_video_height']) ? '270' : $modSettings['OYTE_video_height']) .'px;" src="//i.imgur.com/'. $videoID .'.webm">
+		$result = '<video class="oharaEmbed gifv" preload="auto" autoplay="autoplay" loop="loop" style="max-width: '. (empty($modSettings['OYTE_video_width']) ? '480' : $modSettings['OYTE_video_width']) .'px; max-height: '. (empty($modSettings['OYTE_video_height']) ? '270' : $modSettings['OYTE_video_height']) .'px;" src="//i.imgur.com/'. $videoID .'.webm">
 	<source src="//i.imgur.com/'. $videoID .'.webm" type="video/webm"></source>
 </video>';
 
