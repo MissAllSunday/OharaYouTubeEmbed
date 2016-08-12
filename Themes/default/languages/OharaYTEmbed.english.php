@@ -2,7 +2,7 @@
 
 /*
  * @package Ohara Youtube Embed mod
- * @version 1.2.6
+ * @version 1.2.7
  * @author Jessica Gonzalez <missallsunday@simplemachines.org>
  * @copyright Copyright (C) 2016 Jessica Gonzalez
  * @license http://www.mozilla.org/MPL/ MPL 2.0
