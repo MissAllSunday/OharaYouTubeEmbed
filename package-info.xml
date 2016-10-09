@@ -43,6 +43,8 @@ file, You can obtain one at http://mozilla.org/MPL/2.0/.
 		<remove-file name="$languagedir/OharaYTEmbed.spanish_es-utf8.php" />
 		<remove-file name="$languagedir/OharaYTEmbed.spanish_latin-utf8.php" />
 		<remove-file name="$languagedir/OharaYTEmbed.spanish_latin.php" />
+		<remove-file name="$languagedir/OharaYTEmbed.russian.php" />
+		<remove-file name="$languagedir/OharaYTEmbed.russian-utf8.php" />		
 		<remove-file name="$imagesdir/bbc/youtube.png" />
 		<remove-file name="$imagesdir/bbc/vimeo.png" />
 		<remove-file name="$imagesdir/bbc/gifv.png" />
