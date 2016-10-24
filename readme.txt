@@ -51,7 +51,7 @@ file, You can obtain one at http://mozilla.org/MPL/2.0/.
 [color=purple][b][size=12pt]Changelog[/size][/b][/color]
 [code]
 1.2.7 - Aug 12, 2016,
-- Set basedWidth and basedHeight to prevent weird behaviour on non responsive themes.
+- Set basedWidth and basedHeight to prevent weird behavior on non responsive themes.
 
 1.2.6 - May 29, 2016,
 - Add support for full screen videos.
