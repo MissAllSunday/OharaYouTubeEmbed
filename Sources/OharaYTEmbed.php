@@ -44,8 +44,10 @@ function OYTE_bbc_add_code(&$codes)
 			'tag' => 'yt',
 			'type' => 'unparsed_content',
 			'content' => '$1',
-			'validate' => function (&$tag, &$data, $disabled) use ($txt)
+			'validate' => function (&$tag, &$data, $disabled)
 			{
+				global $txt;
+
 				// This tag was disabled.
 				if (!empty($disabled['yt']))
 					return;
@@ -63,8 +65,10 @@ function OYTE_bbc_add_code(&$codes)
 			'tag' => 'vimeo',
 			'type' => 'unparsed_content',
 			'content' => '$1',
-			'validate' => function (&$tag, &$data, $disabled) use ($txt)
+			'validate' => function (&$tag, &$data, $disabled)
 			{
+				global $txt;
+
 				// This tag was disabled.
 				if (!empty($disabled['vimeo']))
 					return;
@@ -82,8 +86,10 @@ function OYTE_bbc_add_code(&$codes)
 			'tag' => 'gifv',
 			'type' => 'unparsed_content',
 			'content' => '$1',
-			'validate' => function (&$tag, &$data, $disabled) use ($txt)
+			'validate' => function (&$tag, &$data, $disabled)
 			{
+				global $txt;
+
 				// This tag was disabled.
 				if (!empty($disabled['gifv']))
 					return;
@@ -172,14 +178,14 @@ function OYTE_Main($data)
 		$videoID = $data;
 
 	// We all love Regex.
-	$pattern = '#^(?:https?://)?(?:www\.)?(?:youtu\.be/|youtube\.com(?:/embed/|/v/|/watch\?v=|/watch\?.+&v=))([\w-]{11})(?:.+)?$#x';
+	$pattern = '#(?:https?:\/\/)?(?:www\.)?(?:m\.)?(?:youtu\.be\/|youtube\.com(?:\/embed\/|\/v\/|\/watch\?v=|\/watch\?.+&v=))([\w-]{11}) (?:[^\s]+) (?:[ \t\r\n])#xi';
 
 	// First attempt, pure regex.
 	if (empty($videoID) && preg_match($pattern, $data, $matches))
 		$videoID = isset($matches[1]) ? $matches[1] : false;
 
 	// Give another regex a chance.
-	elseif (empty($videoID) && preg_match('%(?:youtube(?:-nocookie)?\.com/(?:[^/]+/.+/|(?:v|e(?:mbed)?)/|.*[?&]v=)|youtu\.be/)([^"&?/ ]{11})%i', $data, $match))
+	elseif (empty($videoID) && preg_match('%(?:youtube(?:-nocookie)?\.com\/(?:[^\/]+\/.+\/|(?:v|e(?:mbed)?)\/|.*[?&]v=)|youtu\.be\/)([^"&?\/ ]{11})%i', $data, $match))
 		$videoID = isset($match[1]) ? $match[1] : false;
 
 	// No?, then one last chance, let PHPs native parse_url() function do the dirty work.
@@ -240,8 +246,12 @@ function OYTE_Gifv($data)
 	$videoID = '';
 	$result = '';
 
+	if (strpos($data, 'http') === false || strpos($data, '.com') === false)
+		return '<video class="oharaEmbed gifv" autoplay loop style="max-width: '. (empty($modSettings['OYTE_video_width']) ? '480' : $modSettings['OYTE_video_width']) .'px; max-height: '. (empty($modSettings['OYTE_video_height']) ? '270' : $modSettings['OYTE_video_height']) .'px;" src="//i.imgur.com/'. $data .'.webm"><source src="//i.imgur.com/'. $data .'.webm" type="video/webm"></source></video>';
+
+
 	// We all love Regex.
-	$pattern = '/^(?:https?:\/\/)?(?:www\.)?i\.imgur\.com\/([a-z0-9]+)\.gifv/i';
+	$pattern = '/^(?:https?:\/\/)?(?:www\.)?i\.imgur\.com\/([a-z0-9]+)\.(?:gifv|webm)/i';
 
 	// First attempt, pure regex.
 	if (empty($videoID) && preg_match($pattern, $data, $matches))
@@ -254,9 +264,7 @@ function OYTE_Gifv($data)
 
 	// Got something!
 	else
-		$result = '<video class="oharaEmbed gifv" preload="auto" autoplay="autoplay" loop="loop" style="max-width: '. (empty($modSettings['OYTE_video_width']) ? '480' : $modSettings['OYTE_video_width']) .'px; max-height: '. (empty($modSettings['OYTE_video_height']) ? '270' : $modSettings['OYTE_video_height']) .'px;" src="//i.imgur.com/'. $videoID .'.webm">
-	<source src="//i.imgur.com/'. $videoID .'.webm" type="video/webm"></source>
-</video>';
+		$result = '<video class="oharaEmbed gifv" autoplay loop style="max-width: '. (empty($modSettings['OYTE_video_width']) ? '480' : $modSettings['OYTE_video_width']) .'px; max-height: '. (empty($modSettings['OYTE_video_height']) ? '270' : $modSettings['OYTE_video_height']) .'px;" src="//i.imgur.com/'. $videoID .'.webm"><source src="//i.imgur.com/'. $videoID .'.webm" type="video/webm"></source></video>';
 
 	return $result;
 }
@@ -275,15 +283,15 @@ function OYTE_Preparse($message)
 
 	// The extremely long regex...
 	$vimeo = '~(?<=[\s>\.(;\'"]|^)(?:https?\:\/\/)?(?:www\.)?vimeo.com\/(?:album\/|groups\/(.*?)\/|channels\/(.*?)\/)?[0-9]+\??[/\w\-_\~%@\?;=#}\\\\]?~';
-	$youtube = '~(?<=[\s>\.(;\'"]|^)(?:http|https):\/\/[\w\-_%@:|]?(?:www\.)?(?:youtu\.be/|youtube\.com(?:/embed/|/v/|/watch\?v=|/watch\?.+&v=))([\w-]{11})(?=[^\w-]|$)(?![?=&+%\w.-]*(?:[\'"][^<>]*>  | </a>  ))[?=&+%\w.-]*[/\w\-_\~%@\?;=#}\\\\]?~ix';
+	$youtube = '~(?<=[\s>\.(;\'"]|^)(?:http|https):\/\/[\w\-_%@:|]?(?:www\.)?(?:m\.)?(?:youtu\.be\/|youtube\.com(?:\/embed\/|\/v\/|\/watch\?v=|\/watch\?.+&v=))([\w-]{11})(?:[^\s]+)?(?=[^\w-]|$)(?![?=&+%\w.-]*(?:[\'"][^<>]*>  | <\/a>  ))[?=&+%\w.-]*[\/\w\-_\~%@\?;=#}\\\\]?~ix';
 
-	$gifv = '~(?<=[\s>\.(;\'"]|^)(?:http|https):\/\/[\w\-_%@:|]?(?:www\.)?i\.imgur\.com\/([a-z0-9]+)\.gifv(?=[^\w-]|$)(?![?=&+%\w.-]*(?:[\'"][^<>]*>  | <\/a>  ))[?=&+%\w.-]*[\/\w\-_\~%@\?;=#}\\\\]?~ix';
+	$gifv = '~(?<=[\s>\.(;\'"]|^)(?:http|https):\/\/[\w\-_%@:|]?(?:www\.)?i\.imgur\.com\/([a-z0-9]+)\.(?:gifv|webm)(?=[^\w-]|$)(?![?=&+%\w.-]*(?:[\'"][^<>]*>  | <\/a>  ))[?=&+%\w.-]*[\/\w\-_\~%@\?;=#}\\\\]?~ix';
 
 	// Is this a YouTube video url?
 	$message = preg_replace_callback(
 		$youtube,
 		function ($matches) {
-			return '[youtube]'. $matches[0] .'[/youtube]';
+			return '[youtube]'. $matches[1] .'[/youtube]';
 		},
 		$message
 	);
@@ -301,7 +309,7 @@ function OYTE_Preparse($message)
 	$message = preg_replace_callback(
 		$gifv,
 		function ($matches) {
-			return '[gifv]'. $matches[0] .'[/gifv]';
+			return '[gifv]'. $matches[1] .'[/gifv]';
 		},
 		$message
 	);
