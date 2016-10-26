@@ -20,6 +20,7 @@ You can enable/disable the mod as well as set the width and height for the video
 [code]
 http://www.youtube.com/watch?v={ID}
 http://www.youtube.com/watch?v={ID}&{Parameters}
+http://www.m.youtube.com/watch?v={ID}
 http://youtu.be/{ID}
 http://www.youtube.com/watch?feature=player_embedded&v=[ID]
 http://vimeo.com/[ID]
@@ -50,6 +51,11 @@ file, You can obtain one at http://mozilla.org/MPL/2.0/.
 
 [color=purple][b][size=12pt]Changelog[/size][/b][/color]
 [code]
+1.2.8 - Oct 25, 2016
+- Improve regex for gifv and youtube urls.
+- Pass the ID when using url auto parsing, prevents using another regex to get it.
+- Use global scope inside closures.
+
 1.2.7 - Aug 12, 2016,
 - Set basedWidth and basedHeight to prevent weird behavior on non responsive themes.
 
