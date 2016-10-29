@@ -8,13 +8,14 @@
 	<version>2.1</version>
 	<type>modification</type>
 
-	<install for="2.1 Beta 2, 2.1 Beta 3, 2.1 - 2.1.99">
+	<install for="2.1 Beta 3, 2.1 Beta 4, 2.1 RC 1, 2.1 RC 2, 2.1 - 2.1.99">
 		<readme parsebbc="true">readme.txt</readme>
 		<license type="inline" parsebbc="false">
 This Source Code Form is subject to the terms of the Mozilla Public
 License, v. 2.0. If a copy of the MPL was not distributed with this
 file, You can obtain one at http://mozilla.org/MPL/2.0/.
 		</license>
+		<code>configInstall.php</code>
 		<hook function="OharaYTEmbed::runTimeHooks" hook="integrate_load_theme" file="$sourcedir/OharaYTEmbed.php" object="true"></hook>
 
 		<!-- DUH! WINNING! -->
@@ -27,7 +28,6 @@ file, You can obtain one at http://mozilla.org/MPL/2.0/.
 		<require-file name="youtube.png" destination="$imagesdir/bbc" />
 		<require-file name="vimeo.png" destination="$imagesdir/bbc" />
 		<require-file name="gifv.png" destination="$imagesdir/bbc" />
-		<require-file name="_configOharaYTEmbed.json" destination="$boarddir">json config file</require-file>
 		<redirect url="index.php?action=admin;area=modsettings;sa=general" timeout="1000" />
 	</install>
 
@@ -44,7 +44,7 @@ file, You can obtain one at http://mozilla.org/MPL/2.0/.
 		<remove-file name="$languagedir/OharaYTEmbed.spanish_latin-utf8.php" />
 		<remove-file name="$languagedir/OharaYTEmbed.spanish_latin.php" />
 		<remove-file name="$languagedir/OharaYTEmbed.russian.php" />
-		<remove-file name="$languagedir/OharaYTEmbed.russian-utf8.php" />		
+		<remove-file name="$languagedir/OharaYTEmbed.russian-utf8.php" />
 		<remove-file name="$imagesdir/bbc/youtube.png" />
 		<remove-file name="$imagesdir/bbc/vimeo.png" />
 		<remove-file name="$imagesdir/bbc/gifv.png" />
