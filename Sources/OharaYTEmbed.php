@@ -11,9 +11,11 @@
 if (!defined('SMF'))
 	die('Hacking attempt...');
 
-// Use Ohara! manually :(
-require_once ($sourcedir .'/ohara/src/Suki/Ohara.php');
+// Ohara autoload!
+require_once $sourcedir .'/ohara/src/Suki/autoload.php';
 require_once ($sourcedir .'/iOharaYTEmbed.php');
+
+use Suki\Ohara;
 
 class OharaYTEmbed extends Suki\Ohara
 {
@@ -41,8 +43,8 @@ class OharaYTEmbed extends Suki\Ohara
 
 	public function defaultSettings()
 	{
-		$this->width = $this->enable('width') ? $this->setting('width') : 480;
-		$this->height = $this->enable('height') ? $this->setting('height') : 270;
+		$this->width = $this->setting('width', 480);
+		$this->height = $this->setting('height', 270);
 
 		$this->sitesFolder = $this->sourceDir . '/'. $this->name;
 	}
@@ -78,7 +80,7 @@ class OharaYTEmbed extends Suki\Ohara
 		// Gotta include a setting for the sites. Make sure the txt string actually exists!
 		foreach (static::$sites as $site)
 			if (!empty($site) && is_object($site))
-				$config_vars[] = array('check', $this->name .'_enable_'. $site->siteSettings['identifier'], 'label' => $this->parser($this->text('enable_generic'), array('site' => $site->siteSettings['name'])));
+				$config_vars[] = array('check', $this->name .'_enable_'. $site->siteSettings['identifier'], 'label' => $this['tools']->parser($this->text('enable_generic'), array('site' => $site->siteSettings['name'])));
 
 		$config_vars[] = '';
 	}
@@ -93,7 +95,7 @@ class OharaYTEmbed extends Suki\Ohara
 		$that = $this;
 
 		foreach (static::$sites as $site)
-			if (!empty($site) && is_object($site) && $this->setting('enable_'. $site->siteSettings['identifier']))
+			if (!empty($site) && is_object($site) && $this->enable('enable_'. $site->siteSettings['identifier']))
 			{
 				$codes[] = array(
 					'tag' => $site->siteSettings['identifier'],
@@ -146,10 +148,10 @@ class OharaYTEmbed extends Suki\Ohara
 		$buttons = array();
 
 		foreach (static::$sites as $site)
-			if (!empty($site) && is_object($site) && $this->setting('enable_'. $site->siteSettings['identifier']))
+			if (!empty($site) && is_object($site) && $this->enable('enable_'. $site->siteSettings['identifier']))
 				$buttons[] = array(
 					'code' => $site->siteSettings['identifier'],
-					'description' => $this->parser($this->text('desc_generic'), array('site' => $site->siteSettings['name'])),
+					'description' => $this['tools']->parser($this->text('desc_generic'), array('site' => $site->siteSettings['name'])),
 					'before' => $site->siteSettings['before'],
 					'after' => $site->siteSettings['after'],
 					'image' => $site->siteSettings['image'],
@@ -169,7 +171,7 @@ class OharaYTEmbed extends Suki\Ohara
 
 		// As always, the good old foreach saves the day!
 		foreach (static::$sites as $site)
-			if (!empty($site) && is_object($site) && $this->setting('enable_'. $site->siteSettings['identifier']))
+			if (!empty($site) && is_object($site) && $this->enable('enable_'. $site->siteSettings['identifier']))
 				$site->auto($message);
 	}
 
@@ -179,10 +181,10 @@ class OharaYTEmbed extends Suki\Ohara
 
 		// The much needed css file.
 		loadCSSFile('oharaEmbed.css', array('force_current' => false, 'validate' => true, 'minimize' => true));
-		loadJavascriptFile('ohvideos.min.js', array('local' => true, 'force_current' => false, 'defer' => true, 'minimize' => false));
+		loadJavaScriptFile('ohvideos.min.js', array('local' => true, 'force_current' => false, 'defer' => true, 'minimize' => false));
 
 		// Set a max width var to let the JS code know how to act and react!
-		addInlineJavascript('
+		addInlineJavaScript('
 	var _ohWidth = '. $this->width .';
 	var _ohHeight = '. $this->height .';
 	var _ohSites = [];');
@@ -192,7 +194,7 @@ class OharaYTEmbed extends Suki\Ohara
 			{
 				// The js file is expected to be located at the default theme's script folder and needs to include its own extension!
 				if (!empty($site->siteSettings['js_file']))
-					loadJavascriptFile($site->siteSettings['js_file'], array('local' => true, 'default_theme' => true, 'defer' => true, 'minimize' => true));
+					loadJavaScriptFile($site->siteSettings['js_file'], array('local' => true, 'default_theme' => true, 'defer' => true, 'minimize' => true));
 
 				// The css file is expected to be located at the default theme's script folder and needs to include its own extension!
 				if (!empty($site->siteSettings['css_file']))
@@ -200,7 +202,7 @@ class OharaYTEmbed extends Suki\Ohara
 
 				// Is there any inline or JS file to be loaded? Please be sure to add a new line at the beginning and end of your string and to follow proper indent style too!
 				if (!empty($site->siteSettings['js_inline']))
-					addInlineJavascript($site->siteSettings['js_inline']);
+					addInlineJavaScript($site->siteSettings['js_inline']);
 
 				// Does this site wants to add their own unique HTML tag? SMF already supports div by default.
 				if (!empty($site->siteSettings['allowed_tag']))
