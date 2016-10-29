@@ -26,7 +26,7 @@ class OHGifv implements iOharaYTEmbed
 	',
 		'js_file' => '',
 		'css_file' => '',
-		'regex' => '~(?<=[\s>\.(;\'"]|^)(?:http|https):\/\/[\w\-_%@:|]?(?:www\.)?i\.imgur\.com\/([a-z0-9]+)\.gifv(?=[^\w-]|$)(?![?=&+%\w.-]*(?:[\'"][^<>]*>  | <\/a>  ))[?=&+%\w.-]*[\/\w\-_\~%@\?;=#}\\\\]?~ix',
+		'regex' => '~(?<=[\s>\.(;\'"]|^)(?:http|https):\/\/[\w\-_%@:|]?(?:www\.)?i\.imgur\.com\/([a-z0-9]+)\.(?:gifv|webm)(?=[^\w-]|$)(?![?=&+%\w.-]*(?:[\'"][^<>]*>  | <\/a>  ))[?=&+%\w.-]*[\/\w\-_\~%@\?;=#}\\\\]?~ix',
 		'before' => '[gifv]',
 		'after' => '[/gifv]',
 		'image' => 'gifv',
@@ -60,7 +60,7 @@ class OHGifv implements iOharaYTEmbed
 		$result = '';
 
 		// We all love Regex.
-		$pattern = '/^(?:https?:\/\/)?(?:www\.)?i\.imgur\.com\/([a-z0-9]+)\.gifv/i';
+		$pattern = '/^(?:https?:\/\/)?(?:www\.)?i\.imgur\.com\/([a-z0-9]+)\.(?:gifv|webm)/i';
 
 		// First attempt, pure regex.
 		if (empty($result) && preg_match($pattern, $data, $matches))

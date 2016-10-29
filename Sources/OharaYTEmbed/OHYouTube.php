@@ -28,7 +28,7 @@ class OHYouTube implements iOharaYTEmbed
 	',
 		'js_file' => '',
 		'css_file' => '',
-		'regex' => '~(?<=[\s>\.(;\'"]|^)(?:http|https):\/\/[\w\-_%@:|]?(?:www\.)?(?:youtu\.be\/|youtube\.com(?:\/embed\/|\/v\/|\/watch\?v=|\/watch\?.+&v=))([\w-]{11})(?=[^\w-]|$)(?![?=&+%\w.-]*(?:[\'"][^<>]*>  | <\/a>  ))[?=&+%\w.-]*[\/\w\-_\~%@\?;=#}\\\\]?~ix',
+		'regex' => '~(?<=[\s>\.(;\'"]|^)(?:http|https):\/\/[\w\-_%@:|]?(?:www\.)?(?:m\.)?(?:youtu\.be\/|youtube\.com(?:\/embed\/|\/v\/|\/watch\?v=|\/watch\?.+&v=))([\w-]{11})(?:[^\s]+)?(?=[^\w-]|$)(?![?=&+%\w.-]*(?:[\'"][^<>]*>  | <\/a>  ))[?=&+%\w.-]*[\/\w\-_\~%@\?;=#}\\\\]?~ix',
 		'before' => '[youtube]',
 		'after' => '[/youtube]',
 		'image' => 'youtube',
@@ -64,7 +64,7 @@ class OHYouTube implements iOharaYTEmbed
 		$result = '';
 
 		// We all love Regex.
-		$pattern = '#(?:https?:\/\/)?(?:www\.)?(?:youtu\.be\/|youtube\.com(?:\/embed\/|\/v\/|\/watch\?v=|\/watch\?.+&v=))([\w-]{11})(?:.+)?$#x';
+		$pattern = '#(?:https?:\/\/)?(?:www\.)?(?:m\.)?(?:youtu\.be\/|youtube\.com(?:\/embed\/|\/v\/|\/watch\?v=|\/watch\?.+&v=))([\w-]{11}) (?:[^\s]+) (?:[ \t\r\n])#xi';
 
 		// Check if the user provided the youtube ID
 		if (preg_match('/^[a-zA-z0-9_-]{11}$/', $data) > 0)
