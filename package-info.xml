@@ -51,6 +51,5 @@ file, You can obtain one at http://mozilla.org/MPL/2.0/.
 		<remove-file name="$themedir/scripts/ohvideos.js" />
 		<remove-file name="$themedir/scripts/ohvideos.min.js" />
 		<remove-file name="$themedir/css/oharaEmbed.css" />
-		<remove-file name="$boarddir/_configOharaYTEmbed.json" />
 	</uninstall>
 </package-info>
