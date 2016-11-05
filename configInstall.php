@@ -28,7 +28,7 @@ $_config = array(
 );
 
 // All good.
-updateSettings(array('_configBlogNews' => json_encode($_config)));
+updateSettings(array('_configOharaYTEmbed' => json_encode($_config)));
 
 if (SMF == 'SSI')
 	echo 'Database changes are complete!';
