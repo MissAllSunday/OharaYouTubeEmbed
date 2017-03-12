@@ -2,9 +2,9 @@
 
 /*
  * @package Ohara Youtube Embed mod
- * @version 1.2.8
- * @author Jessica González <missallsunday@simplemachines.org>
- * @copyright Copyright (C) 2016 Jessica González
+ * @version 1.2.9
+ * @author Jessica González <suki@missallsunday.com>
+ * @copyright Copyright (C) 2017 Jessica González
  * @license http://www.mozilla.org/MPL/ MPL 2.0
  */
 
@@ -202,7 +202,7 @@ function OYTE_Main($data)
 
 	// Got something!
 	else
-		$result = '<div class="oharaEmbed youtube" id="oh_'. $videoID .'" style="width: '. (empty($modSettings['OYTE_video_width']) ? '480' : $modSettings['OYTE_video_width']) .'px; height: '. (empty($modSettings['OYTE_video_height']) ? '270' : $modSettings['OYTE_video_height']) .'px;"></div>';
+		$result = '<div class="oharaEmbed youtube" id="oh_'. $videoID .'" style="width: '. (empty($modSettings['OYTE_video_width']) ? '480' : $modSettings['OYTE_video_width']) .'px; height: '. (empty($modSettings['OYTE_video_height']) ? '270' : $modSettings['OYTE_video_height']) .'px;"><noscript><a href="//www.youtube.com/watch?v='. $videoID .'">//www.youtube.com/watch?v='. $videoID .'</a></noscript></div>';
 
 	return $result;
 }
@@ -247,11 +247,11 @@ function OYTE_Gifv($data)
 	$result = '';
 
 	if (strpos($data, 'http') === false || strpos($data, '.com') === false)
-		return '<video class="oharaEmbed gifv" autoplay loop style="max-width: '. (empty($modSettings['OYTE_video_width']) ? '480' : $modSettings['OYTE_video_width']) .'px; max-height: '. (empty($modSettings['OYTE_video_height']) ? '270' : $modSettings['OYTE_video_height']) .'px;" src="//i.imgur.com/'. $data .'.webm"><source src="//i.imgur.com/'. $data .'.webm" type="video/webm"></source></video>';
+		return '<video class="oharaEmbed gifv" autoplay loop style="max-width: '. (empty($modSettings['OYTE_video_width']) ? '480' : $modSettings['OYTE_video_width']) .'px; max-height: '. (empty($modSettings['OYTE_video_height']) ? '270' : $modSettings['OYTE_video_height']) .'px;"><source src="//i.imgur.com/'. $data .'.webm" type="video/webm"></source><source src="//i.imgur.com/'. $data .'.mp4" type="video/mp4"></source></video>';
 
 
 	// We all love Regex.
-	$pattern = '/^(?:https?:\/\/)?(?:www\.)?i\.imgur\.com\/([a-z0-9]+)\.(?:gifv|webm)/i';
+	$pattern = '/^(?:https?:\/\/)?(?:www\.)?i\.imgur\.com\/([a-z0-9]+)\.(?:gif|gifv|webm|mp4)/i';
 
 	// First attempt, pure regex.
 	if (empty($videoID) && preg_match($pattern, $data, $matches))
@@ -264,7 +264,7 @@ function OYTE_Gifv($data)
 
 	// Got something!
 	else
-		$result = '<video class="oharaEmbed gifv" autoplay loop style="max-width: '. (empty($modSettings['OYTE_video_width']) ? '480' : $modSettings['OYTE_video_width']) .'px; max-height: '. (empty($modSettings['OYTE_video_height']) ? '270' : $modSettings['OYTE_video_height']) .'px;" src="//i.imgur.com/'. $videoID .'.webm"><source src="//i.imgur.com/'. $videoID .'.webm" type="video/webm"></source></video>';
+		$result = '<video class="oharaEmbed gifv" autoplay loop style="max-width: '. (empty($modSettings['OYTE_video_width']) ? '480' : $modSettings['OYTE_video_width']) .'px; max-height: '. (empty($modSettings['OYTE_video_height']) ? '270' : $modSettings['OYTE_video_height']) .'px;"><source src="//i.imgur.com/'. $videoID .'.webm" type="video/webm"></source><source src="//i.imgur.com/'. $videoID .'.mp4" type="video/mp4"></video>';
 
 	return $result;
 }
@@ -283,9 +283,9 @@ function OYTE_Preparse($message)
 
 	// The extremely long regex...
 	$vimeo = '~(?<=[\s>\.(;\'"]|^)(?:https?\:\/\/)?(?:www\.)?vimeo.com\/(?:album\/|groups\/(.*?)\/|channels\/(.*?)\/)?[0-9]+\??[/\w\-_\~%@\?;=#}\\\\]?~';
-	$youtube = '~(?<=[\s>\.(;\'"]|^)(?:http|https):\/\/[\w\-_%@:|]?(?:www\.)?(?:m\.)?(?:youtu\.be\/|youtube\.com(?:\/embed\/|\/v\/|\/watch\?v=|\/watch\?.+&v=))([\w-]{11})(?:[^\s]+)?(?=[^\w-]|$)(?![?=&+%\w.-]*(?:[\'"][^<>]*>  | <\/a>  ))[?=&+%\w.-]*[\/\w\-_\~%@\?;=#}\\\\]?~ix';
+	$youtube = '~(?<=[\s>\.(;\'"]|^)(?:http|https):\/\/[\w\-_%@:|]?(?:www\.)?(?:m\.)?(?:youtu\.be\/|youtube\.com(?:\/embed\/|\/v\/|\/watch\?v=|\/watch\?.+&v=))([\w-]{11})(?:[^\s|\<|\[]+)?(?=[^\w-]|$)(?![?=&+%\w.-]*(?:[\'"][^<>]*>|<\/a> ))[?=&+%\w.-]*[\/\w\-_\~%@\?;=#}\\\\]?~ix';
 
-	$gifv = '~(?<=[\s>\.(;\'"]|^)(?:http|https):\/\/[\w\-_%@:|]?(?:www\.)?i\.imgur\.com\/([a-z0-9]+)\.(?:gifv|webm)(?=[^\w-]|$)(?![?=&+%\w.-]*(?:[\'"][^<>]*>  | <\/a>  ))[?=&+%\w.-]*[\/\w\-_\~%@\?;=#}\\\\]?~ix';
+	$gifv = '~(?<=[\s>\.(;\'"]|^)(?:http|https):\/\/[\w\-_%@:|]?(?:www\.)?i\.imgur\.com\/([a-z0-9]+)\.(?:gif|gifv|webm|mp4)(?=[^\w-]|$)(?![?=&+%\w.-]*(?:[\'"][^<>]*>  | <\/a>  ))[?=&+%\w.-]*[\/\w\-_\~%@\?;=#}\\\\]?~ix';
 
 	// Is this a YouTube video url?
 	$message = preg_replace_callback(

@@ -36,7 +36,7 @@ License, v. 2.0. If a copy of the MPL was not distributed with this
 file, You can obtain one at http://mozilla.org/MPL/2.0/.
  [/pre]
 
- 
+
 [color=purple][b][size=12pt]Settings[/size][/b][/color]
 
 - Admin->Configuration->Modifications
@@ -51,6 +51,11 @@ file, You can obtain one at http://mozilla.org/MPL/2.0/.
 
 [color=purple][b][size=12pt]Changelog[/size][/b][/color]
 [code]
+1.2.9 - March 12, 2017
+- Fix the "/>" appearing on autoembed
+- Fix support for gifv
+- Add a link to the video if JavaScript is disabled
+
 1.2.8 - Oct 25, 2016
 - Improve regex for gifv and youtube urls.
 - Pass the ID when using url auto parsing, prevents using another regex to get it.
@@ -70,7 +75,7 @@ file, You can obtain one at http://mozilla.org/MPL/2.0/.
 
 1.2.4 - August 2, 2015,
 - Added responsiveness to videos. This will only work on responsive themes.
-- Fixed an issue when two or more instances of the same video where posted, none of them would be played. 
+- Fixed an issue when two or more instances of the same video where posted, none of them would be played.
 - Re-wrote the JS code to use prototypes.
 - Change the default size values to 480 x 270.
 

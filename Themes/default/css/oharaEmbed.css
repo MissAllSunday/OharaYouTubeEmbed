@@ -10,7 +10,13 @@
 	transition: all 200ms ease-out;
 	cursor: pointer;
 }
-
+.oharaEmbed a{
+	color: #fff;
+	font-size: 16px;
+	margin: auto;
+	padding: 10px 0;
+	display: block;
+}
 
 /* You Tube play button */
 .youtube .youtube_play {
