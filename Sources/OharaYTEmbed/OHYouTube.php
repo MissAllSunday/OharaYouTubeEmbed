@@ -3,7 +3,7 @@
 /*
  * @package Ohara Youtube Embed mod
  * @version 2.1
- * @author Jessica González <missallsunday@simplemachines.org>
+ * @author Jessica González <suki@missallsunday.com>
  * @copyright Copyright (c) 2016 Jessica González
  * @license http://www.mozilla.org/MPL/ MPL 2.0
  */
@@ -49,6 +49,7 @@ class OHYouTube implements iOharaYTEmbed
 			'https://youtu.be/sDj72zqZakE',
 			'https://www.youtube.com/watch?v=sDj72zqZakE',
 			'http://www.youtube.com/watch?feature=player_embedded&v=sDj72zqZakE',
+			'<p>https://www.youtube.com/watch?v=sDj72zqZakE<br /></p>',
 		),
 	);
 

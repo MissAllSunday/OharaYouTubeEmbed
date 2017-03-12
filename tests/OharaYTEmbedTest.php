@@ -54,7 +54,7 @@ class OharaYTEmbedTest extends \PHPUnit_Framework_TestCase
 			$this->assertObjectHasAttribute('siteTests', $site);
 	}
 
-	public function TestOharaYTEmbed()
+	public function testOharaYTEmbed()
 	{
 		$o = new OharaYTEmbedMock;
 
@@ -65,6 +65,10 @@ class OharaYTEmbedTest extends \PHPUnit_Framework_TestCase
 		{
 			foreach ($site->siteTests['original'] as $originalString)
 			{
+				// Skip it.
+				if (empty($site->siteTests['expected']))
+					continue;
+
 				$result = $site->content($originalString);
 
 				$this->assertEquals($site->siteTests['expected'], $result);

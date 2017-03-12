@@ -3,6 +3,9 @@
 define('ROOT', dirname(__DIR__));
 define('SMF', true);
 
+function loadLanguage(){}
+function log_error(){}
+
 // Mock SMFs settings values.
 global $modSettings;
 global $sourcedir, $scripturl;

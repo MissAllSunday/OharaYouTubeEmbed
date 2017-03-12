@@ -3,7 +3,7 @@
 /*
  * @package Ohara Youtube Embed mod
  * @version 2.1
- * @author Jessica González <missallsunday@simplemachines.org>
+ * @author Jessica González <suki@missallsunday.com>
  * @copyright Copyright (c) 2016 Jessica González
  * @license http://www.mozilla.org/MPL/ MPL 2.0
  */
@@ -42,9 +42,9 @@ class OHVimeo implements iOharaYTEmbed
 	 * @var array
 	 */
 	public $siteTests = array(
-		'expected' => '<div class="oharaEmbed vimeo" data-ohara_vimeo="%7B%22title%22%3A%22Pancake%22%2C%22video_id%22%3A42078826%2C%22imageUrl%22%3A%22https%3A%5C%2F%5C%2Fi.vimeocdn.com%5C%2Fvideo%5C%2F291805065_295x166.jpg%22%7D" id="oh_vimeo_42078826" style="width: 480px; height: 270px;"></div>',
+		'expected' => '',
 		'original' => array(
-			'https://vimeo.com/42078826',
+			'',
 		),
 	);
 

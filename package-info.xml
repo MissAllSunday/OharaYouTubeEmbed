@@ -19,7 +19,7 @@ file, You can obtain one at http://mozilla.org/MPL/2.0/.
 		<hook function="OharaYTEmbed::runTimeHooks" hook="integrate_load_theme" file="$sourcedir/OharaYTEmbed.php" object="true"></hook>
 
 		<!-- DUH! WINNING! -->
-		<credits url="http://missallsunday.com" license="MPL 2.0" copyright="Suki" licenseurl="https://www.mozilla.org/MPL/2.0/">Ohara YouTube Embed mod</credits>
+		<credits url="https://missallsunday.com" license="MPL 2.0" copyright="Suki" licenseurl="https://www.mozilla.org/MPL/2.0/">Ohara YouTube Embed mod</credits>
 		<require-dir name="Themes" destination="$boarddir">Theme and Language files</require-dir>
 		<require-dir name="Sources/OharaYTEmbed" destination="$sourcedir">Source library</require-dir>
 		<require-dir name="Sources/ohara" destination="$sourcedir">Source library</require-dir>
