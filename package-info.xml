@@ -25,6 +25,7 @@ file, You can obtain one at http://mozilla.org/MPL/2.0/.
 		<require-dir name="Sources/ohara" destination="$sourcedir">Source library</require-dir>
 		<require-file name="Sources/OharaYTEmbed.php" destination="$sourcedir">The main class</require-file>
 		<require-file name="Sources/iOharaYTEmbed.php" destination="$sourcedir">Sites interface</require-file>
+		<require-dir name="vendor" destination="$boarddir">vendor folder</require-dir>
 		<require-file name="youtube.png" destination="$imagesdir/bbc" />
 		<require-file name="vimeo.png" destination="$imagesdir/bbc" />
 		<require-file name="gifv.png" destination="$imagesdir/bbc" />

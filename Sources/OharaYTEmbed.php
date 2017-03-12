@@ -24,7 +24,7 @@ class OharaYTEmbed extends Suki\Ohara
 	public $height;
 	public static $sites = array();
 
-	protected $_useConfig = true;
+	public $useConfig = true;
 
 	public function __construct()
 	{
