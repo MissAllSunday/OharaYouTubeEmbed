@@ -1,4 +1,4 @@
-**Ohara youtube embed**, http://missallsunday.com
+**Ohara youtube embed**, http://missallsunday.com ![Travis](https://travis-ci.org/MissAllSunday/OharaYouTubeEmbed.svg?branch=master)
 
 
 The software is licensed under [MPL 2.0 license](https://www.mozilla.org/MPL/).
@@ -48,7 +48,7 @@ vimeo.com/groups/[Group name]/videos/[ID]
 - Added support for SMF 2.1 Beta 3
 - Added a minified version of ohvideos.js
 - Added responsiveness to videos. This will only work on responsive themes.
-- Fixed an issue when two or more instances of the same video where posted, none of them would be played. 
+- Fixed an issue when two or more instances of the same video where posted, none of them would be played.
 - Re-wrote the JS code to use prototypes.
 - Change the default size values to 480 x 270.
 
