@@ -16,7 +16,7 @@ class OharaYTEmbedMock extends OharaYTEmbed
 	}
 }
 
-class OharaYTEmbedTest extends \PHPUnit_Framework_TestCase
+class OharaYTEmbedTest extends \PHPUnit\Framework\TestCase
 {
 	public function testGetSites()
 	{
