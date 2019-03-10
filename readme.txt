@@ -44,14 +44,20 @@ file, You can obtain one at http://mozilla.org/MPL/2.0/.
 
 [color=purple][b][size=12pt]Languages[/size][/b][/color]
 
--English/utf8
--Spanish_latin/utf8
--Spanish_es/utf8
+- English/utf8
+- Spanish_latin/utf8
+- Spanish_es/utf8
+- Polish/utf8
 
 
 [color=purple][b][size=12pt]Changelog[/size][/b][/color]
 [code]
-1.2.9 - March 12, 2017
+1.2.10 - March 10, 2019
+- Add Polish translation, thanks to jsx and FishingManMatt
+- Correctly delete language files on uninstall
+- Spanish word corrections
+
+1.2.10 - March 12, 2017
 - Fix the "/>" appearing on autoembed
 - Fix support for gifv
 - Add a link to the video if JavaScript is disabled

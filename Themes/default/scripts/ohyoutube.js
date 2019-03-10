@@ -1,7 +1,7 @@
 /*
- Copyright (C) 2017 Jessica González
+ Copyright (C) 2019 Jessica González
  @license http://www.mozilla.org/MPL/ MPL 2.0
- @version 1.2.9
+ @version 1.2.10
 */
 
 var _oh = function(){
