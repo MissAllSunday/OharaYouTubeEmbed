@@ -1,6 +1,7 @@
 <?php
 
 
+use PHPUnit\Framework\TestCase;
 use \Suki\Ohara;
 
 // Extend the main class to avoid calling SMF's functions.
@@ -16,7 +17,7 @@ class OharaYTEmbedMock extends OharaYTEmbed
 	}
 }
 
-class OharaYTEmbedTest extends \PHPUnit\Framework\TestCase
+class OharaYTEmbedTest extends TestCase
 {
 	public function testGetSites()
 	{
@@ -25,7 +26,7 @@ class OharaYTEmbedTest extends \PHPUnit\Framework\TestCase
 		// Get all available sites.
 		$sites = $o->getSites();
 
-		$this->assertInternalType('array', $sites);
+		$this->assertIsArray($sites);
 
 		// $sites must only contain objects.
 		$this->assertContainsOnly('object', $sites);
