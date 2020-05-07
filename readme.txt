@@ -52,12 +52,16 @@ file, You can obtain one at http://mozilla.org/MPL/2.0/.
 
 [color=purple][b][size=12pt]Changelog[/size][/b][/color]
 [code]
+1.2.11 - May 07, 2020
+- Add French translation, thanks to BrunoR
+- Correctly delete language files
+
 1.2.10 - March 10, 2019
 - Add Polish translation, thanks to jsx and FishingManMatt
 - Correctly delete language files on uninstall
 - Spanish word corrections
 
-1.2.10 - March 12, 2017
+1.2.11 - March 12, 2017
 - Fix the "/>" appearing on autoembed
 - Fix support for gifv
 - Add a link to the video if JavaScript is disabled

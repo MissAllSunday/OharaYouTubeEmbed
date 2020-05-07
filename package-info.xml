@@ -5,7 +5,7 @@
 
 	<name>Ohara YouTube Embed</name>
 	<id>Suki:ohara_youtube_embed</id>
-	<version>1.2.10</version>
+	<version>1.2.11</version>
 	<type>modification</type>
 
 	<install for="2.0 - 2.0.99">
@@ -27,11 +27,13 @@
 		<remove-file name="$languagedir/OharaYTEmbed.english.php" />
 		<remove-file name="$languagedir/OharaYTEmbed.english-utf8.php" />
 		<remove-file name="$languagedir/OharaYTEmbed.spanish_es.php" />
-		<remove-file name="$languagedir/OharaYTEmbed.spanish_es_utf8.php" />
-		<remove-file name="$languagedir/OharaYTEmbed.spanish_latin_utf8.php" />
+		<remove-file name="$languagedir/OharaYTEmbed.spanish_es-utf8.php" />
+		<remove-file name="$languagedir/OharaYTEmbed.spanish_latin-utf8.php" />
 		<remove-file name="$languagedir/OharaYTEmbed.spanish_latin.php" />
 		<remove-file name="$languagedir/OharaYTEmbed.polish-utf8.php" />
 		<remove-file name="$languagedir/OharaYTEmbed.polish.php" />
+        <remove-file name="$languagedir/OharaYTEmbed.french.php" />
+        <remove-file name="$languagedir/OharaYTEmbed.french-utf8.php" />
 		<remove-file name="$imagesdir/bbc/youtube.gif" />
 		<remove-file name="$imagesdir/bbc/vimeo.gif" />
 		<remove-file name="$imagesdir/bbc/gifv.gif" />
