@@ -2,14 +2,15 @@
 
 /*
  * @package Ohara Youtube Embed mod
- * @version 1.2.11
- * @author Jessica González <suki@missallsunday.com>
- * @copyright Copyright (C) 2020 Jessica González
+ * @version 1.2.12
+ * @author Michel Mendiola <suki@missallsunday.com>
+ * @copyright Copyright (C) 2022 Michel Mendiola
  * @license http://www.mozilla.org/MPL/ MPL 2.0
  */
 
 if (file_exists(dirname(__FILE__) . '/SSI.php') && !defined('SMF'))
 	require_once(dirname(__FILE__) . '/SSI.php');
+
 elseif (!defined('SMF'))
 	exit('<b>Error:</b> Cannot install - please verify you put this in the same place as SMF\'s index.php.');
 

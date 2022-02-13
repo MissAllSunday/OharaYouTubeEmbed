@@ -1,15 +1,15 @@
 [center][color=purple][size=5][b]Ohara YouTube Embed [/b][/size][/color]
-[b]Author:[/b] [url=http://missallsunday.com]Suki[/url][/center]
+[b]Author:[/b] [url=https://missallsunday.com]Suki[/url][/center]
 
 [color=red][b][size=16pt]Attention:[/size][/b][/color]
-On install make sure to mark the "[b]Install in Other Themes[/b]" checkbox.
+When installing make sure to mark the "[b]Install in Other Themes[/b]" checkbox.
 
 
 [color=purple][b][size=12pt]Description[/size][/b][/color]
 
 [b]For SMF 2.0.x only[/b]
 
-[b]Version 1.2.x and above requires [color=purple]PHP 5.3[/color] or greater[/b]
+[b]Version 1.2.x and above requires [color=purple]PHP 5.3[/color] or greater[/b] and [color=purple]ECMAScript 2015[/color] or greater
 
 You can auto-embed any valid youtube, imgur/gifv or vimeo urls and the mod will automatically convert them to videos.
 
@@ -52,6 +52,10 @@ file, You can obtain one at http://mozilla.org/MPL/2.0/.
 
 [color=purple][b][size=12pt]Changelog[/size][/b][/color]
 [code]
+1.2.12 - Feb 13, 2022
+- Remove jQuery dependency
+- Add support for ECMAScript 2015
+
 1.2.11 - May 07, 2020
 - Add French translation, thanks to BrunoR
 - Correctly delete language files
@@ -61,7 +65,7 @@ file, You can obtain one at http://mozilla.org/MPL/2.0/.
 - Correctly delete language files on uninstall
 - Spanish word corrections
 
-1.2.11 - March 12, 2017
+1.2.9 - March 12, 2017
 - Fix the "/>" appearing on autoembed
 - Fix support for gifv
 - Add a link to the video if JavaScript is disabled
