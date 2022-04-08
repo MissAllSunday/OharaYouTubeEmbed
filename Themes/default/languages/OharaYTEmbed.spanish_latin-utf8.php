@@ -2,9 +2,9 @@
 
 /*
  * @package Ohara Youtube Embed mod
- * @version 1.2.12
- * @author Michel Mendiola <suki@missallsunday.com>
- * @copyright Copyright (C) 2022 Michel Mendiola
+ * @version 1.2.13
+ * @author Jessica González <suki@missallsunday.com>
+ * @copyright Copyright (C) 2020 Jessica González
  * @license http://www.mozilla.org/MPL/ MPL 2.0
  */
 

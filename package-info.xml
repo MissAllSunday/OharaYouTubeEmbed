@@ -1,11 +1,11 @@
 <?xml version="1.0" ?>
-<!DOCTYPE package-info SYSTEM "http://www.simplemachines.org/xml/package-info">
+<!DOCTYPE package-info SYSTEM "https://www.simplemachines.org/xml/package-info">
 
-<package-info xmlns="http://www.simplemachines.org/xml/package-info" xmlns:smf="http://www.simplemachines.org/">
+<package-info xmlns="https://www.simplemachines.org/xml/package-info" xmlns:smf="https://www.simplemachines.org/">
 
 	<name>Ohara YouTube Embed</name>
 	<id>Suki:ohara_youtube_embed</id>
-	<version>1.2.12</version>
+	<version>1.2.13</version>
 	<type>modification</type>
 
 	<install for="2.0 - 2.0.99">
@@ -32,8 +32,6 @@
 		<remove-file name="$languagedir/OharaYTEmbed.spanish_latin.php" />
 		<remove-file name="$languagedir/OharaYTEmbed.polish-utf8.php" />
 		<remove-file name="$languagedir/OharaYTEmbed.polish.php" />
-        <remove-file name="$languagedir/OharaYTEmbed.french.php" />
-        <remove-file name="$languagedir/OharaYTEmbed.french-utf8.php" />
 		<remove-file name="$imagesdir/bbc/youtube.gif" />
 		<remove-file name="$imagesdir/bbc/vimeo.gif" />
 		<remove-file name="$imagesdir/bbc/gifv.gif" />

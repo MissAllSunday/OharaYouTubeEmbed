@@ -2,14 +2,14 @@
 
 /*
  * @package Ohara Youtube Embed mod
- * @version 1.2.12
+ * @version 1.2.13
  * @author Michel Mendiola <suki@missallsunday.com>
  * @copyright Copyright (C) 2022 Michel Mendiola
  * @license http://www.mozilla.org/MPL/ MPL 2.0
  */
 
 if (!defined('SMF'))
-    die('Hacking attempt...');
+    die('No direct access...');
 
 function OYTE_bbc_add_code(&$codes)
 {
@@ -153,6 +153,9 @@ function OYTE_settings(&$config_vars)
     $config_vars[] = $txt['OYTE_title'];
     $config_vars[] = array('check', 'OYTE_master', 'subtext' => $txt['OYTE_master_sub']);
     $config_vars[] = array('check', 'OYTE_autoEmbed', 'subtext' => $txt['OYTE_autoEmbed_sub']);
+    $config_vars[] = array('int', 'OYTE_min_screen_size', 'subtext' => $txt['OYTE_min_screen_size_sub'], 'size' => 4);
+    $config_vars[] = array('int', 'OYTE_video_width', 'subtext' => $txt['OYTE_video_width_sub'], 'size' => 4);
+    $config_vars[] = array('int', 'OYTE_video_height', 'subtext' => $txt['OYTE_video_height_sub'], 'size' => 4);
     $config_vars[] = '';
 }
 
@@ -203,7 +206,7 @@ function OYTE_Main($data)
         $result = '
 		<div class="oharaEmbed youtube" id="oh_'. $videoID .'">
 			<noscript>
-				<a href="//www.youtube.com/watch?v='. $videoID .'">//www.youtube.com/watch?v='. $videoID . '</a>
+				<a href="https://youtube.com/watch?v='. $videoID .'">https://youtube.com/watch?v='. $videoID . '</a>
 			</noscript>
 		</div>';
 
@@ -223,19 +226,14 @@ function OYTE_Vimeo($data)
     require_once($sourcedir .'/Subs-Package.php');
 
     // Construct the URL
-    $oembed = 'https://vimeo.com/api/oembed.json?url=' . rawurlencode($data) . '&width='.
-        (empty($modSettings['OYTE_video_width']) ? '480' : $modSettings['OYTE_video_width']) .
-        '&height='. (empty($modSettings['OYTE_video_height']) ? '270' : $modSettings['OYTE_video_height']);
+    $oembed = 'https://vimeo.com/api/oembed.json?url=' . rawurlencode($data);
 
     //Attempts to fetch data from a URL, regardless of PHP's allow_url_fopen setting
     $jsonArray = json_decode(fetch_web_data($oembed), true);
 
     if (!empty($jsonArray) && is_array($jsonArray) && !empty($jsonArray['html']))
         return '
-        <div class="oharaEmbed vimeo">'. str_replace('<iframe', '<iframe width="'.
-                (empty($modSettings['OYTE_video_width']) ? '480' : $modSettings['OYTE_video_width']) .
-                'px" height="'. (empty($modSettings['OYTE_video_height']) ? '270' : $modSettings['OYTE_video_height']) .
-                'px"', $jsonArray['html']) .'</div>';
+        <div class="oharaEmbed vimeo">'. $jsonArray['html'].'</div>';
 
     else
         return sprintf($txt['OYTE_unvalid_link'], 'vimeo');
@@ -257,7 +255,7 @@ function OYTE_Gifv($data)
 
     if (strpos($data, 'http') === false || strpos($data, '.com') === false)
         return '
-		<video class="oharaEmbed gifv" autoplay loop preload="auto" controls>
+		<video class="gifv" autoplay loop preload="auto" controls>
 			<source src="https://i.imgur.com/'. $data .'.webm" type="video/webm">
 			<source src="https://i.imgur.com/'. $data .'.mp4" type="video/mp4">
 		</video>';
@@ -338,10 +336,23 @@ function OYTE_css()
 {
     global $context, $settings, $modSettings;
 
+    $videoWidth = !empty($modSettings['OYTE_video_width']) ? $modSettings['OYTE_video_width'] : 480;
+    $videoHeight = !empty($modSettings['OYTE_video_height']) ? $modSettings['OYTE_video_height'] : 270;
+    $screenMinSize = !empty($modSettings['OYTE_min_screen_size']) ? $modSettings['OYTE_min_screen_size'] : 768;
+
     // Add our css and js files. Dear and lovely mod authors, if you're going to use $context['html_headers'] MAKE SURE you append your data .= instead of re-declaring the var! and don't forget to add a new line and proper indentation too!
     $context['html_headers'] .= '
 	<script type="text/javascript" src="'. $settings['default_theme_url'] .'/scripts/ohyoutube.js"></script>
-	<link rel="stylesheet" type="text/css" href="'. $settings['default_theme_url'] .'/css/oharaEmbed.css" />';
+	<link rel="stylesheet" type="text/css" href="'. $settings['default_theme_url'] .'/css/oharaEmbed.css" />
+    <style>
+        @media screen and (min-width: '. $screenMinSize .'px) {
+            .oharaEmbed, .gifv, .oharaEmbed iframe, .oharaEmbed object, .oharaEmbed embed {
+                max-width: '. $videoWidth .'px;
+                max-height: '. $videoHeight .'px;
+                padding-bottom: '. $videoHeight .'px;
+            }
+        }
+    </style>';
 }
 
 // DUH! WINNING!

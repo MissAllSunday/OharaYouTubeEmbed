@@ -2,9 +2,9 @@
 
 /*
  * @package Ohara Youtube Embed mod
- * @version 1.2.12
- * @author Jessica Gonzalez <suki@missallsunday.com>
- * @copyright Copyright (C) 2020 Jessica Gonzalez
+ * @version 1.2.13
+ * @author Michel Mendiola <suki@missallsunday.com>
+ * @copyright Copyright (C) 2022 Michel Mendiola
  * @license http://www.mozilla.org/MPL/ MPL 2.0
  */
 
@@ -14,6 +14,8 @@ $txt['OYTE_master'] = 'Enable the Ohara Youtube Embed mod';
 $txt['OYTE_master_sub'] = 'This is the master setting, it needs to be enable for the mod to work.';
 $txt['OYTE_autoEmbed'] = 'Enable the autoembed feature';
 $txt['OYTE_autoEmbed_sub'] = 'If enable, all valid and available links posted will be converted to embedded videos automatically. If disabled you will have to use the BBC tags to convert links to videos.';
+$txt['OYTE_min_screen_size'] = 'Minimum screen size for sizes settings';
+$txt['OYTE_min_screen_size_sub'] = 'Screens larger than this setting will apply the video\'s width and height, defaults to 768';
 $txt['OYTE_video_width'] = 'Video\'s width:';
 $txt['OYTE_video_width_sub'] = 'If empty it will take the default value: 480.';
 $txt['OYTE_video_height'] = 'Video\'s height:';

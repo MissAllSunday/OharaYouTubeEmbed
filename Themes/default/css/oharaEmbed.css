@@ -16,22 +16,6 @@
 	display:block;
 }
 
-@media (min-width: 1920px) {
-	.oharaEmbed, .gifv {
-		max-width: 1440px;
-	}
-}
-@media (min-width: 3840px) {
-	.oharaEmbed, .gifv{
-		max-width: 2160px;
-	}
-}
-@media (min-width: 2560px) {
-	.oharaEmbed, .gifv {
-		max-width: 1920px;
-	}
-}
-
 .oharaEmbed iframe, .oharaEmbed object, .oharaEmbed embed {
 	position: absolute;
 	top: 0;

@@ -2,24 +2,26 @@
 
 /*
  * @package Ohara Youtube Embed mod
- * @version 1.2.12
- * @author Jessica Gonz�lez <suki@missallsunday.com>
- * @copyright Copyright (C) 2020 Jessica Gonz�lez
+ * @version 1.2.13
+ * @author Michel Mendiola <suki@missallsunday.com>
+ * @copyright Copyright (C) 2022 Michel Mendiola
  * @license http://www.mozilla.org/MPL/ MPL 2.0
  */
 
 global $txt;
 
-$txt['OYTE_master'] = 'W��cz modyfikacj� Ohara Youtube Embed';
-$txt['OYTE_master_sub'] = 'To jest ustawienie g��wne, to ustawienie musi by� w��czone, �eby modyfikacja dzia�a�a.';
-$txt['OYTE_autoEmbed'] = 'W��cz funkcj� automatyczne wbudowanie';
-$txt['OYTE_autoEmbed_sub'] = 'Je�li ta funkcja b�dzie w��czona to wszystkie prawid�owe i dost�pne linki, b�d� automatycznie przekonwertowane na wbudowane filmy. Je�li ta funkcja b�dzie wy��czona, b�dziesz musia� u�y� znacznik�w BBC, aby przekonwertowa� linki na wbudowane filmy.';
-$txt['OYTE_video_width'] = 'Szeroko�� filmu:';
-$txt['OYTE_video_width_sub'] = 'Je�li zostawisz 0, zostanie ustawiona domy�lna szeroko��: 480';
-$txt['OYTE_video_height'] = 'Wysoko�� filmu:';
-$txt['OYTE_video_height_sub'] = 'Je�li zostawisz 0, zostanie ustawiona domy�lna wysoko��: 270';
+$txt['OYTE_master'] = 'Włącz modyfikację Ohara Youtube Embed';
+$txt['OYTE_master_sub'] = 'To jest ustawienie główne, to ustawienie musi być włączone, żeby modyfikacja działała.';
+$txt['OYTE_autoEmbed'] = 'Włącz funkcję automatyczne wbudowanie';
+$txt['OYTE_autoEmbed_sub'] = 'Jeśli ta funkcja będzie włączona to wszystkie prawidłowe i dostępne linki, będą automatycznie przekonwertowane na wbudowane filmy. Jeśli ta funkcja będzie wyłączona, będziesz musiał użyć znaczników BBC, aby przekonwertować linki na wbudowane filmy.';
+$txt['OYTE_min_screen_size'] = 'Minimum screen size for sizes settings';
+$txt['OYTE_min_screen_size_sub'] = 'Screens larger than this setting will apply the video\'s width and height, defaults to 768';
+$txt['OYTE_video_width'] = 'Szerokość filmu:';
+$txt['OYTE_video_width_sub'] = 'Jeśli zostawisz 0, zostanie ustawiona domyślna szerokość: 480';
+$txt['OYTE_video_height'] = 'Wysokość filmu:';
+$txt['OYTE_video_height_sub'] = 'Jeśli zostawisz 0, zostanie ustawiona domyślna wysokość: 270';
 $txt['OYTE_desc'] = 'Wstaw link do filmu z youtube';
 $txt['OYTE_vimeo_desc'] = 'Wstaw link do filmu z vimeo';
 $txt['OYTE_gifv_desc'] = 'Wstaw link do gifa z imgur';
-$txt['OYTE_unvalid_link'] = 'Nieprawid�owy link %s';
+$txt['OYTE_unvalid_link'] = 'Nieprawidłowy link %s';
 $txt['OYTE_title'] = 'Modyfikacja Ohara Youtube|Vimeo Embed';
