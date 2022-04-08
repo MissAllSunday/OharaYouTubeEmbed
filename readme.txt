@@ -52,6 +52,9 @@ file, You can obtain one at http://mozilla.org/MPL/2.0/.
 
 [color=purple][b][size=12pt]Changelog[/size][/b][/color]
 [code]
+1.2.13 - April 08, 2022
+- Add min screen size setting
+
 1.2.12 - Feb 13, 2022
 - Remove jQuery dependency
 - Add support for ECMAScript 2015
