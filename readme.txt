@@ -9,9 +9,9 @@ When installing make sure to mark the "[b]Install in Other Themes[/b]" checkbox.
 
 [b]For SMF 2.0.x only[/b]
 
-[b]Version 1.2.x and above requires [color=purple]PHP 5.3[/color] or greater[/b] and [color=purple]ECMAScript 2015[/color] or greater
+[b]Version 1.2.x and above requires [color=purple]PHP 7.0[/color] or greater[/b] and [color=purple]ECMAScript 2015[/color] or greater
 
-You can auto-embed any valid youtube, imgur/gifv or vimeo urls and the mod will automatically convert them to videos.
+You can auto-embed any valid youtube or vimeo urls and the mod will automatically convert them to videos.
 
 This mod will also add a BBC tag:  [nobbc][youtube][/youtube], [gifv][/gifv] and [vimeo][/vimeo][/nobbc]  where you can post your youtube or vimeo urls and it will be converted to a video directly in the message.
 
@@ -52,6 +52,11 @@ file, You can obtain one at http://mozilla.org/MPL/2.0/.
 
 [color=purple][b][size=12pt]Changelog[/size][/b][/color]
 [code]
+1.2.14 - May 06, 2023
+- Remove imgur support
+- Fix correctly displaying smileys after posting a video
+- Use curl to make request to vimeo for getting the oembed info.
+
 1.2.13 - April 08, 2022
 - Add min screen size setting
 

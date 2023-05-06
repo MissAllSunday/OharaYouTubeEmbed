@@ -2,9 +2,9 @@
 
 /*
  * @package Ohara Youtube Embed mod
- * @version 1.2.13
+ * @version 1.2.14
  * @author Michel Mendiola <suki@missallsunday.com>
- * @copyright Copyright (C) 2022 Michel Mendiola
+ * @copyright Copyright (C) 2023 Michel Mendiola
  * @license http://www.mozilla.org/MPL/ MPL 2.0
  */
 
@@ -81,27 +81,6 @@ function OYTE_bbc_add_code(&$codes)
             },
             'disabled_content' => '$1',
             'block_level' => true,
-        ),
-        array(
-            'tag' => 'gifv',
-            'type' => 'unparsed_content',
-            'content' => '$1',
-            'validate' => function (&$tag, &$data, $disabled)
-            {
-                global $txt;
-
-                // This tag was disabled.
-                if (!empty($disabled['gifv']))
-                    return;
-
-                if (empty($data))
-                    $data = $txt['OYTE_unvalid_link'];
-
-                else
-                    $data = OYTE_Gifv(trim(strtr($data, array('<br />' => ''))));
-            },
-            'disabled_content' => '$1',
-            'block_level' => true,
         )
     );
 
@@ -132,14 +111,6 @@ function OYTE_bbc_add_button(&$buttons)
         'before' => '[vimeo]',
         'after' => '[/vimeo]',
         'description' => $txt['OYTE_vimeo_desc'],
-    );
-
-    $buttons[count($buttons) - 1][] =array(
-        'image' => 'gifv',
-        'code' => 'gifv',
-        'before' => '[gifv]',
-        'after' => '[/gifv]',
-        'description' => $txt['OYTE_gifv_desc'],
     );
 }
 
@@ -183,18 +154,18 @@ function OYTE_Main($data)
 
     // First attempt, pure regex.
     if (empty($videoID) && preg_match($pattern, $data, $matches))
-        $videoID = isset($matches[1]) ? $matches[1] : false;
+        $videoID = $matches[1] ?? false;
 
     // Give another regex a chance.
     elseif (empty($videoID) && preg_match('%(?:youtube(?:-nocookie)?\.com\/(?:[^\/]+\/.+\/|(?:v|e(?:mbed)?)\/|.*[?&]v=)|youtu\.be\/)([^"&?\/ ]{11})%i', $data, $match))
-        $videoID = isset($match[1]) ? $match[1] : false;
+        $videoID = $match[1] ?? false;
 
     // No?, then one last chance, let PHPs native parse_url() function do the dirty work.
     elseif (empty($videoID))
     {
         // This relies on the url having ? and =, this is only an emergency check.
         parse_str(parse_url($data, PHP_URL_QUERY), $videoID);
-        $videoID = isset($videoID['v']) ? $videoID['v'] : false;
+        $videoID = $videoID['v'] ?? false;
     }
 
     // At this point, all tests had miserably failed.
@@ -204,11 +175,11 @@ function OYTE_Main($data)
     // Got something!
     else
         $result = '
-		<div class="oharaEmbed youtube" id="oh_'. $videoID .'">
-			<noscript>
-				<a href="https://youtube.com/watch?v='. $videoID .'">https://youtube.com/watch?v='. $videoID . '</a>
-			</noscript>
-		</div>';
+        <div class="oharaEmbed youtube" id="oh_'. $videoID .'">
+            <noscript>
+                <a href="https://youtube.com/watch?v='. $videoID .'">https://youtube.com/watch?v='. $videoID . '</a>
+            </noscript>
+        </div>';
 
     return $result;
 }
@@ -222,14 +193,10 @@ function OYTE_Vimeo($data)
 
     loadLanguage('OharaYTEmbed');
 
-    // Need a function in a far far away file...
-    require_once($sourcedir .'/Subs-Package.php');
 
     // Construct the URL
-    $oembed = 'https://vimeo.com/api/oembed.json?url=' . rawurlencode($data);
-
-    //Attempts to fetch data from a URL, regardless of PHP's allow_url_fopen setting
-    $jsonArray = json_decode(fetch_web_data($oembed), true);
+    $oembed = 'https://vimeo.com/api/oembed.json?dnt=true&url=' . rawurlencode($data);
+    $jsonArray = json_decode(curlWrapper($oembed), true);
 
     if (!empty($jsonArray) && is_array($jsonArray) && !empty($jsonArray['html']))
         return '
@@ -255,10 +222,10 @@ function OYTE_Gifv($data)
 
     if (strpos($data, 'http') === false || strpos($data, '.com') === false)
         return '
-		<video class="gifv" autoplay loop preload="auto" controls>
-			<source src="https://i.imgur.com/'. $data .'.webm" type="video/webm">
-			<source src="https://i.imgur.com/'. $data .'.mp4" type="video/mp4">
-		</video>';
+        <video class="gifv" autoplay loop preload="auto" controls>
+            <source src="https://i.imgur.com/'. $data .'.webm" type="video/webm">
+            <source src="https://i.imgur.com/'. $data .'.mp4" type="video/mp4">
+        </video>';
 
 
     // We all love Regex.
@@ -266,7 +233,7 @@ function OYTE_Gifv($data)
 
     // First attempt, pure regex.
     if (empty($videoID) && preg_match($pattern, $data, $matches))
-        $videoID = isset($matches[1]) ? $matches[1] : false;
+        $videoID = $matches[1] ?? false;
 
 
     // At this point, all tests had miserably failed.
@@ -276,12 +243,12 @@ function OYTE_Gifv($data)
     // Got something!
     else
         $result = '
-		<video class="gifv" autoplay loop preload="auto" controls>
-			<source src="https://i.imgur.com/'. $videoID .
+        <video class="gifv" autoplay loop preload="auto" controls>
+            <source src="https://i.imgur.com/'. $videoID .
             '.webm" type="video/webm">
-			<source src="https://i.imgur.com/' .
+            <source src="https://i.imgur.com/' .
             $videoID .'.mp4" type="video/mp4">
-		</video>';
+        </video>';
 
     return $result;
 }
@@ -304,30 +271,18 @@ function OYTE_Preparse($message)
 
     $gifv = '~(?<=[\s>\.(;\'"]|^)(?:http|https):\/\/[\w\-_%@:|]?(?:www\.)?i\.imgur\.com\/([a-z0-9]+)\.(?:gif|gifv|webm|mp4)(?=[^\w-]|$)(?![?=&+%\w.-]*(?:[\'"][^<>]*>  | <\/a>  ))[?=&+%\w.-]*[\/\w\-_\~%@\?;=#}\\\\]?~ix';
 
-    // Is this a YouTube video url?
-    $message = preg_replace_callback(
-        $youtube,
-        function ($matches) {
-            return '[youtube]'. $matches[1] .'[/youtube]';
-        },
-        $message
-    );
-
-    // A Vimeo url perhaps?
-    $message = preg_replace_callback(
-        $vimeo,
-        function ($matches) {
-            return '[vimeo]'. $matches[0] .'[/vimeo]';
-        },
-        $message
-    );
-
-    // imgur gifv format.
-    return preg_replace_callback(
-        $gifv,
-        function ($matches) {
-            return '[gifv]'. $matches[1] .'[/gifv]';
-        },
+    return preg_replace_callback_array(
+        [
+            $vimeo => function ($match) {var_dump($match);
+                return OYTE_Vimeo($match[0]);
+            },
+            $youtube => function ($match) {
+                return OYTE_Main($match[1]);
+            },
+            $gifv => function ($match) {var_dump($match);
+                return '[gifv]'. $match[1] .'[/gifv]';
+            },
+        ],
         $message
     );
 }
@@ -342,8 +297,8 @@ function OYTE_css()
 
     // Add our css and js files. Dear and lovely mod authors, if you're going to use $context['html_headers'] MAKE SURE you append your data .= instead of re-declaring the var! and don't forget to add a new line and proper indentation too!
     $context['html_headers'] .= '
-	<script type="text/javascript" src="'. $settings['default_theme_url'] .'/scripts/ohyoutube.js"></script>
-	<link rel="stylesheet" type="text/css" href="'. $settings['default_theme_url'] .'/css/oharaEmbed.css" />
+    <script type="text/javascript" src="'. $settings['default_theme_url'] .'/scripts/ohyoutube.js"></script>
+    <link rel="stylesheet" type="text/css" href="'. $settings['default_theme_url'] .'/css/oharaEmbed.css" />
     <style>
         @media screen and (min-width: '. $screenMinSize .'px) {
             .oharaEmbed, .gifv, .oharaEmbed iframe, .oharaEmbed object, .oharaEmbed embed {
@@ -364,4 +319,19 @@ function OYTE_care()
         $context['copyrights']['mods'][] = '
         <a href="https://missallsunday.com" target="_blank" title="Free SMF mods">
             Ohara YouTube Embed mod &copy Suki</a>';
+}
+
+function curlWrapper($url) {
+
+    if(function_exists('curl_init') === false){
+        return '';
+    }
+
+    $ch = curl_init();
+    curl_setopt($ch, CURLOPT_URL, $url);
+    curl_setopt($ch, CURLOPT_RETURNTRANSFER, 1);
+    $output = curl_exec($ch);
+    curl_close($ch);
+
+    return $output;
 }

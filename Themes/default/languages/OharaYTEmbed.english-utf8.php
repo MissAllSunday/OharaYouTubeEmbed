@@ -2,7 +2,7 @@
 
 /*
  * @package Ohara Youtube Embed mod
- * @version 1.2.12
+ * @version 1.2.14
  * @author Michel Mendiola <suki@missallsunday.com>
  * @copyright Copyright (C) 2022 Michel Mendiola
  * @license http://www.mozilla.org/MPL/ MPL 2.0
@@ -22,6 +22,5 @@ $txt['OYTE_video_height'] = 'Video\'s height:';
 $txt['OYTE_video_height_sub'] = 'If empty it will take the default value: 270';
 $txt['OYTE_desc'] = 'Embed a youtube video url';
 $txt['OYTE_vimeo_desc'] = 'Embed a vimeo video url';
-$txt['OYTE_gifv_desc'] = 'Embed an imgur gifv url';
 $txt['OYTE_unvalid_link'] = 'Not a valid %s URL';
 $txt['OYTE_title'] = 'Ohara Youtube|Vimeo Embed mod';

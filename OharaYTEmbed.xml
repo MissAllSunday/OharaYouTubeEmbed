@@ -3,7 +3,7 @@
 
 <modification xmlns="https://www.simplemachines.org/xml/modification" xmlns:smf="https://www.simplemachines.org/">
 	<id>Suki:ohara_youtube_embed</id>
-	<version>1.2.13</version>
+	<version>1.2.14</version>
 
 	<file name="$sourcedir/Post.php">
 		<operation>

@@ -22,6 +22,5 @@ $txt['OYTE_video_height'] = 'Wysokość filmu:';
 $txt['OYTE_video_height_sub'] = 'Jeśli zostawisz 0, zostanie ustawiona domyślna wysokość: 270';
 $txt['OYTE_desc'] = 'Wstaw link do filmu z youtube';
 $txt['OYTE_vimeo_desc'] = 'Wstaw link do filmu z vimeo';
-$txt['OYTE_gifv_desc'] = 'Wstaw link do gifa z imgur';
 $txt['OYTE_unvalid_link'] = 'Nieprawidłowy link %s';
 $txt['OYTE_title'] = 'Modyfikacja Ohara Youtube|Vimeo Embed';
