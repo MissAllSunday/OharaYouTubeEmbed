@@ -21,7 +21,7 @@ function OYTE_bbc_add_code(&$codes)
     loadLanguage('OharaYTEmbed');
 
     array_push($codes,
-        array(
+        [
             'tag' => 'youtube',
             'type' => 'unparsed_content',
             'content' => '$1',
@@ -35,12 +35,12 @@ function OYTE_bbc_add_code(&$codes)
                     $data = $txt['OYTE_unvalid_link'];
 
                 else
-                    $data = OYTE_Main(trim(strtr($data, array('<br />' => ''))));
+                    $data = OYTE_Main(trim(strtr($data, ['<br />' => ''])));
             },
             'disabled_content' => '$1',
             'block_level' => true,
-        ),
-        array(
+		],
+        [
             'tag' => 'yt',
             'type' => 'unparsed_content',
             'content' => '$1',
@@ -56,12 +56,12 @@ function OYTE_bbc_add_code(&$codes)
                     $data = $txt['OYTE_unvalid_link'];
 
                 else
-                    $data = OYTE_Main(trim(strtr($data, array('<br />' => ''))));
+                    $data = OYTE_Main(trim(strtr($data, ['<br />' => ''])));
             },
             'disabled_content' => '$1',
             'block_level' => true,
-        ),
-        array(
+		],
+        [
             'tag' => 'vimeo',
             'type' => 'unparsed_content',
             'content' => '$1',
@@ -77,11 +77,11 @@ function OYTE_bbc_add_code(&$codes)
                     $data = $txt['OYTE_unvalid_link'];
 
                 else
-                    $data = OYTE_Vimeo(trim(strtr($data, array('<br />' => ''))));
+                    $data = OYTE_Vimeo(trim(strtr($data, ['<br />' => ''])));
             },
             'disabled_content' => '$1',
             'block_level' => true,
-        )
+		]
     );
 
     OYTE_care();
@@ -97,21 +97,19 @@ function OYTE_bbc_add_button(&$buttons)
     if (empty($modSettings['OYTE_master']))
         return;
 
-    $buttons[count($buttons) - 1][] = array(
-        'image' => 'youtube',
-        'code' => 'youtube',
-        'before' => '[youtube]',
-        'after' => '[/youtube]',
-        'description' => $txt['OYTE_desc'],
-    );
-
-    $buttons[count($buttons) - 1][] =array(
-        'image' => 'vimeo',
-        'code' => 'vimeo',
-        'before' => '[vimeo]',
-        'after' => '[/vimeo]',
-        'description' => $txt['OYTE_vimeo_desc'],
-    );
+	array_push($buttons, [
+		'image' => 'youtube',
+		'code' => 'youtube',
+		'before' => '[youtube]',
+		'after' => '[/youtube]',
+		'description' => $txt['OYTE_desc'],
+	], [
+		'image' => 'vimeo',
+		'code' => 'vimeo',
+		'before' => '[vimeo]',
+		'after' => '[/vimeo]',
+		'description' => $txt['OYTE_vimeo_desc'],
+	]);
 }
 
 // Don't bother on create a whole new page for this, let's use integrate_general_mod_settings ^o^.
@@ -174,8 +172,7 @@ function OYTE_Main($data)
 
     // Got something!
     else
-        $result = '
-        <div class="oharaEmbed youtube" id="oh_'. $videoID .'"><noscript><a href="https://youtube.com/watch?v='. $videoID .'">https://youtube.com/watch?v='. $videoID . '</a></noscript></div>';
+        $result = '<div class="oharaEmbed youtube" id="oh_'. $videoID .'"><noscript><a href="https://youtube.com/watch?v='. $videoID .'">https://youtube.com/watch?v='. $videoID . '</a></noscript></div>';
 
     return $result;
 }
@@ -195,58 +192,10 @@ function OYTE_Vimeo($data)
     $jsonArray = json_decode(curlWrapper($oembed), true);
 
     if (!empty($jsonArray) && is_array($jsonArray) && !empty($jsonArray['html']))
-        return '
-        <div class="oharaEmbed vimeo">'. $jsonArray['html'].'</div>';
+        return '<div class="oharaEmbed vimeo">'. $jsonArray['html'].'</div>';
 
     else
         return sprintf($txt['OYTE_unvalid_link'], 'vimeo');
-}
-
-function OYTE_Gifv($data)
-{
-    global $modSettings, $txt;
-
-    loadLanguage('OharaYTEmbed');
-
-    // Gotta respect the master setting...
-    if (empty($data) || empty($modSettings['OYTE_master']))
-        return sprintf($txt['OYTE_unvalid_link'], 'gifv');
-
-    // Set a local var for laziness.
-    $videoID = '';
-    $result = '';
-
-    if (strpos($data, 'http') === false || strpos($data, '.com') === false)
-        return '
-        <video class="gifv" autoplay loop preload="auto" controls>
-            <source src="https://i.imgur.com/'. $data .'.webm" type="video/webm">
-            <source src="https://i.imgur.com/'. $data .'.mp4" type="video/mp4">
-        </video>';
-
-
-    // We all love Regex.
-    $pattern = '/^(?:https?:\/\/)?(?:www\.)?i\.imgur\.com\/([a-z0-9]+)\.(?:gif|gifv|webm|mp4)/i';
-
-    // First attempt, pure regex.
-    if (empty($videoID) && preg_match($pattern, $data, $matches))
-        $videoID = $matches[1] ?? false;
-
-
-    // At this point, all tests had miserably failed.
-    if (empty($videoID))
-        return sprintf($txt['OYTE_unvalid_link'], 'gifv');
-
-    // Got something!
-    else
-        $result = '
-        <video class="gifv" autoplay loop preload="auto" controls>
-            <source src="https://i.imgur.com/'. $videoID .
-            '.webm" type="video/webm">
-            <source src="https://i.imgur.com/' .
-            $videoID .'.mp4" type="video/mp4">
-        </video>';
-
-    return $result;
 }
 
 function OYTE_Preparse($message)
@@ -269,13 +218,13 @@ function OYTE_Preparse($message)
 
     return preg_replace_callback_array(
         [
-            $vimeo => function ($match) {var_dump($match);
+            $vimeo => function ($match) {
                 return OYTE_Vimeo($match[0]);
             },
             $youtube => function ($match) {
                 return OYTE_Main($match[1]);
             },
-            $gifv => function ($match) {var_dump($match);
+            $gifv => function ($match) {
                 return '[gifv]'. $match[1] .'[/gifv]';
             },
         ],
