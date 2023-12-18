@@ -52,6 +52,11 @@ file, You can obtain one at http://mozilla.org/MPL/2.0/.
 
 [color=purple][b][size=12pt]Changelog[/size][/b][/color]
 [code]
+1.2.15 - Dec 18, 2023
+- Fix setting for allowFullScreen
+- Don't need to parse new lines and spaces
+- Add phpunit tests
+
 1.2.14 - May 06, 2023
 - Remove imgur support
 - Fix correctly displaying smileys after posting a video

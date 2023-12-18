@@ -2,7 +2,7 @@
 
 /*
  * @package Ohara Youtube Embed mod
- * @version 1.2.14
+ * @version 1.2.15
  * @author Michel Mendiola <suki@missallsunday.com>
  * @copyright Copyright (C) 2023 Michel Mendiola
  * @license http://www.mozilla.org/MPL/ MPL 2.0
@@ -175,18 +175,14 @@ function OYTE_Main($data)
     // Got something!
     else
         $result = '
-        <div class="oharaEmbed youtube" id="oh_'. $videoID .'">
-            <noscript>
-                <a href="https://youtube.com/watch?v='. $videoID .'">https://youtube.com/watch?v='. $videoID . '</a>
-            </noscript>
-        </div>';
+        <div class="oharaEmbed youtube" id="oh_'. $videoID .'"><noscript><a href="https://youtube.com/watch?v='. $videoID .'">https://youtube.com/watch?v='. $videoID . '</a></noscript></div>';
 
     return $result;
 }
 
 function OYTE_Vimeo($data)
 {
-    global $modSettings, $txt, $sourcedir;
+    global $modSettings, $txt;
 
     if (empty($data) || empty($modSettings['OYTE_master']))
         return sprintf($txt['OYTE_unvalid_link'], 'vimeo');

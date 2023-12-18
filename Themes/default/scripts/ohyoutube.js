@@ -1,7 +1,7 @@
 /*
  Copyright (C) 2022 Michel Mendiola
  @license http://www.mozilla.org/MPL/ MPL 2.0
- @version 1.2.13
+ @version 1.2.15
 */
 
 class OharaYouTubeEmbed {
@@ -42,11 +42,11 @@ class OharaYouTubeEmbed {
 	addIframe(element) {
 		let iframe = document.createElement('iframe')
 
-		let iframeUrl = '//www.youtube.com/embed/' + element.videoID + '?autoplay=1&autohide=1';
+		let iframeUrl = 'https://www.youtube.com/embed/' + element.videoID + '?autoplay=1&autohide=1';
 
 		iframe.frameBorder = '0'
 		iframe.src = iframeUrl
-		iframe.allowfullscreen = 'allowfullscreen'
+		iframe.setAttribute('allowFullScreen', '')
 
 		element.append(iframe)
 	}
