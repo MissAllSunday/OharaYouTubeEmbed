@@ -90,26 +90,28 @@ function OYTE_bbc_add_code(&$codes)
 // The bbc button.
 function OYTE_bbc_add_button(&$buttons)
 {
-    global $txt, $modSettings;
+	global $txt, $modSettings;
 
-    loadLanguage('OharaYTEmbed');
+	loadLanguage('OharaYTEmbed');
 
-    if (empty($modSettings['OYTE_master']))
-        return;
+	if (empty($modSettings['OYTE_master']))
+		return;
 
-	array_push($buttons, [
+	$buttons[count($buttons) - 1][] = [
 		'image' => 'youtube',
 		'code' => 'youtube',
 		'before' => '[youtube]',
 		'after' => '[/youtube]',
 		'description' => $txt['OYTE_desc'],
-	], [
+	];
+
+	$buttons[count($buttons) - 1][] = [
 		'image' => 'vimeo',
 		'code' => 'vimeo',
 		'before' => '[vimeo]',
 		'after' => '[/vimeo]',
 		'description' => $txt['OYTE_vimeo_desc'],
-	]);
+	];
 }
 
 // Don't bother on create a whole new page for this, let's use integrate_general_mod_settings ^o^.
