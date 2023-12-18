@@ -30,8 +30,8 @@ final class OharaYTEmbedTest extends TestCase
 		OYTE_bbc_add_button($buttons);
 
 		$this->assertCount(2, $buttons);
-		$this->assertSame('youtube', $buttons[0]['image']);
-		$this->assertSame('vimeo', $buttons[1]['image']);
+		$this->assertSame('youtube', $buttons[-1][0]['image']);
+		$this->assertSame('vimeo', $buttons[0][0]['image']);
 	}
 
 	public function testOYTE_settings()
