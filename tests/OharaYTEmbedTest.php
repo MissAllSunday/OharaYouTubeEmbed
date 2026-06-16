@@ -2,7 +2,7 @@
 
 
 use PHPUnit\Framework\TestCase;
-use \Suki\Ohara;
+use Suki\Ohara;
 
 // Extend the main class to avoid calling SMF's functions.
 class OharaYTEmbedMock extends OharaYTEmbed

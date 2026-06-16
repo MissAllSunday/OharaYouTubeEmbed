@@ -1,24 +1,10 @@
 <?php
 
-/*
- * @package Ohara Youtube Embed mod
- * @version 2.1
- * @author Jessica González <suki@missallsunday.com>
- * @copyright Copyright (c) 2016 Jessica González
- * @license http://www.mozilla.org/MPL/ MPL 2.0
- */
-
-if (!defined('SMF'))
-	die('Hacking attempt...');
-
-// Ohara autoload!
-require_once $sourcedir .'/ohara/src/Suki/autoload.php';
-require_once ($sourcedir .'/iOharaYTEmbed.php');
-
-use Suki\Ohara;
+namespace OharaYTEmbed\OharaYTEmbed;
 
 class OharaYTEmbed extends Suki\Ohara
 {
+    public const PATTERN = 'OharaYTEmbed_';
 	public $name = __CLASS__;
 	public $width;
 	public $height;
