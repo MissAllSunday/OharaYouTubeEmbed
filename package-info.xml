@@ -8,19 +8,19 @@
 	<version>2.1</version>
 	<type>modification</type>
 
-	<install for="2.1 Beta 3, 2.1 Beta 4, 2.1 RC 1, 2.1 RC 2, 2.1 - 2.1.99">
+	<install for="2.1 - 2.1.99">
 		<readme parsebbc="true">readme.txt</readme>
 		<license type="inline" parsebbc="false">
 This Source Code Form is subject to the terms of the Mozilla Public
 License, v. 2.0. If a copy of the MPL was not distributed with this
 file, You can obtain one at http://mozilla.org/MPL/2.0/.
 		</license>
+		<credits url="https://missallsunday.com" license="MPL 2.0" copyright="Michel Mendiola" licenseurl="https://www.mozilla.org/MPL/2.0/">
+			Ohara YouTube Embed mod
+		</credits>
 		<code>configInstall.php</code>
 		<code>installCheck.php</code>
 		<hook function="OharaYTEmbed::runTimeHooks" hook="integrate_load_theme" file="$sourcedir/OharaYTEmbed.php" object="true"></hook>
-
-		<!-- DUH! WINNING! -->
-		<credits url="https://missallsunday.com" license="MPL 2.0" copyright="Suki" licenseurl="https://www.mozilla.org/MPL/2.0/">Ohara YouTube Embed mod</credits>
 		<require-dir name="Themes" destination="$boarddir">Theme and Language files</require-dir>
 		<require-dir name="Sources/OharaYTEmbed" destination="$sourcedir">Source library</require-dir>
 		<require-dir name="Sources/ohara" destination="$sourcedir">Source library</require-dir>
