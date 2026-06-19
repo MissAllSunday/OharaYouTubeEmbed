@@ -20,19 +20,14 @@ abstract class VideoProvider implements EmbedSiteInterface
     public const OEMBED_URL = '';
     public const BUTTON_IMAGE = '';
 
-    protected bool $fallbackOnOembedFailure = true;
-
-    public function getRegex(): string { return static::REGEX; }
-    public function getIdentifier(): string { return static::IDENTIFIER; }
-    public function getEmbedUrl(): string { return static::EMBED_URL; }
-    public function getRequestUrl(): string { return static::REQUEST_URL; }
-    public function getDisplayName(): string { return ucfirst(static::IDENTIFIER); }
-    public function jsInline(): ?string { return null; }
-    public function cssInLine(): ?string { return null; }
-
     public function getTemplate(): string
     {
         return '<div class="oharaEmbed {id}" title="{title}" data-ohara_{id}="{video_id}" data-ohara_image_url="{image_url}" id="oh_{id}_{video_id}" style="width: {width}px; height: {height}px;"></div>';
+    }
+
+    public function getDisplayName(): string
+    {
+        return ucfirst(static::IDENTIFIER);
     }
 
     public function content(string $data): string
@@ -135,14 +130,10 @@ abstract class VideoProvider implements EmbedSiteInterface
 
     protected function handleFailure(string $videoId): string
     {
-        if ($this->fallbackOnOembedFailure) {
-            return $this->create(EmbedParams::from([
-                EmbedParams::KEY_VIDEO_ID => $videoId,
-                EmbedParams::KEY_TITLE    => ucfirst(static::IDENTIFIER) . ' Video',
-            ]));
-        }
-
-        return $this->invalid();
+        return $this->create(EmbedParams::from([
+            EmbedParams::KEY_VIDEO_ID => $videoId,
+            EmbedParams::KEY_TITLE    => ucfirst(static::IDENTIFIER) . ' Video', // Uso de constante
+        ]));
     }
 
     protected function create(EmbedParams $params): string

@@ -13,21 +13,6 @@ namespace OharaYTEmbed\Contracts;
  */
 interface EmbedSiteInterface
 {
-    /** Lowercase machine-readable key, e.g. 'youtube'. Used in HTML IDs, BBC tags, and modSettings keys. */
-    public function getIdentifier(): string;
-
-    /** Human-readable label shown in admin settings, e.g. 'YouTube'. */
-    public function getDisplayName(): string;
-
-    /** PCRE pattern (including delimiters and flags). */
-    public function getRegex(): string;
-
-    /** Inline JavaScript to inject (should begin and end with a newline). */
-    public function jsInline(): ?string;
-
-    /** Inline CSS to inject. */
-    public function cssInLine(): ?string;
-
     /**
      * Convert BBC tag body $data (a URL or a bare video ID) into the embed HTML.
      * Returns $data unchanged when the input cannot be parsed.

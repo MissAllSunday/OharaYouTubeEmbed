@@ -49,10 +49,11 @@ final class SiteRegistry
         }
 
         foreach (glob($this->sitesDir . '/*.php') ?: [] as $file) {
+            /** @var EmbedSiteInterface|VideoProvider|null $site */
             $site = $this->loadFile($file);
 
             if ($site !== null) {
-                $this->sites[$site->getIdentifier()] = $site;
+                $this->sites[$site::IDENTIFIER] = $site;
             }
         }
 
@@ -62,6 +63,9 @@ final class SiteRegistry
     /**
      * Attempt to load a single site class from $file.
      * Returns null and silently skips if the class cannot be used.
+     *
+     * @param string $file
+     * @return EmbedSiteInterface|VideoProvider
      * @throws ReflectionException
      */
     private function loadFile(string $file): ?EmbedSiteInterface
