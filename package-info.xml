@@ -18,26 +18,55 @@ file, You can obtain one at http://mozilla.org/MPL/2.0/.
 		<credits url="https://missallsunday.com" license="MPL 2.0" copyright="Michel Mendiola" licenseurl="https://www.mozilla.org/MPL/2.0/">
 			Ohara YouTube Embed mod
 		</credits>
-		<code>configInstall.php</code>
 		<code>installCheck.php</code>
-		<hook function="OharaYTEmbed::runTimeHooks" hook="integrate_load_theme" file="$sourcedir/OharaYTEmbed.php" object="true"></hook>
+		<!-- Static hook registration replaces the old configInstall.php + integrate_load_theme bootstrap.
+		     All four hooks point to the bootstrap entry-point (Sources/OharaYTEmbed.php) which primes
+		     Composer's autoloader before SMF instantiates OharaYTEmbed\OharaYTEmbed. -->
+		<hook hook="integrate_bbc_codes"
+		      function="OharaYTEmbed\OharaYTEmbed::addCode"
+		      file="$sourcedir/OharaYTEmbed.php"
+		      object="true" />
+		<hook hook="integrate_bbc_buttons"
+		      function="OharaYTEmbed\OharaYTEmbed::addButtons"
+		      file="$sourcedir/OharaYTEmbed.php"
+		      object="true" />
+		<hook hook="integrate_general_mod_settings"
+		      function="OharaYTEmbed\OharaYTEmbed::addSettings"
+		      file="$sourcedir/OharaYTEmbed.php"
+		      object="true" />
+		<hook hook="integrate_pre_parsebbc"
+		      function="OharaYTEmbed\OharaYTEmbed::addEmbed"
+		      file="$sourcedir/OharaYTEmbed.php"
+		      object="true" />
+		<require-file name="Sources/OharaYTEmbed.php" destination="$sourcedir">Autoloader bootstrap entry-point</require-file>
 		<require-dir name="Themes" destination="$boarddir">Theme and Language files</require-dir>
-		<require-dir name="Sources/OharaYTEmbed" destination="$sourcedir">Source library</require-dir>
-		<require-dir name="Sources/ohara" destination="$sourcedir">Source library</require-dir>
-		<require-file name="Sources/OharaYTEmbed.php" destination="$sourcedir">The main class</require-file>
-		<require-file name="Sources/iOharaYTEmbed.php" destination="$sourcedir">Sites interface</require-file>
-		<require-dir name="vendor" destination="$boarddir">vendor folder</require-dir>
+		<require-dir name="Sources/OharaYTEmbed" destination="$sourcedir">Source library and site plugins</require-dir>
+		<require-dir name="vendor" destination="$boarddir">Composer vendor folder</require-dir>
 		<require-file name="youtube.png" destination="$imagesdir/bbc" />
 		<require-file name="vimeo.png" destination="$imagesdir/bbc" />
 		<require-file name="gifv.png" destination="$imagesdir/bbc" />
 		<redirect url="index.php?action=admin;area=modsettings;sa=general" timeout="1000" />
 	</install>
 
-	<!-- Do note that Sources/ohara dir isn't deleted as it can be used by other mods. -->
 	<uninstall for="2.1 Beta 2, 2.1 Beta 3, 2.1 - 2.1.99">
-		<hook function="OharaYTEmbed::runTimeHooks" hook="integrate_load_theme" file="$sourcedir/OharaYTEmbed.php" object="true" reverse="true" />
+		<!-- Reverse the four static hooks registered at install time. -->
+		<hook hook="integrate_bbc_codes"
+		      function="OharaYTEmbed\OharaYTEmbed::addCode"
+		      file="$sourcedir/OharaYTEmbed.php"
+		      object="true" reverse="true" />
+		<hook hook="integrate_bbc_buttons"
+		      function="OharaYTEmbed\OharaYTEmbed::addButtons"
+		      file="$sourcedir/OharaYTEmbed.php"
+		      object="true" reverse="true" />
+		<hook hook="integrate_general_mod_settings"
+		      function="OharaYTEmbed\OharaYTEmbed::addSettings"
+		      file="$sourcedir/OharaYTEmbed.php"
+		      object="true" reverse="true" />
+		<hook hook="integrate_pre_parsebbc"
+		      function="OharaYTEmbed\OharaYTEmbed::addEmbed"
+		      file="$sourcedir/OharaYTEmbed.php"
+		      object="true" reverse="true" />
 		<remove-file name="$sourcedir/OharaYTEmbed.php" />
-		<remove-file name="$sourcedir/iOharaYTEmbed.php" />
 		<remove-dir name="$sourcedir/OharaYTEmbed" />
 		<remove-file name="$languagedir/OharaYTEmbed.english.php" />
 		<remove-file name="$languagedir/OharaYTEmbed.english-utf8.php" />

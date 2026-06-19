@@ -1,201 +1,206 @@
 <?php
 
-namespace OharaYTEmbed\OharaYTEmbed;
+declare(strict_types=1);
 
-class OharaYTEmbed extends Suki\Ohara
+namespace OharaYTEmbed;
+
+use OharaYTEmbed\Contracts\EmbedSiteInterface;
+use OharaYTEmbed\Site\SiteRegistry;
+use OharaYTEmbed\Traits\SettingsTrait;
+
+/**
+ * Supported sites are discovered automatically by SiteRegistry: drop a file
+ * that implements EmbedSiteInterface into Sources/OharaYTEmbed/Sites/ and it
+ * will appear in settings, BBC codes, and auto-embed without any other change.
+ */
+class OharaYTEmbed
 {
+    use SettingsTrait;
+
     public const PATTERN = 'OharaYTEmbed_';
-	public $name = __CLASS__;
-	public $width;
-	public $height;
-	public static $sites = array();
+    public const NAME    = 'OharaYTEmbed';
+    public const DEFAULT_WIDTH = 480;
+    public const DEFAULT_HEIGHT = 270;
 
-	public $useConfig = true;
+    public string $name   = self::NAME;
+    public int    $width  = 480;
+    public int    $height = 270;
 
-	public function __construct()
-	{
-		// Get yourself noted.
-		$this->setRegistry();
+    public string $sourceDir;
+    public string $scriptUrl;
+    public string $boardDir;
+    public string $boardUrl;
 
-		// Get the default settings.
-		$this->defaultSettings();
+    private SiteRegistry $registry;
 
-		// Get a list of all available sites.
-		$this->getSites();
+    public function __construct(?SiteRegistry $registry = null)
+    {
+        $this->sourceDir = $this->global('sourcedir');
+        $this->scriptUrl = $this->global('scripturl');
+        $this->boardDir  = $this->global('boarddir');
+        $this->boardUrl  = $this->global('boardurl');
 
-		// Set our css bits.
-		$this->addCss();
-	}
+        $this->width  = (int) $this->getSetting('width',  480);
+        $this->height = (int) $this->getSetting('height', 270);
 
-	public function defaultSettings()
-	{
-		$this->width = $this->setting('width', 480);
-		$this->height = $this->setting('height', 270);
+        $this->registry = $registry ?? new SiteRegistry(
+            $this,
+            $this->sourceDir . '/' . self::NAME . '/Sites',
+        );
 
-		$this->sitesFolder = $this->sourceDir . '/'. $this->name;
-	}
+        $this->addCss();
+    }
 
-	public function getSites()
-	{
-		$directories = array_diff(scandir($this->sitesFolder), array('..', '.'));
+    /** @return array<string, EmbedSiteInterface> */
+    public function getSites(): array
+    {
+        return $this->registry->all();
+    }
 
-		if (empty(static::$sites) && !empty($directories) && is_array($directories))
-			foreach ($directories as $file)
-			{
-				// Does it exists?
-				if (file_exists($this->sitesFolder .'/'. $file))
-				{
-					$filename = pathinfo($this->sitesFolder .'/'. $file, PATHINFO_FILENAME);
-					require_once $this->sitesFolder .'/'. $file;
-					static::$sites[$filename] = new $filename($this);
-				}
-			}
+    public function addSettings(array &$config_vars): void
+    {
+        $config_vars[] = $this->text('title');
+        $config_vars[] = ['check', self::NAME . '_enable',    'subtext' => $this->text('enable_sub')];
+        $config_vars[] = ['check', self::NAME . '_autoEmbed', 'subtext' => $this->text('autoEmbed_sub')];
+        $config_vars[] = ['int',   self::NAME . '_width',     'subtext' => $this->text('width_sub'),  'size' => 3];
+        $config_vars[] = ['int',   self::NAME . '_height',    'subtext' => $this->text('height_sub'), 'size' => 3];
 
-		return static::$sites;
-	}
+        foreach ($this->getSites() as $site) {
+            $config_vars[] = [
+                'check',
+                self::NAME . '_enable_' . $site->identifier(),
+                'label' => self::tokens($this->text('enable_generic'), ['site' => $site->displayName()]),
+            ];
+        }
 
-	//Don't bother on create a whole new page for this, let's use integrate_general_mod_settings ^o^.
-	public function addSettings(&$config_vars)
-	{
-		$config_vars[] = $this->text('title');
-		$config_vars[] = array('check', $this->name .'_enable', 'subtext' => $this->text('enable_sub'));
-		$config_vars[] = array('check', $this->name .'_autoEmbed', 'subtext' => $this->text('autoEmbed_sub'));
-		$config_vars[] = array('int', $this->name .'_width', 'subtext' => $this->text('width_sub'), 'size' => 3);
-		$config_vars[] = array('int', $this->name .'_height', 'subtext' => $this->text('height_sub'), 'size' => 3);
+        $config_vars[] = '';
+    }
 
-		// Gotta include a setting for the sites. Make sure the txt string actually exists!
-		foreach (static::$sites as $site)
-			if (!empty($site) && is_object($site))
-				$config_vars[] = array('check', $this->name .'_enable_'. $site->siteSettings['identifier'], 'label' => $this['tools']->parser($this->text('enable_generic'), array('site' => $site->siteSettings['name'])));
+    public function addCode(array &$codes): void
+    {
+        if (!$this->isEnable('enable')) {
+            return;
+        }
 
-		$config_vars[] = '';
-	}
+        foreach ($this->getSites() as $site) {
+            if (!$this->isEnable('enable_' . $site->identifier())) {
+                continue;
+            }
 
-	public function addCode(&$codes)
-	{
-		// Mod is disabled.
-		if (!$this->enable('enable'))
-			return;
+            $codes[] = $this->buildBbcEntry($site, $site->bbcTag());
 
-		// Quick fix for PHP below 5.4.
-		$that = $this;
+            if ($site->extraBbcTag() !== null) {
+                $codes[] = $this->buildBbcEntry($site, $site->extraBbcTag());
+            }
+        }
+    }
 
-		foreach (static::$sites as $site)
-			if (!empty($site) && is_object($site) && $this->enable('enable_'. $site->siteSettings['identifier']))
-			{
-				$codes[] = array(
-					'tag' => $site->siteSettings['identifier'],
-					'type' => 'unparsed_content',
-					'content' => '$1',
-					'validate' => function (&$tag, &$data, $disabled) use ($that, $site)
-					{
-						// This BBC is currently disabled.
-						if (!empty($disabled[$site->siteSettings['identifier']]))
-							return;
+    public function addButtons(array &$dummy): void
+    {
+        global $context;
 
-						$data = empty($data) ? $site->invalid() : $site->content(trim(strtr($data, array('<br />' => ''))));
-					},
-					'disabled_content' => '$1',
-					'block_level' => true,
-				);
+        if (!$this->isEnable('enable')) {
+            return;
+        }
 
-				// Any extra tags?
-				if (!empty($site->siteSettings['extra_tag']))
-					$codes[] = array(
-						'tag' => $site->siteSettings['extra_tag'],
-						'type' => 'unparsed_content',
-						'content' => '$1',
-						'validate' => function (&$tag, &$data, $disabled) use ($that, $site)
-						{
-							// This extra tag is currently disabled.
-							if (!empty($disabled[$site->siteSettings['extra_tag']]))
-								return;
+        $buttons = [];
 
-							$data = empty($data) ? $site->invalid() : $site->content(trim(strtr($data, array('<br />' => ''))));
-						},
-						'disabled_content' => '$1',
-						'block_level' => true,
-					);
-			}
+        foreach ($this->getSites() as $site) {
+            if (!$this->isEnable('enable_' . $site->identifier())) {
+                continue;
+            }
 
-		// No longer needed.
-		unset($that);
-	}
+            $buttons[] = [
+                'code'        => $site->bbcTag(),
+                'description' => self::tokens($this->text('desc_generic'), ['site' => $site->displayName()]),
+                'before'      => '[' . $site->bbcTag() . ']',
+                'after'       => '[/' . $site->bbcTag() . ']',
+                'image'       => $site->buttonImage(),
+            ];
+        }
 
-	//The bbc button.
-	public function addButtons(&$dummy)
-	{
-		global $context;
+        if ($buttons !== []) {
+            $last = count($context['bbc_tags']) - 1;
+            $context['bbc_tags'][$last] = array_merge($context['bbc_tags'][$last], $buttons);
+        }
+    }
 
-		// Mod is disabled.
-		if (!$this->enable('enable'))
-			return;
+    public function addEmbed(string &$message, mixed &$smileys, mixed &$cache_id, mixed &$parse_tags): void
+    {
+        global $context;
 
-		$buttons = array();
+        if (!$this->isEnable('enable') || !$this->isEnable('autoEmbed') || !empty($context['ohara_disable'])) {
+            return;
+        }
 
-		foreach (static::$sites as $site)
-			if (!empty($site) && is_object($site) && $this->enable('enable_'. $site->siteSettings['identifier']))
-				$buttons[] = array(
-					'code' => $site->siteSettings['identifier'],
-					'description' => $this['tools']->parser($this->text('desc_generic'), array('site' => $site->siteSettings['name'])),
-					'before' => $site->siteSettings['before'],
-					'after' => $site->siteSettings['after'],
-					'image' => $site->siteSettings['image'],
-				);
+        foreach ($this->getSites() as $site) {
+            if ($this->isEnable('enable_' . $site->identifier())) {
+                $site->auto($message);
+            }
+        }
+    }
 
-		if (!empty($buttons) && is_array($buttons))
-			$context['bbc_tags'][count($context['bbc_tags']) - 1] = array_merge($context['bbc_tags'][count($context['bbc_tags']) - 1], $buttons);
-	}
+    public function addCss(): void
+    {
+        global $context;
 
-	public function addEmbed(&$message, &$smileys, &$cache_id, &$parse_tags)
-	{
-		global $context;
+        loadCSSFile('oharaEmbed.css', ['force_current' => false, 'validate' => true, 'minimize' => true]);
+        loadJavaScriptFile('ohvideos.min.js', ['local' => true, 'force_current' => false, 'defer' => true, 'minimize' => false]);
 
-		// Mod is disabled or the user don't want to use autoEmbed or somebody else do not want this to happen.
-		if (!$this->enable('enable') || !$this->enable('autoEmbed') || !empty($context['ohara_disable']))
-			return;
+        addInlineJavaScript(sprintf(
+            "\n\tvar _ohWidth = %d;\n\tvar _ohHeight = %d;\n\tvar _ohSites = [];",
+            $this->width,
+            $this->height,
+        ));
 
-		// As always, the good old foreach saves the day!
-		foreach (static::$sites as $site)
-			if (!empty($site) && is_object($site) && $this->enable('enable_'. $site->siteSettings['identifier']))
-				$site->auto($message);
-	}
+        foreach ($this->getSites() as $site) {
+            if (!$this->isEnable('enable_' . $site->identifier())) {
+                continue;
+            }
 
-	public function addCss()
-	{
-		global $context;
+            if ($site->jsFile() !== null && $site->jsFile() !== '') {
+                loadJavaScriptFile($site->jsFile(), ['local' => true, 'default_theme' => true, 'defer' => true, 'minimize' => true]);
+            }
 
-		// The much needed css file.
-		loadCSSFile('oharaEmbed.css', array('force_current' => false, 'validate' => true, 'minimize' => true));
-		loadJavaScriptFile('ohvideos.min.js', array('local' => true, 'force_current' => false, 'defer' => true, 'minimize' => false));
+            if ($site->cssFile() !== null && $site->cssFile() !== '') {
+                loadCSSFile($site->cssFile(), ['force_current' => false, 'validate' => true, 'minimize' => true]);
+            }
 
-		// Set a max width var to let the JS code know how to act and react!
-		addInlineJavaScript('
-	var _ohWidth = '. $this->width .';
-	var _ohHeight = '. $this->height .';
-	var _ohSites = [];');
+            if ($site->jsInline() !== null) {
+                addInlineJavaScript($site->jsInline());
+            }
 
-		foreach (static::$sites as $site)
-			if (!empty($site) && is_object($site) && $this->setting('enable_'. $site->siteSettings['identifier']))
-			{
-				// The js file is expected to be located at the default theme's script folder and needs to include its own extension!
-				if (!empty($site->siteSettings['js_file']))
-					loadJavaScriptFile($site->siteSettings['js_file'], array('local' => true, 'default_theme' => true, 'defer' => true, 'minimize' => true));
+            if ($site->allowedHtmlTag() !== null) {
+                $context['allowed_html_tags'][] = $site->allowedHtmlTag();
+            }
+        }
+    }
 
-				// The css file is expected to be located at the default theme's script folder and needs to include its own extension!
-				if (!empty($site->siteSettings['css_file']))
-					loadCSSFile($site->siteSettings['css_file'], array('force_current' => false, 'validate' => true, 'minimize' => true));
+    // -----------------------------------------------------------------------
+    // Private helpers
+    // -----------------------------------------------------------------------
 
-				// Is there any inline or JS file to be loaded? Please be sure to add a new line at the beginning and end of your string and to follow proper indent style too!
-				if (!empty($site->siteSettings['js_inline']))
-					addInlineJavaScript($site->siteSettings['js_inline']);
-
-				// Does this site wants to add their own unique HTML tag? SMF already supports div by default.
-				if (!empty($site->siteSettings['allowed_tag']))
-					$context['allowed_html_tags'][] = $site->siteSettings['allowed_tag'];
-			}
-	}
+    /**
+     * Build one SMF BBC code array entry for $site using $tag as the tag name.
+     *
+     * @return array<string, mixed>
+     */
+    private function buildBbcEntry(EmbedSiteInterface $site, string $tag): array
+    {
+        return [
+            'tag'              => $tag,
+            'type'             => 'unparsed_content',
+            'content'          => '$1',
+            'validate'         => static function (mixed &$bbcTag, mixed &$data, array $disabled) use ($site, $tag): void {
+                if (!empty($disabled[$tag])) {
+                    return;
+                }
+                $data = ($data === '' || $data === false || $data === null)
+                    ? $site->invalid()
+                    : $site->content(trim(strtr((string) $data, ['<br />' => ''])));
+            },
+            'disabled_content' => '$1',
+            'block_level'      => true,
+        ];
+    }
 }
-
-/* Slowly repeating
-...Sunday morning */

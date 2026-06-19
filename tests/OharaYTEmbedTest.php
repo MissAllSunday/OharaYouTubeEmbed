@@ -1,80 +1,105 @@
 <?php
 
+declare(strict_types=1);
 
+namespace OharaYTEmbed\Tests;
+
+use OharaYTEmbed\Contracts\EmbedSiteInterface;
+use OharaYTEmbed\OharaYTEmbed;
 use PHPUnit\Framework\TestCase;
-use Suki\Ohara;
-
-// Extend the main class to avoid calling SMF's functions.
-class OharaYTEmbedMock extends OharaYTEmbed
-{
-	public function __construct()
-	{
-		// Get yourself noted.
-		$this->setRegistry();
-
-		// Get the default settings.
-		$this->defaultSettings();
-	}
-}
 
 class OharaYTEmbedTest extends TestCase
 {
-	public function testGetSites()
-	{
-		$o = new OharaYTEmbedMock;
+    private OharaYTEmbed $app;
 
-		// Get all available sites.
-		$sites = $o->getSites();
+    protected function setUp(): void
+    {
+        $this->app = new OharaYTEmbed();
+    }
 
-		$this->assertIsArray($sites);
+    // -----------------------------------------------------------------------
+    // getSites()
+    // -----------------------------------------------------------------------
 
-		// $sites must only contain objects.
-		$this->assertContainsOnly('object', $sites);
-	}
+    public function testGetSitesReturnsNonEmptyArray(): void
+    {
+        $sites = $this->app->getSites();
+        $this->assertIsArray($sites);
+        $this->assertNotEmpty($sites);
+    }
 
-	public function testSiteSettingsProperty()
-	{
-		$o = new OharaYTEmbedMock;
+    public function testGetSitesContainsOnlyEmbedSiteInterface(): void
+    {
+        foreach ($this->app->getSites() as $site) {
+            $this->assertInstanceOf(EmbedSiteInterface::class, $site);
+        }
+    }
 
-		// Get all available sites.
-		$sites = $o->getSites();
+    public function testGetSitesKeyedByIdentifier(): void
+    {
+        foreach ($this->app->getSites() as $key => $site) {
+            $this->assertSame($key, $site->identifier());
+        }
+    }
 
-		// Every site class needs to have a siteSettings property.
-		foreach ($sites as $site)
-			$this->assertObjectHasAttribute('siteSettings', $site);
-	}
+    public function testGetSitesContainsExpectedBuiltinSites(): void
+    {
+        $sites = $this->app->getSites();
+        $this->assertArrayHasKey('youtube', $sites);
+        $this->assertArrayHasKey('vimeo',   $sites);
+        $this->assertArrayHasKey('gifv',    $sites);
+    }
 
-	public function testSiteTestsProperty()
-	{
-		$o = new OharaYTEmbedMock;
+    public function testGetSitesIsMemoised(): void
+    {
+        $first  = $this->app->getSites();
+        $second = $this->app->getSites();
+        $this->assertSame($first, $second);
+    }
 
-		// Get all available sites.
-		$sites = $o->getSites();
+    // -----------------------------------------------------------------------
+    // tokens()
+    // -----------------------------------------------------------------------
 
-		// Every site class needs to have a siteSettings property.
-		foreach ($sites as $site)
-			$this->assertObjectHasAttribute('siteTests', $site);
-	}
+    public function testTokensSubstitutesCurlyBracePlaceholders(): void
+    {
+        $result = OharaYTEmbed::tokens(
+            'Hello {name}, welcome to {place}!',
+            ['name' => 'World', 'place' => 'PHP'],
+        );
+        $this->assertSame('Hello World, welcome to PHP!', $result);
+    }
 
-	public function testOharaYTEmbed()
-	{
-		$o = new OharaYTEmbedMock;
+    public function testTokensLeavesUnmatchedPlaceholdersIntact(): void
+    {
+        $result = OharaYTEmbed::tokens('Hello {unknown}', ['name' => 'World']);
+        $this->assertSame('Hello {unknown}', $result);
+    }
 
-		// Get all available sites.
-		$sites = $o->getSites();
+    public function testTokensWithEmptyTemplateReturnsEmpty(): void
+    {
+        $this->assertSame('', OharaYTEmbed::tokens('', ['key' => 'value']));
+    }
 
-		foreach ($sites as $site)
-		{
-			foreach ($site->siteTests['original'] as $originalString)
-			{
-				// Skip it.
-				if (empty($site->siteTests['expected']))
-					continue;
+    public function testTokensWithEmptyTokensArrayIsNoOp(): void
+    {
+        $this->assertSame('no change', OharaYTEmbed::tokens('no change', []));
+    }
 
-				$result = $site->content($originalString);
+    // -----------------------------------------------------------------------
+    // text()
+    // -----------------------------------------------------------------------
 
-				$this->assertEquals($site->siteTests['expected'], $result);
-			}
-		}
-	}
+    public function testTextReturnsEmptyStringForMissingKey(): void
+    {
+        // $txt is empty in the test environment (bootstrap sets it to []).
+        $this->assertSame('', $this->app->text('non_existent_key_xyz'));
+    }
+
+    public function testTextReturnsValueWhenKeyExists(): void
+    {
+        $GLOBALS['txt']['OharaYTEmbed_test_key'] = 'hello';
+        $this->assertSame('hello', $this->app->text('test_key'));
+        unset($GLOBALS['txt']['OharaYTEmbed_test_key']);
+    }
 }

@@ -4,11 +4,20 @@ declare(strict_types=1);
 
 namespace OharaYTEmbed\Traits;
 
-use OharaYTEmbed\OharaYTEmbed\OharaYTEmbed;
+use OharaYTEmbed\OharaYTEmbed;
 
 trait SettingsTrait
 {
-    public function getSetting(string $settingName, $fallBack = false): mixed
+    public function getText(string $key): string
+    {
+        global $txt;
+
+        loadLanguage(self::NAME);
+
+        return $txt[self::NAME . '_' . $key];
+    }
+
+    public function getSetting(string $settingName, mixed $fallBack = false): mixed
     {
         $modSettings = $this->global('modSettings');
 
@@ -26,7 +35,7 @@ trait SettingsTrait
         return !empty($modSettings[OharaYTEmbed::PATTERN . $settingName]);
     }
 
-    public function modSetting(string $settingName, $fallBack = false): mixed
+    public function modSetting(string $settingName, mixed $fallBack = false): mixed
     {
         $modSettings = $this->global('modSettings');
 
@@ -42,7 +51,7 @@ trait SettingsTrait
         return $GLOBALS[$variableName] ?? false;
     }
 
-    public function setGlobal($globalName, $globalValue): void
+    public function setGlobal(string $globalName, mixed $globalValue): void
     {
         $GLOBALS[$globalName] = $globalValue;
     }
@@ -55,6 +64,18 @@ trait SettingsTrait
         $context = $this->global('context');
         $context = array_merge($context, $contextVars);
         $this->setGlobal('context', $context);
+    }
+
+    /**
+     * @param array<string, string> $tokens
+     */
+    public function tokens(string $template, array $tokens): string
+    {
+        $pairs = [];
+        foreach ($tokens as $key => $value) {
+            $pairs['{' . $key . '}'] = $value;
+        }
+        return strtr($template, $pairs);
     }
 
     public function requireOnce(string $fileName, string $dir = ''): void
