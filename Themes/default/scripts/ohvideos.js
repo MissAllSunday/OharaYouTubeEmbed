@@ -10,8 +10,7 @@
 	};
 
 	OharaEmbedPlayer.prototype.init = function () {
-		// change var to either let or const, depending on each case AI!
-		var self = this;
+		const self = this;
 
 		// Iterar sobre cada contenedor para inicializar su estado visual (Vista Previa)
 		$(this.masterSelector).each(function () {
@@ -30,7 +29,7 @@
 	 */
 	OharaEmbedPlayer.prototype.setupPreview = function ($container) {
 		// Recuperar la imagen resuelta nativamente por tu DTO de PHP
-		var imageUrl = $container.data('ohara_image_url') || $container.attr('data-ohara_image_url');
+		const imageUrl = $container.data('ohara_image_url') || $container.attr('data-ohara_image_url');
 
 		if (imageUrl) {
 			$container.css({
@@ -53,7 +52,7 @@
 	 */
 	OharaEmbedPlayer.prototype.playVideo = function ($container) {
 		// Encontrar qué configuración de sitio le pertenece leyendo las clases
-		var siteInfo = null;
+		let siteInfo = null;
 		$.each(_ohSites, function (index, site) {
 			if ($container.hasClass(site.identifier)) {
 				siteInfo = site;
@@ -64,8 +63,8 @@
 		if (!siteInfo) return;
 
 		// Leer los parámetros sanitizados que el DTO inyectó en el HTML
-		var rawData = $container.data('ohara_' + siteInfo.identifier) || $container.attr('data-ohara_' + siteInfo.identifier);
-		var videoData = {};
+		const rawData = $container.data('ohara_' + siteInfo.identifier) || $container.attr('data-ohara_' + siteInfo.identifier);
+		let videoData = {};
 
 		try {
 			// Intentar parsear el JSON de datos. Si falla (porque es un ID plano), construir el objeto básico
@@ -74,18 +73,18 @@
 			videoData = { video_id: rawData };
 		}
 
-		var videoId = videoData.video_id || rawData;
+		const videoId = videoData.video_id || rawData;
 		if (!videoId) return;
 
 		// Construir la URL final del iframe reemplazando el token dinámico
-		var embedUrl = siteInfo.embedUrl.replace('{video_id}', videoId);
+		const embedUrl = siteInfo.embedUrl.replace('{video_id}', videoId);
 
 		// Resolver dimensiones calculadas
-		var width = $container.width() || videoData.width || 480;
-		var height = $container.height() || videoData.height || 270;
+		const width = $container.width() || videoData.width || 480;
+		const height = $container.height() || videoData.height || 270;
 
 		// Crear el elemento Iframe puro
-		var $iframe = $('<iframe/>', {
+		const $iframe = $('<iframe/>', {
 			'frameborder': '0',
 			'src': embedUrl,
 			'width': '100%',
@@ -121,22 +120,22 @@
 				},
 				// Convierte el elemento HTML del editor de vuelta a la etiqueta BBCode [tag]id[/tag]
 				format: function (element, content) {
-					var $el = $(element);
-					var videoId = $el.attr('data-' + site.identifier + '-id');
+					const $el = $(element);
+					const videoId = $el.attr('data-' + site.identifier + '-id');
 					return videoId ? '[' + site.identifier + ']' + videoId + '[/' + site.identifier + ']' : content;
 				},
 				// Renderiza el BBCode dentro del área WYSIWYG del editor usando una vista previa limpia
 				html: function (token, attrs, content) {
-					var cleanContent = content.trim();
-					var match = null;
+					const cleanContent = content.trim();
+					let match = null;
 
 					// Si pasaron una URL completa, intentar extraer el ID usando la Regex que mandó el backend
 					if (site.regex) {
-						var regexPattern = new RegExp(site.regex.replace(/^\/|\/[a-z]*$/g, ''), 'i');
+						const regexPattern = new RegExp(site.regex.replace(/^\/|\/[a-z]*$/g, ''), 'i');
 						match = cleanContent.match(regexPattern);
 					}
 
-					var videoId = match ? match[0] : cleanContent;
+					const videoId = match ? match[0] : cleanContent;
 
 					if (videoId !== '') {
 						// Pintamos una simulación responsiva dentro del editor de texto
