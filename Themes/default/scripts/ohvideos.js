@@ -1,190 +1,152 @@
-/*
- Copyright (c) 2016 Jessica González
- @license http://www.mozilla.org/MPL/ MPL 2.0
- @version 2.1
-*/
+/**
+ * Ohara YouTube Embed
+ */
 
-var _oh = function(){
-	this.masterDiv = $('.oharaEmbed');
-	this.basedElement = this.masterDiv.parent();
-	this.defaultWidth = typeof(_ohWidth) !== 'undefined' ? _ohWidth : 480;
-	this.defaultHeight = typeof(_ohHeight) !== 'undefined' ? _ohHeight : 270;
-	this.aspectRatio = this.defaultHeight / this.defaultWidth;
+(function ($) {
+	'use strict';
+	const OharaEmbedPlayer = function () {
+		this.masterSelector = '.oharaEmbed';
+		this.init();
+	};
 
-	this.main();
-	this.responsive();
-};
+	OharaEmbedPlayer.prototype.init = function () {
+		// change var to either let or const, depending on each case AI!
+		var self = this;
 
-_oh.prototype.getIframe = function(video)
-{
-	iframe = $('<iframe/>', {'frameborder': '0', 'src': video.embedUrl, 'width': this.defaultWidth, 'height': this.defaultHeight, 'allowfullscreen': '', 'class': 'oharaEmbedIframe'});
+		// Iterar sobre cada contenedor para inicializar su estado visual (Vista Previa)
+		$(this.masterSelector).each(function () {
+			self.setupPreview($(this));
+		});
 
-	return iframe;
-};
+		// DELEGACIÓN DE EVENTOS: Un solo listener global para todo el foro
+		$(document).on('click', this.masterSelector, function (e) {
+			e.preventDefault();
+			self.playVideo($(this));
+		});
+	};
 
-_oh.prototype.main = function(){
+	/**
+	 * Configura la miniatura (thumbnail) de fondo obtenida por oEmbed
+	 */
+	OharaEmbedPlayer.prototype.setupPreview = function ($container) {
+		// Recuperar la imagen resuelta nativamente por tu DTO de PHP
+		var imageUrl = $container.data('ohara_image_url') || $container.attr('data-ohara_image_url');
 
-	_ohMain = this;
+		if (imageUrl) {
+			$container.css({
+				'background-image': 'url(' + decodeURIComponent(imageUrl) + ')',
+				'background-size': 'cover',
+				'background-position': 'center',
+				'cursor': 'pointer',
+				'position': 'relative'
+			});
 
-	// Get all registered sites.
-	$.each(_ohSites, function(index, site) {
-			$('.' + site.identifier).each(function(index, video){
+			// Inyectar un botón de play genérico flotante si no existe
+			if ($container.find('.ohara-play-btn').length === 0) {
+				$container.append('<div class="ohara-play-btn" style="position:absolute; top:50%; left:50%; transform:translate(-50%,-50%); width:64px; height:64px; background:rgba(0,0,0,0.7); border-radius:50%; display:flex; align-items:center; justify-content:center; color:#fff; font-size:24px;">▶</div>');
+			}
+		}
+	};
 
-				// No JS witchcraft? fine then!
-				if (typeof site.noJS !== "undefined")
-					return false;
+	/**
+	 * Reemplaza el contenedor/miniatura por el Iframe real en tiempo de ejecución
+	 */
+	OharaEmbedPlayer.prototype.playVideo = function ($container) {
+		// Encontrar qué configuración de sitio le pertenece leyendo las clases
+		var siteInfo = null;
+		$.each(_ohSites, function (index, site) {
+			if ($container.hasClass(site.identifier)) {
+				siteInfo = site;
+				return false; // Break
+			}
+		});
 
-				video.domElement = $(this);
+		if (!siteInfo) return;
 
-				// Get and gather all we need!
-				video = $.extend(video, $.parseJSON(decodeURIComponent(video.domElement.data('ohara_'+ site.identifier))));
-				video.embedUrl = site.embedUrl.replace('{video_id}', video.video_id);
-				video.requestUrl = site.requestUrl.replace('{video_id}', video.video_id);
+		// Leer los parámetros sanitizados que el DTO inyectó en el HTML
+		var rawData = $container.data('ohara_' + siteInfo.identifier) || $container.attr('data-ohara_' + siteInfo.identifier);
+		var videoData = {};
 
-				// Allow each site to use their own function.
-				if (typeof site.getData == 'function'){
-					site.getData(_ohMain, video);
-				}
+		try {
+			// Intentar parsear el JSON de datos. Si falla (porque es un ID plano), construir el objeto básico
+			videoData = typeof rawData === 'object' ? rawData : $.parseJSON(decodeURIComponent(rawData));
+		} catch (e) {
+			videoData = { video_id: rawData };
+		}
 
-				else{
-					_ohMain.getData(video);
-				}
+		var videoId = videoData.video_id || rawData;
+		if (!videoId) return;
 
-				// Finally, create the actual video's HTML.
-				if (typeof site.createVideo == 'function'){
-					site.createVideo(_ohMain, video);
-				}
+		// Construir la URL final del iframe reemplazando el token dinámico
+		var embedUrl = siteInfo.embedUrl.replace('{video_id}', videoId);
 
-				else{
-					video.domElement.append($('<div/>', {'class': 'oharaEmbed_play'}));
+		// Resolver dimensiones calculadas
+		var width = $container.width() || videoData.width || 480;
+		var height = $container.height() || videoData.height || 270;
 
-					video.domElement.on('click', function() {
+		// Crear el elemento Iframe puro
+		var $iframe = $('<iframe/>', {
+			'frameborder': '0',
+			'src': embedUrl,
+			'width': '100%',
+			'height': '100%',
+			'allowfullscreen': '',
+			'allow': 'accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share',
+			'class': 'oharaEmbedIframe'
+		});
 
-						// Replace the video thumbnail with a HTML5 Player.
-						$(this).html(_ohMain.getIframe(video));
+		// Limpiar el contenedor (quitar botón e imagen) e inyectar el reproductor activo
+		$container.empty().css('background-image', 'none').append($iframe);
+	};
 
-						_ohMain.responsive();
-					});
+
+	// =========================================================================
+	// 2. Extensión Dinámica Automatizada para SCEditor (BBCode)
+	// =========================================================================
+	$(function () {
+		// Inicializar el reproductor envolvente en el DOM
+		new OharaEmbedPlayer();
+
+		if (typeof $.sceditor === 'undefined' || _ohSites === 'undefined') {
+			return;
+		}
+
+		// Bucle declarativo: Registra de forma automática CUALQUIER sitio nuevo que agregues al Backend
+		$.each(_ohSites, function (index, site) {
+
+			$.sceditor.plugins.bbcode.bbcode.set(site.identifier, {
+				allowsEmpty: true,
+				tags: {
+					iframe: {}
+				},
+				// Convierte el elemento HTML del editor de vuelta a la etiqueta BBCode [tag]id[/tag]
+				format: function (element, content) {
+					var $el = $(element);
+					var videoId = $el.attr('data-' + site.identifier + '-id');
+					return videoId ? '[' + site.identifier + ']' + videoId + '[/' + site.identifier + ']' : content;
+				},
+				// Renderiza el BBCode dentro del área WYSIWYG del editor usando una vista previa limpia
+				html: function (token, attrs, content) {
+					var cleanContent = content.trim();
+					var match = null;
+
+					// Si pasaron una URL completa, intentar extraer el ID usando la Regex que mandó el backend
+					if (site.regex) {
+						var regexPattern = new RegExp(site.regex.replace(/^\/|\/[a-z]*$/g, ''), 'i');
+						match = cleanContent.match(regexPattern);
+					}
+
+					var videoId = match ? match[0] : cleanContent;
+
+					if (videoId !== '') {
+						// Pintamos una simulación responsiva dentro del editor de texto
+						return '<iframe frameborder="0" src="' + site.embedUrl.replace('{video_id}', videoId) + '" data-' + site.identifier + '-id="' + videoId + '" class="oharaEmbedIframe" style="width: 420px; height: 315px;"></iframe>';
+					}
+
+					return content;
 				}
 			});
-	});
-
-	// Gotta make sure the new iframe gets resized if needed.
-	_ohMain.responsive();
-};
-
-_oh.prototype.getData = function(video){
-	$.getJSON('https://noembed.com/embed',
-		{format: 'json', url: video.requestUrl}, function (data) {
-
-		title = $('<div/>', {'class': 'oharaEmbed_title'}).html(data.title);
-
-		video.domElement.css({'background-image': 'url('+ data.thumbnail_url +')', 'background-size': 'cover'});
-		video.domElement.append(title);
-	});
-};
-
-_oh.prototype.responsive = function()
-{
-	_ohResponsive = this;
-
-	$(window).resize(function(){
-
-		// Get the new width and height.
-		var newWidth = _ohResponsive.basedElement.width();
-		var newHeight = (newWidth * _ohResponsive.aspectRatio) <= _ohResponsive.defaultHeight ? (newWidth * _ohResponsive.aspectRatio) : _ohResponsive.defaultHeight;
-
-		// If the new width is lower than the "default width" then apply some resizing. No? then go back to our default sizes
-		var applyResize = (newWidth <= _ohResponsive.defaultWidth),
-			applyWidth = !applyResize ? _ohResponsive.defaultWidth : newWidth,
-			applyHeight = !applyResize ? _ohResponsive.defaultHeight : newHeight;
-
-		// Gotta resize the master div.
-		_ohResponsive.masterDiv.width(applyWidth).height(applyHeight);
-		$('iframe.oharaEmbedIframe').each(function(){
-			$(this).width(applyWidth).height(applyHeight);
-		});
-
-	// Kick off one resize to fix all videos on page load.
-	}).resize();
-};
-
-_oh.prototype.refresh = function(timeWait){
-	timeWait = typeof timeWait !== 'undefined' ? timeWait : 3E3;
-	_ohRefresh = this;
-	setTimeout(function(){_ohRefresh.main();},timeWait);
-	setTimeout(function(){_ohRefresh.responsive();},timeWait);
-};
-
-function oh_refresh(timeWait)
-{
-	var _ohObject = _ohObject || new _oh();
-
-		_ohObject.refresh();
-}
-
-// Add support for the editor.
-if (typeof $.sceditor !== 'undefined')
-{
-	$.sceditor.plugins.bbcode.bbcode.set(
-		'youtube', {
-				allowsEmpty: true,
-				tags: {
-					iframe: {
-						'data-youtube-id': null
-					}
-				},
-				format: function (element, content) {
-					element = element.attr('data-youtube-id');
-
-					return element ? '[youtube]' + element + '[/youtube]' : content;
-				},
-				html: function (token, attrs, content) {
-					if (match = content.match(/(^[a-zA-z0-9_-]{11})$/) || content.match(/(?:https?:\/\/)?(?:www\.)?(?:youtu\.be\/|youtube\.com(?:\/embed\/|\/v\/|\/watch\?v=|\/watch\?.+&v=))([\w-]{11})(?:.+)?$/) || content.match(/(?:youtube(?:-nocookie)?\.com\/(?:[^\/]+\/.+\/|(?:v|e(?:mbed)?)\/|.*[?&]v=)|youtu\.be\/)([^"&?\/ ]{11})/)) {
-
-						return '<iframe frameborder="0" src="//www.youtube.com/embed/'+ match[1] +'?autoplay=0&autohide=1" data-youtube-id="'+ content +'" allowfullscreen class="oharaEmbedIframe" style="width: 420px; height: 315px;"></iframe>';
-					}
-
-					else{
-						return content;
-					}
-				}
-			}
-	);
-
-	$.sceditor.plugins.bbcode.bbcode.set(
-		'vimeo', {
-				allowsEmpty: true,
-				tags: {
-					iframe: {
-						'data-vimeo-id': null
-					}
-				},
-				format: function (element, content) {
-					element = element.attr('data-vimeo-id');
-
-					return element ? '[vimeo]' + element + '[/vimeo]' : content;
-				},
-				html: function (token, attrs, content) {
-					if (match = content.match(/(^\d+$)/) || content.match(/(?:https?:\/\/)?(?:www\.)?(?:player\.)?vimeo\.com\/(?:[a-z]*\/)*([0-9]{6,11})[?]?.*/)) {
-
-						return '<iframe frameborder="0" src="//player.vimeo.com/video/'+ match[1] +'?autoplay=0" data-vimeo-id="'+ content +'" allowfullscreen class="oharaEmbedIframe" style="width: 420px; height: 315px;"></iframe>';
-					}
-
-					else{
-						return content;
-					}
-				}
-			}
-	);
-}
-(function( $ ) {
-	$(function() {
-		var _ohObject = new _oh(),
-			_ohQuickEdit;
-
-		$(document).on('click', 'input[name=preview], input[name=post]', function(){
-			_ohObject.refresh();
 		});
 	});
+
 })(jQuery);
