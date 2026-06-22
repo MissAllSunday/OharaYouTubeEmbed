@@ -60,23 +60,19 @@ class OharaYTEmbed
         return $this->registry->all();
     }
 
-    /**
-     * @throws ReflectionException
-     */
     public function addSettings(array &$config_vars): void
     {
         $config_vars[] = $this->getText('title');
-        // replace all $this->text calls with $this->getText AI!
-        $config_vars[] = ['check', self::NAME . '_enable',    'subtext' => $this->text('enable_sub')];
-        $config_vars[] = ['check', self::NAME . '_autoEmbed', 'subtext' => $this->text('autoEmbed_sub')];
-        $config_vars[] = ['int',   self::NAME . '_width',     'subtext' => $this->text('width_sub'),  'size' => 3];
-        $config_vars[] = ['int',   self::NAME . '_height',    'subtext' => $this->text('height_sub'), 'size' => 3];
+        $config_vars[] = ['check', self::NAME . '_enable',    'subtext' => $this->getText('enable_sub')];
+        $config_vars[] = ['check', self::NAME . '_autoEmbed', 'subtext' => $this->getText('autoEmbed_sub')];
+        $config_vars[] = ['int',   self::NAME . '_width',     'subtext' => $this->getText('width_sub'),  'size' => 3];
+        $config_vars[] = ['int',   self::NAME . '_height',    'subtext' => $this->getText('height_sub'), 'size' => 3];
 
         foreach ($this->getSites() as $site) {
             $config_vars[] = [
                 'check',
                 self::NAME . '_enable_' . $site->identifier(),
-                'label' => self::tokens($this->text('enable_generic'), ['site' => $site->displayName()]),
+                'label' => self::tokens($this->getText('enable_generic'), ['site' => $site->displayName()]),
             ];
         }
 
@@ -119,7 +115,7 @@ class OharaYTEmbed
 
             $buttons[] = [
                 'code'        => $site->bbcTag(),
-                'description' => self::tokens($this->text('desc_generic'), ['site' => $site->displayName()]),
+                'description' => self::tokens($this->getText('desc_generic'), ['site' => $site->displayName()]),
                 'before'      => '[' . $site->bbcTag() . ']',
                 'after'       => '[/' . $site->bbcTag() . ']',
                 'image'       => $site->buttonImage(),
