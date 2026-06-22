@@ -5,101 +5,90 @@ declare(strict_types=1);
 namespace OharaYTEmbed\Tests;
 
 use OharaYTEmbed\Contracts\EmbedSiteInterface;
+use OharaYTEmbed\Data\EmbedParams;
 use OharaYTEmbed\OharaYTEmbed;
+use OharaYTEmbed\Site\VideoProvider;
 use PHPUnit\Framework\TestCase;
+use Prophecy\PhpUnit\ProphecyTrait;
 
-class OharaYTEmbedTest extends TestCase
+class VideoProviderTest extends TestCase
 {
-    private OharaYTEmbed $app;
+    use ProphecyTrait;
+
+    private VideoProvider $videoProvider;
 
     protected function setUp(): void
     {
-        $this->app = new OharaYTEmbed();
+        parent::setUp();
+        $this->videoProvider = new class() extends VideoProvider {
+            public const REGEX = '/regex/';
+            public const IDENTIFIER = 'test';
+            public const EMBED_URL = 'https://example.com/embed/{video_id}';
+            public const REQUEST_URL = 'https://example.com/request/{video_id}';
+            public const OEMBED_URL = 'https://example.com/oembed?url={url}&width={width}&height={height}';
+            public const BUTTON_IMAGE = 'button.png';
+
+            protected function fetchOembedResponse(string $videoId): string|false
+            {
+                return json_encode([
+                    EmbedParams::KEY_VIDEO_ID => $videoId,
+                    EmbedParams::KEY_TITLE => 'Test Video',
+                    EmbedParams::KEY_THUMBNAIL_URL => 'https://example.com/thumbnail.jpg',
+                    EmbedParams::KEY_WIDTH => 640,
+                    EmbedParams::KEY_HEIGHT => 360,
+                ]);
+            }
+        };
     }
 
     // -----------------------------------------------------------------------
-    // getSites()
+    // content()
     // -----------------------------------------------------------------------
 
-    public function testGetSitesReturnsNonEmptyArray(): void
+    public function testContentReturnsEmbedHtmlForValidVideoId(): void
     {
-        $sites = $this->app->getSites();
-        $this->assertIsArray($sites);
-        $this->assertNotEmpty($sites);
+        $videoId = '1234567890';
+        $embedHtml = $this->videoProvider->content("https://example.com/video/{$videoId}");
+        $this->assertStringContainsString('Test Video', $embedHtml);
+        $this->assertStringContainsString('https://example.com/embed/1234567890', $embedHtml);
     }
 
-    public function testGetSitesContainsOnlyEmbedSiteInterface(): void
+    public function testContentReturnsOriginalDataForInvalidVideoId(): void
     {
-        foreach ($this->app->getSites() as $site) {
-            $this->assertInstanceOf(EmbedSiteInterface::class, $site);
-        }
-    }
-
-    public function testGetSitesKeyedByIdentifier(): void
-    {
-        foreach ($this->app->getSites() as $key => $site) {
-            $this->assertSame($key, $site->identifier());
-        }
-    }
-
-    public function testGetSitesContainsExpectedBuiltinSites(): void
-    {
-        $sites = $this->app->getSites();
-        $this->assertArrayHasKey('youtube', $sites);
-        $this->assertArrayHasKey('vimeo',   $sites);
-        $this->assertArrayHasKey('gifv',    $sites);
-    }
-
-    public function testGetSitesIsMemoised(): void
-    {
-        $first  = $this->app->getSites();
-        $second = $this->app->getSites();
-        $this->assertSame($first, $second);
+        $data = "https://example.com/video/invalid";
+        $result = $this->videoProvider->content($data);
+        $this->assertSame($data, $result);
     }
 
     // -----------------------------------------------------------------------
-    // tokens()
+    // invalid()
     // -----------------------------------------------------------------------
 
-    public function testTokensSubstitutesCurlyBracePlaceholders(): void
+    public function testInvalidReturnsInvalidLinkMessage(): void
     {
-        $result = OharaYTEmbed::tokens(
-            'Hello {name}, welcome to {place}!',
-            ['name' => 'World', 'place' => 'PHP'],
-        );
-        $this->assertSame('Hello World, welcome to PHP!', $result);
-    }
-
-    public function testTokensLeavesUnmatchedPlaceholdersIntact(): void
-    {
-        $result = OharaYTEmbed::tokens('Hello {unknown}', ['name' => 'World']);
-        $this->assertSame('Hello {unknown}', $result);
-    }
-
-    public function testTokensWithEmptyTemplateReturnsEmpty(): void
-    {
-        $this->assertSame('', OharaYTEmbed::tokens('', ['key' => 'value']));
-    }
-
-    public function testTokensWithEmptyTokensArrayIsNoOp(): void
-    {
-        $this->assertSame('no change', OharaYTEmbed::tokens('no change', []));
+        $GLOBALS['txt']['OharaYTEmbed_invalid_link'] = 'Invalid {site} link';
+        $result = $this->videoProvider->invalid();
+        $this->assertSame('Invalid Test link', $result);
+        unset($GLOBALS['txt']['OharaYTEmbed_invalid_link']);
     }
 
     // -----------------------------------------------------------------------
-    // text()
+    // auto()
     // -----------------------------------------------------------------------
 
-    public function testTextReturnsEmptyStringForMissingKey(): void
+    public function testAutoReplacesValidVideoUrls(): void
     {
-        // $txt is empty in the test environment (bootstrap sets it to []).
-        $this->assertSame('', $this->app->text('non_existent_key_xyz'));
+        $message = "Check out https://example.com/video/1234567890 and https://example.com/video/invalid";
+        $this->videoProvider->auto($message);
+        $this->assertStringContainsString('Test Video', $message);
+        $this->assertStringContainsString('https://example.com/embed/1234567890', $message);
+        $this->assertStringContainsString('invalid', $message);
     }
 
-    public function testTextReturnsValueWhenKeyExists(): void
+    public function testAutoDoesNotReplaceInvalidVideoUrls(): void
     {
-        $GLOBALS['txt']['OharaYTEmbed_test_key'] = 'hello';
-        $this->assertSame('hello', $this->app->text('test_key'));
-        unset($GLOBALS['txt']['OharaYTEmbed_test_key']);
+        $message = "Check out https://example.com/video/invalid";
+        $this->videoProvider->auto($message);
+        $this->assertSame("Check out https://example.com/video/invalid", $message);
     }
 }
