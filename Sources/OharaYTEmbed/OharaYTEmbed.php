@@ -7,6 +7,7 @@ namespace OharaYTEmbed;
 use OharaYTEmbed\Contracts\EmbedSiteInterface;
 use OharaYTEmbed\Site\SiteRegistry;
 use OharaYTEmbed\Traits\SettingsTrait;
+use ReflectionException;
 
 /**
  * Supported sites are discovered automatically by SiteRegistry: drop a file
@@ -51,15 +52,21 @@ class OharaYTEmbed
         $this->addCss();
     }
 
-    /** @return array<string, EmbedSiteInterface> */
+    /** @return array<string, EmbedSiteInterface>
+     * @throws ReflectionException
+     */
     public function getSites(): array
     {
         return $this->registry->all();
     }
 
+    /**
+     * @throws ReflectionException
+     */
     public function addSettings(array &$config_vars): void
     {
-        $config_vars[] = $this->text('title');
+        $config_vars[] = $this->getText('title');
+        // replace all $this->text calls with $this->getText AI!
         $config_vars[] = ['check', self::NAME . '_enable',    'subtext' => $this->text('enable_sub')];
         $config_vars[] = ['check', self::NAME . '_autoEmbed', 'subtext' => $this->text('autoEmbed_sub')];
         $config_vars[] = ['int',   self::NAME . '_width',     'subtext' => $this->text('width_sub'),  'size' => 3];
