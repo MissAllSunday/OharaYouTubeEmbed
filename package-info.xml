@@ -19,9 +19,6 @@ file, You can obtain one at http://mozilla.org/MPL/2.0/.
 			Ohara YouTube Embed mod
 		</credits>
 		<code>installCheck.php</code>
-		<!-- Static hook registration replaces the old configInstall.php + integrate_load_theme bootstrap.
-		     All four hooks point to the bootstrap entry-point (Sources/OharaYTEmbed.php) which primes
-		     Composer's autoloader before SMF instantiates OharaYTEmbed\OharaYTEmbed. -->
 		<hook hook="integrate_bbc_codes"
 		      function="OharaYTEmbed\OharaYTEmbed::addCode"
 		      file="$sourcedir/OharaYTEmbed.php"
@@ -42,9 +39,6 @@ file, You can obtain one at http://mozilla.org/MPL/2.0/.
 		<require-dir name="Themes" destination="$boarddir">Theme and Language files</require-dir>
 		<require-dir name="Sources/OharaYTEmbed" destination="$sourcedir">Source library and site plugins</require-dir>
 		<require-dir name="vendor" destination="$boarddir">Composer vendor folder</require-dir>
-		<require-file name="youtube.png" destination="$imagesdir/bbc" />
-		<require-file name="vimeo.png" destination="$imagesdir/bbc" />
-		<require-file name="gifv.png" destination="$imagesdir/bbc" />
 		<redirect url="index.php?action=admin;area=modsettings;sa=general" timeout="1000" />
 	</install>
 
