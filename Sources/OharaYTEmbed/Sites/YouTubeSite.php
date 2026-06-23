@@ -18,7 +18,7 @@ use OharaYTEmbed\Site\VideoProvider;
 final class YouTubeSite extends VideoProvider
 {
     public const IDENTIFIER = 'youtube';
-    public const REGEX = '%(?:https?://)?(?:www\.|m\.)?youtube(?:-nocookie)?\.com/(?:embed/|v/|watch\?(?:[^&]*&)*?v=)([\w-]{11})|(?:https?://)?youtu\.be/([\w-]{11})%i';
+    public const REGEX = '%(?:https?://)?(?:www\.|m\.)?youtube(?:-nocookie)?\.com/(?:embed/|v/|watch\?(?:[^&]*&)*?v=)\K[\w-]{11}|(?:https?://)?youtu\.be/\K[\w-]{11}|^[\w-]{11}$%i';
     public const AUTO_REGEX = '%(?:https?://)?(?:www\.|m\.)?youtube(?:-nocookie)?\.com/(?:embed/|v/|watch\?(?:[^&]*&)*?v=)[\w-]{11}|(?:https?://)?youtu\.be/[\w-]{11}%i';
     public const EMBED_URL = 'https://youtube.com/embed/{video_id}?autoplay=1&autohide=1';
     public const REQUEST_URL = 'https://youtube.com/watch?v={video_id}';

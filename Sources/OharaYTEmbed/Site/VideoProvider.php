@@ -35,12 +35,19 @@ abstract class VideoProvider implements EmbedSiteInterface
     {
         $videoId = $this->extractVideoId($data);
 
+        if ($data === 'mock-123') {
+            var_dump($videoId);
+        }
+
         if ($videoId === '') {
             return $data;
         }
 
         if (static::OEMBED_URL === '') {
-            return $this->create(EmbedParams::from([EmbedParams::KEY_VIDEO_ID => $videoId]));
+            return $this->create(EmbedParams::from([
+                EmbedParams::KEY_IDENTIFIER => static::IDENTIFIER,
+                EmbedParams::KEY_VIDEO_ID => $videoId
+            ]));
         }
 
         $response = $this->fetchOembedResponse($videoId);
@@ -83,12 +90,9 @@ abstract class VideoProvider implements EmbedSiteInterface
     public function extractVideoId(string $data): string
     {
         $cleanData = trim($data);
-        if (strlen($cleanData) === 11 || (is_numeric($cleanData) && strlen($cleanData) >= 6)) {
-            return $cleanData;
-        }
 
         if (static::REGEX !== '' && preg_match(static::REGEX, $cleanData, $m)) {
-            return $m[1];
+            return $m[0];
         }
 
         return '';
@@ -135,7 +139,8 @@ abstract class VideoProvider implements EmbedSiteInterface
     {
         return $this->create(EmbedParams::from([
             EmbedParams::KEY_VIDEO_ID => $videoId,
-            EmbedParams::KEY_TITLE    => ucfirst(static::IDENTIFIER) . ' Video', // Uso de constante
+            EmbedParams::KEY_IDENTIFIER => static::IDENTIFIER,
+            EmbedParams::KEY_TITLE    => $this->getDisplayName()
         ]));
     }
 

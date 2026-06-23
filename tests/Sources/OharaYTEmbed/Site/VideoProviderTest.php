@@ -16,79 +16,77 @@ class VideoProviderTest extends TestCase
     protected function setUp(): void
     {
         parent::setUp();
+
         $this->videoProvider = new class() extends VideoProvider {
-            public const IDENTIFIER = 'youtube';
-            public const REGEX = '%(?:https?://)?(?:www\.|m\.)?youtube(?:-nocookie)?\.com/(?:embed/|v/|watch\?(?:[^&]*&)*?v=)([\w-]{11})|(?:https?://)?youtu\.be/([\w-]{11})%i';
-            public const AUTO_REGEX = '%(?:https?://)?(?:www\.|m\.)?youtube(?:-nocookie)?\.com/(?:embed/|v/|watch\?(?:[^&]*&)*?v=)[\w-]{11}|(?:https?://)?youtu\.be/[\w-]{11}%i';
-            public const EMBED_URL = 'https://youtube.com/embed/{video_id}?autoplay=1&autohide=1';
-            public const REQUEST_URL = 'https://youtube.com/watch?v={video_id}';
-            public const OEMBED_URL = 'https://www.youtube.com/oembed?url={url}&format=json';
-            public const BUTTON_IMAGE = 'button.png';
+            public const IDENTIFIER = 'mocksite';
+            public const REGEX = '%https://mocksite\.com/video/\K\d+|^mock-\d+$%i';
+            public const AUTO_REGEX = '%https://mocksite\.com/video/\d+%i';
+            public const EMBED_URL = 'https://mocksite.com/embed/{video_id}';
+            public const REQUEST_URL = 'https://mocksite.com/video/{video_id}';
+            public const OEMBED_URL = 'https://mocksite.com/oembed?url={url}';
 
             protected function fetchOembedResponse(string $videoId): string|false
             {
+                if ($videoId === 'mock-999' || $videoId === '999') {
+                    return false;
+                }
                 return json_encode([
                     EmbedParams::KEY_VIDEO_ID => $videoId,
-                    EmbedParams::KEY_TITLE => $this->getDisplayName(),
-                    EmbedParams::KEY_THUMBNAIL_URL => 'https://example.com/thumbnail.jpg',
-                    EmbedParams::KEY_WIDTH => 640,
-                    EmbedParams::KEY_HEIGHT => 360,
+                    EmbedParams::KEY_TITLE => 'Mock Title',
+                    EmbedParams::KEY_THUMBNAIL_URL => 'https://mocksite.com/thumb.jpg',
                 ]);
             }
         };
     }
 
-    // -----------------------------------------------------------------------
-    // content()
-    // -----------------------------------------------------------------------
-
-    public function testContentReturnsEmbedHtmlForValidVideoId(): void
+    public function testExtractVideoIdWithRegexPattern(): void
     {
-        $videoId = 'MBdfBTXWtFo';
-        $embedHtml = $this->videoProvider->content("https://www.youtube.com/watch?v={$videoId}");
-
-        $this->assertStringContainsString('id="oh_youtube_MBdfBTXWtFo"', $embedHtml);
+        $this->assertSame('123', $this->videoProvider->extractVideoId('https://mocksite.com/video/123'));
     }
 
-    public function testContentReturnsOriginalDataForInvalidVideoId(): void
+    public function testContentReturnsOriginalDataIfIdExtractionFails(): void
     {
-        $data = "https://example.com/video/invalid";
-        $result = $this->videoProvider->content($data);
-        $this->assertSame($data, $result);
+        $data = 'https://invalid-site.com/abc';
+        $this->assertSame($data, $this->videoProvider->content($data));
     }
 
-    // -----------------------------------------------------------------------
-    // invalid()
-    // -----------------------------------------------------------------------
+    public function testContentPipelineWithSuccessfulOembed(): void
+    {
+        $result = $this->videoProvider->content('mock-123');
 
-    public function testInvalidReturnsInvalidLinkMessage(): void
+        $this->assertStringContainsString('class="oharaEmbed mocksite"', $result);
+        $this->assertStringContainsString('title="Mock Title"', $result);
+        $this->assertStringContainsString('data-ohara_thumbnail_url="https://mocksite.com/thumb.jpg"', $result);
+    }
+
+    public function testContentPipelineHandlesOembedFailureSecurely(): void
+    {
+        // El ID 999 simula una falla de red en nuestro oEmbed Mock
+        $result = $this->videoProvider->content('mock-999');
+
+        $this->assertStringContainsString('class="oharaEmbed mocksite"', $result);
+        $this->assertStringContainsString('title="Mocksite"', $result);
+    }
+
+    public function testInvalidReturnsFormattedLangMessage(): void
     {
         global $txt;
+        $txt[OharaYTEmbed::PATTERN . 'invalid_link'] = 'Enlace de {site} roto';
 
-        $txt[OharaYTEmbed::PATTERN . 'invalid_link'] = 'Invalid {site} link';
-        $result = $this->videoProvider->invalid();
-        $this->assertSame('Invalid Youtube link', $result);
+        $this->assertSame('Enlace de Mocksite roto', $this->videoProvider->invalid());
 
         unset($txt[OharaYTEmbed::PATTERN . 'invalid_link']);
     }
 
-    // -----------------------------------------------------------------------
-    // auto()
-    // -----------------------------------------------------------------------
-
-    public function testAutoReplacesValidVideoUrls(): void
+    public function testAutoMassReplacesMatchesCorrectly(): void
     {
-        $message = "Check out https://www.youtube.com/watch?v=MBdfBTXWtFo and https://example.com/video/invalid";
+        $message = "Mira esto: https://mocksite.com/video/123 y esto no: https://example.com";
+
+        // Para que content() extraiga el ID en el mock, pasamos un ID directo simulado por el provider secundario
         $this->videoProvider->auto($message);
 
-        $this->assertStringContainsString('id="oh_youtube_MBdfBTXWtFo"', $message);
-        $this->assertStringContainsString('invalid', $message);
-    }
-
-    public function testAutoDoesNotReplaceInvalidVideoUrls(): void
-    {
-        $message = "Check out https://example.com/video/invalid";
-        $this->videoProvider->auto($message);
-        $this->assertSame("Check out https://example.com/video/invalid", $message);
+        $this->assertStringContainsString('class="oharaEmbed mocksite"', $message);
+        $this->assertStringNotContainsString('https://mocksite.com/video/123', $message);
+        $this->assertStringContainsString('https://example.com', $message);
     }
 }
