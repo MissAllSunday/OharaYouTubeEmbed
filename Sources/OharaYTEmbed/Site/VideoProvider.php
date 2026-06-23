@@ -35,10 +35,6 @@ abstract class VideoProvider implements EmbedSiteInterface
     {
         $videoId = $this->extractVideoId($data);
 
-        if ($data === 'mock-123') {
-            var_dump($videoId);
-        }
-
         if ($videoId === '') {
             return $data;
         }
