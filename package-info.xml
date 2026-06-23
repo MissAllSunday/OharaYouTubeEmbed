@@ -42,7 +42,7 @@ file, You can obtain one at http://mozilla.org/MPL/2.0/.
 		<redirect url="index.php?action=admin;area=modsettings;sa=general" timeout="1000" />
 	</install>
 
-	<uninstall for="2.1 Beta 2, 2.1 Beta 3, 2.1 - 2.1.99">
+	<uninstall for="2.1 - 2.1.99">
 		<!-- Reverse the four static hooks registered at install time. -->
 		<hook hook="integrate_bbc_codes"
 		      function="OharaYTEmbed\OharaYTEmbed::addCode"
