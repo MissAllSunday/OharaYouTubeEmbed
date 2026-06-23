@@ -2,19 +2,14 @@
 
 declare(strict_types=1);
 
-namespace OharaYTEmbed\Tests;
+namespace OharaYTEmbed\Tests\Sources\OharaYTEmbed\Site;
 
-use OharaYTEmbed\Contracts\EmbedSiteInterface;
 use OharaYTEmbed\Data\EmbedParams;
-use OharaYTEmbed\OharaYTEmbed;
 use OharaYTEmbed\Site\VideoProvider;
 use PHPUnit\Framework\TestCase;
-use Prophecy\PhpUnit\ProphecyTrait;
 
 class VideoProviderTest extends TestCase
 {
-    use ProphecyTrait;
-
     private VideoProvider $videoProvider;
 
     protected function setUp(): void
@@ -33,7 +28,7 @@ class VideoProviderTest extends TestCase
                 return json_encode([
                     EmbedParams::KEY_VIDEO_ID => $videoId,
                     EmbedParams::KEY_TITLE => 'Test Video',
-                    EmbedParams::KEY_THUMBNAIL_URL => 'https://example.com/thumbnail.jpg',
+                    EmbedParams::KEY_IMAGE_URL => 'https://example.com/thumbnail.jpg',
                     EmbedParams::KEY_WIDTH => 640,
                     EmbedParams::KEY_HEIGHT => 360,
                 ]);
