@@ -21,5 +21,8 @@
 	},
 	"config": {
 		"vendor-dir": "oharayt_vendor"
+	},
+	"scripts": {
+		"test": "phpunit --bootstrap tests/bootstrap.php"
 	}
 }
