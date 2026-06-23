@@ -18,7 +18,8 @@ use OharaYTEmbed\Site\VideoProvider;
 final class VimeoSite extends VideoProvider
 {
     public const IDENTIFIER = 'vimeo';
-    public const REGEX = '%^(?:https?://)?(?:www\.|player\.)?vimeo\.com/(?:[a-z]+/)*\K([0-9]{6,11})(?=[&?\s<\[>]|$)%ix';
+    public const REGEX      = '%(?:https?://)?(?:www\.|player\.)?vimeo\.com/(?:[a-z]+/)*([0-9]{6,11})%ix';
+    public const AUTO_REGEX = '%(?:https?://)?(?:www\.|player\.)?vimeo\.com/(?:[a-z]+/)*[0-9]{6,11}%ix';
     public const EMBED_URL = 'https//player.vimeo.com/video/{video_id}?autoplay=1';
     public const REQUEST_URL = 'https://vimeo.com/{video_id}';
     public const OEMBED_URL = 'https://vimeo.com/api/oembed.json?url={url}&width={width}&height={height}';

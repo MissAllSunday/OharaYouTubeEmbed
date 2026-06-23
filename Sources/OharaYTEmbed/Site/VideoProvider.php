@@ -14,6 +14,7 @@ abstract class VideoProvider implements EmbedSiteInterface
     use SettingsTrait;
 
     public const REGEX = '';
+    public const AUTO_REGEX   = '';
     public const IDENTIFIER = '';
     public const EMBED_URL = '';
     public const REQUEST_URL = '';
@@ -22,7 +23,7 @@ abstract class VideoProvider implements EmbedSiteInterface
 
     public function getTemplate(): string
     {
-        return '<div class="oharaEmbed {id}" title="{title}" data-ohara_{id}="{video_id}" data-ohara_image_url="{image_url}" id="oh_{id}_{video_id}" style="width: {width}px; height: {height}px;"></div>';
+        return '<div class="oharaEmbed {id}" title="{title}" data-ohara_{id}="{video_id}" data-ohara_thumbnail_url="{thumbnail_url}" id="oh_{id}_{video_id}" style="width: {width}px; height: {height}px;"></div>';
     }
 
     public function getDisplayName(): string
@@ -64,14 +65,12 @@ abstract class VideoProvider implements EmbedSiteInterface
 
     public function auto(string &$message): void
     {
-        if (static::REGEX === '') {
+        if (static::AUTO_REGEX === '') {
             return;
         }
 
-        if (preg_match_all(static::REGEX, $message, $matches, PREG_SET_ORDER)) {
-            foreach ($matches as $match) {
-                $urlToReplace = $match[0];
-
+        if (preg_match_all(static::AUTO_REGEX, $message, $matches)) {
+            foreach (array_unique($matches[0]) as $urlToReplace) {
                 $embedHtml = $this->content($urlToReplace);
 
                 if ($embedHtml !== $urlToReplace) {
@@ -89,7 +88,7 @@ abstract class VideoProvider implements EmbedSiteInterface
         }
 
         if (static::REGEX !== '' && preg_match(static::REGEX, $cleanData, $m)) {
-            return $m[0];
+            return $m[1];
         }
 
         return '';
@@ -114,18 +113,22 @@ abstract class VideoProvider implements EmbedSiteInterface
 
     protected function processOembedResponse(string $response, string $videoId): ?string
     {
-        /** @var array<string, mixed>|null $json */
-        $json = json_decode($response, true);
+        /** @var array<string, mixed>|null $videoData */
+        $videoData = json_decode($response, true);
 
-        if (!is_array($json) || empty($json)) {
+        if (!is_array($videoData) || empty($videoData)) {
             return null;
         }
 
-        if (empty($json[EmbedParams::KEY_VIDEO_ID])) {
-            $json[EmbedParams::KEY_VIDEO_ID] = $videoId;
+        if (empty($videoData[EmbedParams::KEY_VIDEO_ID])) {
+            $videoData[EmbedParams::KEY_VIDEO_ID] = $videoId;
         }
 
-        return $this->create(EmbedParams::from($json));
+        if (empty($videoData[EmbedParams::KEY_IDENTIFIER])) {
+            $videoData[EmbedParams::KEY_IDENTIFIER] = static::IDENTIFIER;
+        }
+
+        return $this->create(EmbedParams::from($videoData));
     }
 
     protected function handleFailure(string $videoId): string

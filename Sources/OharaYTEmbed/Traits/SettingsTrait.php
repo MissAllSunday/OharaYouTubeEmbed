@@ -12,9 +12,9 @@ trait SettingsTrait
     {
         global $txt;
 
-        loadLanguage(self::NAME);
+        loadLanguage(OharaYTEmbed::NAME);
 
-        return $txt[self::NAME . '_' . $key];
+        return $txt[OharaYTEmbed::NAME . '_' . $key];
     }
 
     public function getSetting(string $settingName, mixed $fallBack = false): mixed

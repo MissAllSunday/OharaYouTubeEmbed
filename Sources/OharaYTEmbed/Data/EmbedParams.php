@@ -6,14 +6,16 @@ namespace OharaYTEmbed\Data;
 
 final class EmbedParams
 {
+    public const KEY_IDENTIFIER = 'id';
     public const KEY_VIDEO_ID  = 'video_id';
     public const KEY_TITLE     = 'title';
-    public const KEY_IMAGE_URL = 'thumbnail_url';
+    public const KEY_THUMBNAIL_URL = 'thumbnail_url';
     public const KEY_WIDTH     = 'width';
     public const KEY_HEIGHT    = 'height';
     public const KEY_EXTRA     = 'extra';
 
     public function __construct(
+        public string $identifier,
         public string $videoId,
         public string $title = '',
         public string $thumbnailUrl = '',
@@ -25,9 +27,10 @@ final class EmbedParams
     public static function from(array $data): self
     {
         return new self(
+            identifier: (string) ($data[self::KEY_IDENTIFIER] ?? ''),
             videoId:      (string) ($data[self::KEY_VIDEO_ID] ?? ''),
             title:         (string) ($data[self::KEY_TITLE] ?? ''),
-            thumbnailUrl:  (string) ($data[self::KEY_IMAGE_URL] ?? ''),
+            thumbnailUrl:  (string) ($data[self::KEY_THUMBNAIL_URL] ?? ''),
             width:         isset($data[self::KEY_WIDTH]) ? (int) $data[self::KEY_WIDTH] : null,
             height:        isset($data[self::KEY_HEIGHT]) ? (int) $data[self::KEY_HEIGHT] : null,
             extra:         (array) ($data[self::KEY_EXTRA] ?? [])
@@ -46,9 +49,10 @@ final class EmbedParams
     public function toArray(): array
     {
         return [
+            self::KEY_IDENTIFIER => $this->identifier,
             self::KEY_VIDEO_ID  => $this->videoId,
             self::KEY_TITLE     => $this->title,
-            self::KEY_IMAGE_URL => $this->thumbnailUrl,
+            self::KEY_THUMBNAIL_URL => $this->thumbnailUrl,
             self::KEY_WIDTH     => $this->width,
             self::KEY_HEIGHT    => $this->height,
             self::KEY_EXTRA     => $this->extra,
