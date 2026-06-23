@@ -38,12 +38,11 @@ file, You can obtain one at http://mozilla.org/MPL/2.0/.
 		<require-file name="Sources/OharaYTEmbed.php" destination="$sourcedir">Autoloader bootstrap entry-point</require-file>
 		<require-dir name="Themes" destination="$boarddir">Theme and Language files</require-dir>
 		<require-dir name="Sources/OharaYTEmbed" destination="$sourcedir">Source library and site plugins</require-dir>
-		<require-dir name="vendor" destination="$boarddir">Composer vendor folder</require-dir>
+		<require-dir name="oharayt_vendor" destination="$boarddir">Composer vendor folder</require-dir>
 		<redirect url="index.php?action=admin;area=modsettings;sa=general" timeout="1000" />
 	</install>
 
 	<uninstall for="2.1 - 2.1.99">
-		<!-- Reverse the four static hooks registered at install time. -->
 		<hook hook="integrate_bbc_codes"
 		      function="OharaYTEmbed\OharaYTEmbed::addCode"
 		      file="$sourcedir/OharaYTEmbed.php"
@@ -62,6 +61,7 @@ file, You can obtain one at http://mozilla.org/MPL/2.0/.
 		      object="true" reverse="true" />
 		<remove-file name="$sourcedir/OharaYTEmbed.php" />
 		<remove-dir name="$sourcedir/OharaYTEmbed" />
+		<remove-dir name="$boarddir/ohara_vendor" />
 		<remove-file name="$languagedir/OharaYTEmbed.english.php" />
 		<remove-file name="$languagedir/OharaYTEmbed.english-utf8.php" />
 		<remove-file name="$languagedir/OharaYTEmbed.spanish_es.php" />
@@ -70,11 +70,7 @@ file, You can obtain one at http://mozilla.org/MPL/2.0/.
 		<remove-file name="$languagedir/OharaYTEmbed.spanish_latin.php" />
 		<remove-file name="$languagedir/OharaYTEmbed.russian.php" />
 		<remove-file name="$languagedir/OharaYTEmbed.russian-utf8.php" />
-		<remove-file name="$imagesdir/bbc/youtube.png" />
-		<remove-file name="$imagesdir/bbc/vimeo.png" />
-		<remove-file name="$imagesdir/bbc/gifv.png" />
 		<remove-file name="$themedir/scripts/ohvideos.js" />
-		<remove-file name="$themedir/scripts/ohvideos.min.js" />
 		<remove-file name="$themedir/css/oharaEmbed.css" />
 	</uninstall>
 </package-info>

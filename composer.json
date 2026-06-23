@@ -18,5 +18,8 @@
 		"psr-4": {
 			"OharaYTEmbed\\Tests\\": "tests/"
 		}
+	},
+	"config": {
+		"vendor-dir": "oharayt_vendor"
 	}
 }

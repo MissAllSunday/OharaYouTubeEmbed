@@ -11,7 +11,7 @@
  * The actual class lives in Sources/OharaYTEmbed/OharaYTEmbed.php.
  */
 
-$_autoloader = dirname(__DIR__) . '/vendor/autoload.php';
+$_autoloader = dirname(__DIR__) . '/oharayt_vendor/autoload.php';
 
 if (file_exists($_autoloader)) {
     require_once $_autoloader;

@@ -46,7 +46,7 @@ Thumbs.db
 .directory
 .idea/
 /test.php
-/vendor/
+/oharayt_vendor/
 /.git/
 /tests/.phpunit.result.cache
 

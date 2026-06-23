@@ -1,7 +1,7 @@
 <?php
 
 // Composer PSR-4 autoloader — must come first so all OharaYTEmbed\* classes resolve.
-require_once dirname(__DIR__) . '/vendor/autoload.php';
+require_once dirname(__DIR__) . '/oharayt_vendor/autoload.php';
 
 define('ROOT', dirname(__DIR__));
 define('SMF', true);
