@@ -27,13 +27,16 @@ class OharaYTEmbed
 
     private SiteRegistry $registry;
 
+    /**
+     * @throws ReflectionException
+     */
     public function __construct(?SiteRegistry $registry = null)
     {
         $this->registry = $registry ?? new SiteRegistry(
             $this->global('sourcedir') . '/' . self::NAME . '/Sites',
         );
 
-        $this->addCss();
+        $this->addAssets();
     }
 
     /**
@@ -151,8 +154,8 @@ class OharaYTEmbed
     {
         global $context;
 
-        loadCSSFile('oharaEmbed.css', ['force_current' => false, 'validate' => true, 'minimize' => true]);
-        loadJavaScriptFile('ohvideos.min.js', ['local' => true, 'force_current' => false, 'defer' => true, 'minimize' => false]);
+        loadCSSFile(OharaYTEmbed::PATTERN . '.css', ['force_current' => false, 'validate' => true, 'minimize' => true]);
+        loadJavaScriptFile(OharaYTEmbed::PATTERN . '.js', ['local' => true, 'force_current' => false, 'defer' => true, 'minimize' => false]);
 
         addInlineJavaScript($this->tokens(
             "\n\tlet _ohWidth = {width};\n\tlet _ohHeight = {height};\n\tlet _ohSites = [];",
@@ -168,22 +171,6 @@ class OharaYTEmbed
             }
 
             $site->registerAssets();
-
-            if ($site->jsFile() !== null && $site->jsFile() !== '') {
-                loadJavaScriptFile($site->jsFile(), ['local' => true, 'default_theme' => true, 'defer' => true, 'minimize' => true]);
-            }
-
-            if ($site->cssFile() !== null && $site->cssFile() !== '') {
-                loadCSSFile($site->cssFile(), ['force_current' => false, 'validate' => true, 'minimize' => true]);
-            }
-
-            if ($site->jsInline() !== null) {
-                addInlineJavaScript($site->jsInline());
-            }
-
-            if ($site->allowedHtmlTag() !== null) {
-                $context['allowed_html_tags'][] = $site->allowedHtmlTag();
-            }
         }
     }
 

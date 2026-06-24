@@ -77,7 +77,7 @@ final class MyNewSite extends VideoProvider
     /**
      * Custom Layout Template Definition.
      * * By default, this method is inherited from the parent VideoProvider, returning a 
-     * template tailored for our shared asynchronous script (ohvideos.js):
+     * template tailored for our shared asynchronous script (OharaYTEmbed.js):
      * '<div class="oharaEmbed {id}" title="{title}" data-ohara_{id}="{video_id}" data-ohara_thumbnail_url="{thumbnail_url}" id="oh_{id}_{video_id}" style="width: {width}px; height: {height}px;"></div>'
      * * Override this method ONLY if your custom platform cannot be controlled asynchronously 
      * via JavaScript and needs a structural raw HTML template instead (such as a native HTML5 <video> wrapper).

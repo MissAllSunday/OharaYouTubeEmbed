@@ -46,7 +46,7 @@ vimeo.com/groups/[Group name]/videos/[ID]
 - Site classes no longer extends the main class, they now implements iOharaYTEmbed.php interface
 - Don't return an empty or false var as it causes issues with SMF's parser
 - Added support for SMF 2.1 Beta 3
-- Added a minified version of ohvideos.js
+- Added a minified version of OharaYTEmbed.js
 - Added responsiveness to videos. This will only work on responsive themes.
 - Fixed an issue when two or more instances of the same video where posted, none of them would be played.
 - Re-wrote the JS code to use prototypes.
