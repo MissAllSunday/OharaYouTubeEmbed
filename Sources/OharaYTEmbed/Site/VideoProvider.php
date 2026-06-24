@@ -26,10 +26,32 @@ abstract class VideoProvider implements EmbedSiteInterface
         return '<div class="oharaEmbed {id}" title="{title}" data-ohara_{id}="{video_id}" data-ohara_thumbnail_url="{thumbnail_url}" id="oh_{id}_{video_id}" style="width: {width}px; height: {height}px;"></div>';
     }
 
+    public function getIdentifier(): string
+    {
+        return static::IDENTIFIER;
+    }
+
     public function getDisplayName(): string
     {
         return ucfirst(static::IDENTIFIER);
     }
+
+    public function getBbcTag(): string
+    {
+        return static::IDENTIFIER;
+    }
+
+    public function getExtraBbcTag(): ?string
+    {
+        return null;
+    }
+
+    public function getButtonImage(): string
+    {
+        return static::BUTTON_IMAGE;
+    }
+
+    public function registerAssets(): void {}
 
     public function content(string $data): string
     {

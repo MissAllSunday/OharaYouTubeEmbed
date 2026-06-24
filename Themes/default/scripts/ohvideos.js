@@ -1,7 +1,3 @@
-/**
- * Ohara YouTube Embed
- */
-
 (function ($) {
 	'use strict';
 

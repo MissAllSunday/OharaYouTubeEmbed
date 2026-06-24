@@ -24,35 +24,20 @@ class OharaYTEmbed
     public const DEFAULT_HEIGHT = 270;
 
     public string $name   = self::NAME;
-    public int    $width  = 480;
-    public int    $height = 270;
-
-    public string $sourceDir;
-    public string $scriptUrl;
-    public string $boardDir;
-    public string $boardUrl;
 
     private SiteRegistry $registry;
 
     public function __construct(?SiteRegistry $registry = null)
     {
-        $this->sourceDir = $this->global('sourcedir');
-        $this->scriptUrl = $this->global('scripturl');
-        $this->boardDir  = $this->global('boarddir');
-        $this->boardUrl  = $this->global('boardurl');
-
-        $this->width  = (int) $this->getSetting('width',  480);
-        $this->height = (int) $this->getSetting('height', 270);
-
         $this->registry = $registry ?? new SiteRegistry(
-            $this,
-            $this->sourceDir . '/' . self::NAME . '/Sites',
+            $this->global('sourcedir') . '/' . self::NAME . '/Sites',
         );
 
         $this->addCss();
     }
 
-    /** @return array<string, EmbedSiteInterface>
+    /**
+     * @return array<string, EmbedSiteInterface>
      * @throws ReflectionException
      */
     public function getSites(): array
@@ -60,6 +45,9 @@ class OharaYTEmbed
         return $this->registry->all();
     }
 
+    /**
+     * @throws ReflectionException
+     */
     public function addSettings(array &$config_vars): void
     {
         $config_vars[] = $this->getText('title');
@@ -71,14 +59,17 @@ class OharaYTEmbed
         foreach ($this->getSites() as $site) {
             $config_vars[] = [
                 'check',
-                self::NAME . '_enable_' . $site->identifier(),
-                'label' => self::tokens($this->getText('enable_generic'), ['site' => $site->displayName()]),
+                self::NAME . '_enable_' . $site->getIdentifier(),
+                'label' => self::tokens($this->getText('enable_generic'), ['site' => $site->getDisplayName()]),
             ];
         }
 
         $config_vars[] = '';
     }
 
+    /**
+     * @throws ReflectionException
+     */
     public function addCode(array &$codes): void
     {
         if (!$this->isEnable('enable')) {
@@ -86,18 +77,23 @@ class OharaYTEmbed
         }
 
         foreach ($this->getSites() as $site) {
-            if (!$this->isEnable('enable_' . $site->identifier())) {
+            if (!$this->isEnable('enable_' . $site->getIdentifier())) {
                 continue;
             }
 
-            $codes[] = $this->buildBbcEntry($site, $site->bbcTag());
+            $codes[] = $this->buildBbcEntry($site, $site->getBbcTag());
 
-            if ($site->extraBbcTag() !== null) {
-                $codes[] = $this->buildBbcEntry($site, $site->extraBbcTag());
+            $extraBbcTag = $site->getExtraBbcTag();
+
+            if ($extraBbcTag !== null) {
+                $codes[] = $this->buildBbcEntry($site, $extraBbcTag);
             }
         }
     }
 
+    /**
+     * @throws ReflectionException
+     */
     public function addButtons(array &$dummy): void
     {
         global $context;
@@ -109,16 +105,16 @@ class OharaYTEmbed
         $buttons = [];
 
         foreach ($this->getSites() as $site) {
-            if (!$this->isEnable('enable_' . $site->identifier())) {
+            if (!$this->isEnable('enable_' . $site->getIdentifier())) {
                 continue;
             }
 
             $buttons[] = [
-                'code'        => $site->bbcTag(),
-                'description' => self::tokens($this->getText('desc_generic'), ['site' => $site->displayName()]),
-                'before'      => '[' . $site->bbcTag() . ']',
-                'after'       => '[/' . $site->bbcTag() . ']',
-                'image'       => $site->buttonImage(),
+                'code'        => $site->getBbcTag(),
+                'description' => self::tokens($this->getText('desc_generic'), ['site' => $site->getDisplayName()]),
+                'before'      => '[' . $site->getBbcTag() . ']',
+                'after'       => '[/' . $site->getBbcTag() . ']',
+                'image'       => $site->getButtonImage(),
             ];
         }
 
@@ -128,38 +124,50 @@ class OharaYTEmbed
         }
     }
 
+    /**
+     * @throws ReflectionException
+     */
     public function addEmbed(string &$message, mixed &$smileys, mixed &$cache_id, mixed &$parse_tags): void
     {
         global $context;
 
-        if (!$this->isEnable('enable') || !$this->isEnable('autoEmbed') || !empty($context['ohara_disable'])) {
+        if (!$this->isEnable('enable') ||
+            !$this->isEnable('autoEmbed') ||
+            !empty($context['ohara_disable'])) {
             return;
         }
 
         foreach ($this->getSites() as $site) {
-            if ($this->isEnable('enable_' . $site->identifier())) {
+            if ($this->isEnable('enable_' . $site->getIdentifier())) {
                 $site->auto($message);
             }
         }
     }
 
-    public function addCss(): void
+    /**
+     * @throws ReflectionException
+     */
+    public function addAssets(): void
     {
         global $context;
 
         loadCSSFile('oharaEmbed.css', ['force_current' => false, 'validate' => true, 'minimize' => true]);
         loadJavaScriptFile('ohvideos.min.js', ['local' => true, 'force_current' => false, 'defer' => true, 'minimize' => false]);
 
-        addInlineJavaScript(sprintf(
-            "\n\tvar _ohWidth = %d;\n\tvar _ohHeight = %d;\n\tvar _ohSites = [];",
-            $this->width,
-            $this->height,
+        addInlineJavaScript($this->tokens(
+            "\n\tlet _ohWidth = {width};\n\tlet _ohHeight = {height};\n\tlet _ohSites = [];",
+           [
+               'width' => $this->getSetting('width', self::DEFAULT_WIDTH),
+               'height' => $this->getSetting('height', self::DEFAULT_HEIGHT)
+           ],
         ));
 
         foreach ($this->getSites() as $site) {
-            if (!$this->isEnable('enable_' . $site->identifier())) {
+            if (!$this->isEnable('enable_' . $site->getIdentifier())) {
                 continue;
             }
+
+            $site->registerAssets();
 
             if ($site->jsFile() !== null && $site->jsFile() !== '') {
                 loadJavaScriptFile($site->jsFile(), ['local' => true, 'default_theme' => true, 'defer' => true, 'minimize' => true]);
