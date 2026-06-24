@@ -12,10 +12,10 @@ This mod will also add a BBC tag: [nobbc][youtube][/youtube], [vimeo][/vimeo] an
 You can enable/disable the mod globally as well as set the default width and height for the videos. Currently, the mod supports the following URL structures out of the box:
 
 [code]
-http://www.youtube.com/watch?v={ID}
-http://www.youtube.com/watch?v={ID}&{Parameters}
-http://youtu.be/{ID}
-http://www.youtube.com/watch?feature=player_embedded&v=[ID]
+www.youtube.com/watch?v={ID}
+www.youtube.com/watch?v={ID}&{Parameters}
+youtu.be/{ID}
+www.youtube.com/watch?feature=player_embedded&v=[ID]
 vimeo.com/[ID]
 vimeo.com/channels/[channel name]/[ID]
 vimeo.com/groups/[Group name]/videos/[ID]
