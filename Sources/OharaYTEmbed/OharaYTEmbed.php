@@ -158,7 +158,7 @@ class OharaYTEmbed
         loadJavaScriptFile(OharaYTEmbed::NAME . '.js', ['local' => true, 'force_current' => false, 'defer' => true, 'minimize' => false]);
 
         addInlineJavaScript($this->tokens(
-            "\n\t\tlet _ohWidth = {width};\n\t\tlet _ohHeight = {height};\n\t\tlet _ohSites = [];",
+            "\n\t\tvar _ohWidth = {width};\n\t\tvar _ohHeight = {height};\n\t\tvar _ohSites = [];",
            [
                'width' => $this->getSetting('width', self::DEFAULT_WIDTH),
                'height' => $this->getSetting('height', self::DEFAULT_HEIGHT)
