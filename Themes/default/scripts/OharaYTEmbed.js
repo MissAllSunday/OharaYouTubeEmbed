@@ -17,7 +17,10 @@
 
 		$(document).on('click', this.masterSelector, (e) => {
 			e.preventDefault();
-			this.playVideo($(e.currentTarget));
+
+			const $mainContainer = $(e.target).closest(this.masterSelector);
+
+			this.playVideo($mainContainer);
 		});
 	};
 
@@ -26,11 +29,13 @@
 	 * @param {jQuery} $container - The jQuery object representing the container.
 	 */
 	OharaEmbedPlayer.prototype.setupPreview = function ($container) {
-		const imageUrl = $container.data('ohara_image_url') || $container.attr('data-ohara_image_url');
+		const rawImageUrl = $container.attr('data-ohara_thumbnail_url');
 
-		if (imageUrl) {
+		if (rawImageUrl) {
+			const imageUrl = decodeURIComponent(rawImageUrl);
+
 			$container.css({
-				'background-image': 'url(' + decodeURIComponent(imageUrl) + ')',
+				'background-image': 'url(' + imageUrl + ')',
 				'background-size': 'cover',
 				'background-position': 'center',
 				'cursor': 'pointer',
@@ -61,13 +66,21 @@
 			return;
 		}
 
-		const rawData = $container.data('ohara_' + siteInfo.identifier) || $container.attr('data-ohara_' + siteInfo.identifier);
+		const rawData = $container.attr('data-ohara_' + siteInfo.identifier);
+
+		if (!rawData) {
+			return;
+		}
+
 		let videoData = {};
 
 		try {
-			videoData = typeof rawData === 'object' ? rawData : $.parseJSON(decodeURIComponent(rawData));
+			const cleanRawData = decodeURIComponent(rawData);
+			videoData = (cleanRawData.indexOf('{') === 0 || cleanRawData.indexOf('[') === 0)
+				? $.parseJSON(cleanRawData)
+				: { video_id: cleanRawData };
 		} catch (e) {
-			videoData = { video_id: rawData };
+			videoData = { video_id: decodeURIComponent(rawData) };
 		}
 
 		const videoId = videoData.video_id || rawData;
@@ -76,9 +89,13 @@
 			return;
 		}
 
-		const embedUrl = siteInfo.embedUrl.replace('{video_id}', videoId);
+		const embedUrl = decodeURIComponent($container.attr('data-ohara_embed_url'));
 
-		const width = $container.width() || videoData.width || 480;
+		if (!embedUrl || embedUrl === 'undefined') {
+			return;
+		}
+
+	const width = $container.width() || videoData.width || 480;
 		const height = $container.height() || videoData.height || 270;
 
 		const $iframe = $('<iframe/>', {
@@ -94,10 +111,6 @@
 		$container.empty().css('background-image', 'none').append($iframe);
 	};
 
-
-	// =========================================================================
-	// 2. Extensión Dinámica Automatizada para SCEditor (BBCode)
-	// =========================================================================
 	$(function () {
 		new OharaEmbedPlayer();
 

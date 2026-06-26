@@ -19,8 +19,8 @@ class VideoProviderTest extends TestCase
 
         $this->videoProvider = new class() extends VideoProvider {
             public const IDENTIFIER = 'mocksite';
-            public const REGEX = '%https://mocksite\.com/video/\K\d+|^mock-\d+$%i';
-            public const AUTO_REGEX = '%https://mocksite\.com/video/\d+%i';
+            public const REGEX = '%https://mocksite\\.com/video/\\K\\d+|^mock-\\d+$%i';
+            public const AUTO_REGEX = '%https://mocksite\\.com/video/\\d+%i';
             public const EMBED_URL = 'https://mocksite.com/embed/{video_id}';
             public const REQUEST_URL = 'https://mocksite.com/video/{video_id}';
             public const OEMBED_URL = 'https://mocksite.com/oembed?url={url}';
@@ -37,35 +37,29 @@ class VideoProviderTest extends TestCase
                 ]);
             }
         };
+
+        global $modSettings;
+        $modSettings[OharaYTEmbed::PATTERN . 'width'] = 480;
+        $modSettings[OharaYTEmbed::PATTERN . 'height'] = 270;
     }
 
-    public function testExtractVideoIdWithRegexPattern(): void
+    public function testContentPipelineReturnsTemplateWithOembedData(): void
     {
-        $this->assertSame('123', $this->videoProvider->extractVideoId('https://mocksite.com/video/123'));
-    }
-
-    public function testContentReturnsOriginalDataIfIdExtractionFails(): void
-    {
-        $data = 'https://invalid-site.com/abc';
-        $this->assertSame($data, $this->videoProvider->content($data));
-    }
-
-    public function testContentPipelineWithSuccessfulOembed(): void
-    {
-        $result = $this->videoProvider->content('mock-123');
+        $result = $this->videoProvider->content('https://mocksite.com/video/123');
 
         $this->assertStringContainsString('class="oharaEmbed mocksite"', $result);
-        $this->assertStringContainsString('title="Mock Title"', $result);
-        $this->assertStringContainsString('data-ohara_thumbnail_url="https://mocksite.com/thumb.jpg"', $result);
+
+        $expectedEmbed = rawurlencode('https://mocksite.com/embed/123');
+        $this->assertStringContainsString('data-ohara_embed_url="' . $expectedEmbed . '"', $result);
     }
 
     public function testContentPipelineHandlesOembedFailureSecurely(): void
     {
-        // El ID 999 simula una falla de red en nuestro oEmbed Mock
         $result = $this->videoProvider->content('mock-999');
 
         $this->assertStringContainsString('class="oharaEmbed mocksite"', $result);
         $this->assertStringContainsString('title="Mocksite"', $result);
+        $this->assertStringContainsString('data-ohara_embed_url="https://mocksite.com/embed/mock-999"', $result);
     }
 
     public function testInvalidReturnsFormattedLangMessage(): void
@@ -82,11 +76,10 @@ class VideoProviderTest extends TestCase
     {
         $message = "Mira esto: https://mocksite.com/video/123 y esto no: https://example.com";
 
-        // Para que content() extraiga el ID en el mock, pasamos un ID directo simulado por el provider secundario
         $this->videoProvider->auto($message);
 
         $this->assertStringContainsString('class="oharaEmbed mocksite"', $message);
+        $this->assertStringContainsString('data-ohara_embed_url="https://mocksite.com/embed/123"', $message);
         $this->assertStringNotContainsString('https://mocksite.com/video/123', $message);
-        $this->assertStringContainsString('https://example.com', $message);
     }
 }

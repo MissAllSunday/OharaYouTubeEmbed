@@ -23,8 +23,6 @@ class OharaYTEmbed
     public const DEFAULT_WIDTH = 480;
     public const DEFAULT_HEIGHT = 270;
 
-    public string $name   = self::NAME;
-
     private SiteRegistry $registry;
 
     /**
@@ -112,6 +110,8 @@ class OharaYTEmbed
                 continue;
             }
 
+            $site->disableVanillaTag();
+
             $buttons[] = [
                 'code'        => $site->getBbcTag(),
                 'description' => self::tokens($this->getText('desc_generic'), ['site' => $site->getDisplayName()]),
@@ -154,11 +154,11 @@ class OharaYTEmbed
     {
         global $context;
 
-        loadCSSFile(OharaYTEmbed::PATTERN . '.css', ['force_current' => false, 'validate' => true, 'minimize' => true]);
-        loadJavaScriptFile(OharaYTEmbed::PATTERN . '.js', ['local' => true, 'force_current' => false, 'defer' => true, 'minimize' => false]);
+        loadCSSFile(OharaYTEmbed::NAME . '.css', ['force_current' => false, 'validate' => true, 'minimize' => true]);
+        loadJavaScriptFile(OharaYTEmbed::NAME . '.js', ['local' => true, 'force_current' => false, 'defer' => true, 'minimize' => false]);
 
         addInlineJavaScript($this->tokens(
-            "\n\tlet _ohWidth = {width};\n\tlet _ohHeight = {height};\n\tlet _ohSites = [];",
+            "\n\t\tlet _ohWidth = {width};\n\t\tlet _ohHeight = {height};\n\t\tlet _ohSites = [];",
            [
                'width' => $this->getSetting('width', self::DEFAULT_WIDTH),
                'height' => $this->getSetting('height', self::DEFAULT_HEIGHT)
@@ -169,6 +169,14 @@ class OharaYTEmbed
             if (!$this->isEnable('enable_' . $site->getIdentifier())) {
                 continue;
             }
+
+            $siteData = [
+                'identifier' => $site->getIdentifier(),
+                'embedUrl'   => $site::EMBED_URL,
+            ];
+
+            $jsonSite = json_encode($siteData, JSON_UNESCAPED_SLASHES);
+            addInlineJavaScript("\n\t\t_ohSites.push(" . $jsonSite . ");");
 
             $site->registerAssets();
         }

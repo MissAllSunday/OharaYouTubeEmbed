@@ -19,11 +19,16 @@ abstract class VideoProvider implements EmbedSiteInterface
     public const EMBED_URL = '';
     public const REQUEST_URL = '';
     public const OEMBED_URL = '';
-    public const BUTTON_IMAGE = '';
 
     public function getTemplate(): string
     {
-        return '<div class="oharaEmbed {id}" title="{title}" data-ohara_{id}="{video_id}" data-ohara_thumbnail_url="{thumbnail_url}" id="oh_{id}_{video_id}" style="width: {width}px; height: {height}px;"></div>';
+        return '<div class="oharaEmbed {id}" ' .
+            'title="{title}" ' .
+            'data-ohara_video_id="{video_id}" ' .
+            'data-ohara_thumbnail_url="{thumbnail_url}" ' .
+            'data-ohara_embed_url="{embed_url}" ' .
+            'id="oh_{id}_{video_id}" ' .
+            'style="width: {width}px; height: {height}px;"></div>';
     }
 
     public function getIdentifier(): string
@@ -48,7 +53,7 @@ abstract class VideoProvider implements EmbedSiteInterface
 
     public function getButtonImage(): string
     {
-        return static::BUTTON_IMAGE;
+        return 'oh_' . static::IDENTIFIER;
     }
 
     public function registerAssets(): void {}
@@ -116,6 +121,29 @@ abstract class VideoProvider implements EmbedSiteInterface
         return '';
     }
 
+    public function disableVanillaTag(): void
+    {
+        global $context;
+
+        if (empty($context['bbc_tags']) || !is_array($context['bbc_tags'])) {
+            return;
+        }
+
+        foreach ($context['bbc_tags'] as $rowIndex => $row) {
+            if (!is_array($row)) {
+                continue;
+            }
+
+            foreach ($row as $buttonIndex => $button) {
+                if (isset($button['code']) && $button['code'] === static::IDENTIFIER) {
+                    unset($context['bbc_tags'][$rowIndex][$buttonIndex]);
+
+                    break 2;
+                }
+            }
+        }
+    }
+
     protected function fetchOembedResponse(string $videoId): string|false
     {
         if (!function_exists('fetch_web_data')) {
@@ -150,6 +178,11 @@ abstract class VideoProvider implements EmbedSiteInterface
             $videoData[EmbedParams::KEY_IDENTIFIER] = static::IDENTIFIER;
         }
 
+        $rawEmbedUrl = str_replace('{video_id}', $videoId, static::EMBED_URL);
+        $videoData[EmbedParams::KEY_EMBED_URL] = rawurlencode($rawEmbedUrl);
+
+        $videoData[EmbedParams::KEY_THUMBNAIL_URL] = rawurlencode($videoData[EmbedParams::KEY_THUMBNAIL_URL]);
+
         return $this->create(EmbedParams::from($videoData));
     }
 
@@ -158,15 +191,16 @@ abstract class VideoProvider implements EmbedSiteInterface
         return $this->create(EmbedParams::from([
             EmbedParams::KEY_VIDEO_ID => $videoId,
             EmbedParams::KEY_IDENTIFIER => static::IDENTIFIER,
-            EmbedParams::KEY_TITLE    => $this->getDisplayName()
+            EmbedParams::KEY_TITLE    => $this->getDisplayName(),
+            EmbedParams::KEY_EMBED_URL => str_replace('{video_id}', $videoId, static::EMBED_URL)
         ]));
     }
 
     protected function create(EmbedParams $params): string
     {
         $params = $params->withDimensions(
-            $params->width ?? (int) $this->getSetting(EmbedParams::KEY_WIDTH, OharaYTEmbed::DEFAULT_WIDTH),
-            $params->height ?? (int) $this->getSetting(EmbedParams::KEY_HEIGHT, OharaYTEmbed::DEFAULT_HEIGHT)
+            (int) $this->getSetting(EmbedParams::KEY_WIDTH, OharaYTEmbed::DEFAULT_WIDTH),
+            (int) $this->getSetting(EmbedParams::KEY_HEIGHT, OharaYTEmbed::DEFAULT_HEIGHT)
         );
 
         return $this->tokens($this->getTemplate(), $params->toArray());

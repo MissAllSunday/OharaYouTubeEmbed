@@ -31,7 +31,6 @@ file, You can obtain one at http://mozilla.org/MPL/2.0/.
 		<require-dir name="oharayt_vendor" destination="$boarddir">Dependencies files</require-dir>
 		<require-dir name="Themes" destination="$boarddir">Theme and Language files</require-dir>
 		<require-dir name="Sources/OharaYTEmbed" destination="$sourcedir">Source library and site plugins</require-dir>
-		<require-dir name="oharayt_vendor" destination="$boarddir">Composer vendor folder</require-dir>
 		<redirect url="index.php?action=admin;area=modsettings;sa=general" timeout="1000" />
 	</install>
 

@@ -23,5 +23,4 @@ final class VimeoSite extends VideoProvider
     public const EMBED_URL = 'https//player.vimeo.com/video/{video_id}?autoplay=1';
     public const REQUEST_URL = 'https://vimeo.com/{video_id}';
     public const OEMBED_URL = 'https://vimeo.com/api/oembed.json?url={url}&width={width}&height={height}';
-    public const BUTTON_IMAGE = 'data:image/gif;base64,R0lGODlhEAARAOMMAP//////zP//AMz//8wAAMwAAID/AIBAQEBAQAAAAAAAAAAAAAAAAAAAAAAAAAAAACH5BAEAAAwALAAAAAAQABEAAwREMDlJq70468076F5YgGRAKIIgEMJAuGzrvnBs33it33iu7/zAgHBILBqPyKRyyWw6n9CodEqtWq/YrHbL7XrB4LBIFAIAOw==';
 }

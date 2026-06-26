@@ -16,8 +16,7 @@ use OharaYTEmbed\Site\VideoProvider;
 final class GifvSite extends VideoProvider
 {
     public const IDENTIFIER   = 'gifv';
-    public const REGEX        = '%(?:https?://)?(?:www\.)?i\.imgur\.com/\K[a-zA-Z0-9]+(?=\.(?:gifv|webm))|^[a-zA-Z0-9]{5,10}$%ix';
-    public const BUTTON_IMAGE = 'data:image/gif;base64,R0lGODlhEAARAOMMAP//////zP//AMz//8wAAMwAAID/AIBAQEBAQAAAAAAAAAAAAAAAAAAAAAAAAAAAACH5BAEAAAwALAAAAAAQABEAAwRFMDlJq70468076F5YgGRAKIIgEMJAuGzrvnBs33it33iu7/zAgHBILBqPyKRyyWw6n9CodEqtWq/YrHbL7XrB4LBIFAIAOw==';
+    public const REGEX        = '%(?:https?://)?(?:www\.)?i\.imgur\.com/\K[a-zA-Z0-9]+(?=\.(?:gifv|webm))|^[a-zA-Z0-9]{5,10}$%ix';public const BUTTON_IMAGE = 'data:image/gif;base64,R0lGODlhEAARAOMMAP//////zP//AMz//8wAAMwAAID/AIBAQEBAQAAAAAAAAAAAAAAAAAAAAAAAAAAAACH5BAEAAAwALAAAAAAQABEAAwRFMDlJq70468076F5YgGRAKIIgEMJAuGzrvnBs33it33iu7/zAgHBILBqPyKRyyWw6n9CodEqtWq/YrHbL7XrB4LBIFAIAOw==';
 
     public function getTemplate(): string
     {

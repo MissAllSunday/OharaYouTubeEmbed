@@ -40,6 +40,12 @@ i.imgur.com/[ID].webm
 [li]Spanish_es[/li]
 [/list]
 
+This mod uses the following icons:
+
+- Imgur icon by [url="https://icons8.com"]Icons8[/url]
+- YouTube icon by [url="https://freepik.com"]Freepik[/url]
+- Vimeo icon by [url="https://www.flaticon.com/authors/fathema-khanom"]Fathema Khanom[/url]
+
 
 [b]###### Changelog:[/b]
 
