@@ -53,7 +53,7 @@ final class SiteRegistry
             $site = $this->loadFile($file);
 
             if ($site !== null) {
-                $this->sites[$site::IDENTIFIER] = $site;
+                $this->sites[$site->getIdentifier()] = $site;
             }
         }
 

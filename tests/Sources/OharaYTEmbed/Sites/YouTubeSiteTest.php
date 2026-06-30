@@ -35,7 +35,8 @@ class YouTubeSiteTest extends TestCase
 
         $this->assertStringNotContainsString($url, $message);
         $this->assertStringContainsString('class="oharaEmbed youtube"', $message);
-        $this->assertStringContainsString('data-ohara_youtube="' . $expectedId . '"', $message);
+       
+        $this->assertStringContainsString('data-ohara_video_id="' . $expectedId . '"', $message);
     }
 
     public function testReturnsEmptyStringForInvalidUrls(): void
@@ -47,12 +48,12 @@ class YouTubeSiteTest extends TestCase
     public static function validUrlProvider(): array
     {
         return [
-            'Standard Watch URL' => ['https://www.youtube.com/watch?v=MBdfBTXWtFo', 'MBdfBTXWtFo'],
+            'Standard Watch URL'   => ['https://www.youtube.com/watch?v=MBdfBTXWtFo', 'MBdfBTXWtFo'],
             'Short URL (youtu.be)' => ['https://youtu.be/MBdfBTXWtFo', 'MBdfBTXWtFo'],
-            'Mobile URL'         => ['https://m.youtube.com/watch?v=MBdfBTXWtFo', 'MBdfBTXWtFo'],
-            'Embed URL'          => ['https://www.youtube.com/embed/MBdfBTXWtFo', 'MBdfBTXWtFo'],
-            'No-Cookie URL'      => ['https://www.youtube-nocookie.com/embed/MBdfBTXWtFo', 'MBdfBTXWtFo'],
-            'URL with params'    => ['https://www.youtube.com/watch?v=MBdfBTXWtFo&feature=shared', 'MBdfBTXWtFo'],
+            'Mobile URL'           => ['https://m.youtube.com/watch?v=MBdfBTXWtFo', 'MBdfBTXWtFo'],
+            'Embed URL'            => ['https://www.youtube.com/embed/MBdfBTXWtFo', 'MBdfBTXWtFo'],
+            'No-Cookie URL'        => ['https://www.youtube-nocookie.com/embed/MBdfBTXWtFo', 'MBdfBTXWtFo'],
+            'URL with params'      => ['https://www.youtube.com/watch?v=MBdfBTXWtFo&feature=shared', 'MBdfBTXWtFo'],
         ];
     }
 }

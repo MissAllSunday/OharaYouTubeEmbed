@@ -17,10 +17,13 @@ use OharaYTEmbed\Site\VideoProvider;
  */
 final class VimeoSite extends VideoProvider
 {
-    public const IDENTIFIER = 'vimeo';
-    public const REGEX      = '%(?:https?://)?(?:www\.|player\.)?vimeo\.com/(?:channels/[^/]+/|ondemand/[^/]+/|video/|(?:\w+/)*)?\K[0-9]{6,11}|^[0-9]{6,11}$%ix';
-    public const AUTO_REGEX = '%(?:https?://)?(?:www\.|player\.)?vimeo\.com/(?:channels/[^/]+/|ondemand/[^/]+/|video/|(?:\w+/)*)?[0-9]{6,11}%ix';
-    public const EMBED_URL = 'https//player.vimeo.com/video/{video_id}?autoplay=1';
-    public const REQUEST_URL = 'https://vimeo.com/{video_id}';
-    public const OEMBED_URL = 'https://vimeo.com/api/oembed.json?url={url}&width={width}&height={height}';
+    public function getIdentifier(): string { return 'vimeo'; }
+    public function getRegex(): string { return '%(?:https?://)?(?:www\.|player\.)?vimeo\.com/(?:channels/[^/]+/|ondemand/[^/]+/|video/|(?:\w+/)*)?\K[0-9]{6,11}(?=\b|(?:\?.*)?$)|^[0-9]{6,11}$%ix'; }
+    public function getAutoRegex(): string
+    {
+        return '%(?:^|[^\[])\K(?:https?://)?(?:www\.|player\.)?vimeo\.com/(?:channels/[^/]+/|ondemand/[^/]+/|video/|(?:\w+/)*)?[0-9]{6,11}(?:(?:\?|\b)[^\[\]\s<>]*)*%ix';
+    }
+    public function getEmbedUrl(): string { return 'https://player.vimeo.com/video/{video_id}?autoplay=1'; }
+    public function getRequestUrl(): string { return 'https://vimeo.com/{video_id}'; }
+    public function getOembedUrl(): string { return 'https://vimeo.com/api/oembed.json?url={url}&width={width}&height={height}'; }
 }

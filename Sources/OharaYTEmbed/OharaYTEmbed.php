@@ -82,8 +82,9 @@ class OharaYTEmbed
                 continue;
             }
 
-            $codes[] = $this->buildBbcEntry($site, $site->getBbcTag());
+            $site->disableVanillaCode($codes);
 
+            $codes[] = $this->buildBbcEntry($site, $site->getBbcTag());
             $extraBbcTag = $site->getExtraBbcTag();
 
             if ($extraBbcTag !== null) {
@@ -157,35 +158,16 @@ class OharaYTEmbed
         loadCSSFile(OharaYTEmbed::NAME . '.css', ['force_current' => false, 'validate' => true, 'minimize' => true]);
         loadJavaScriptFile(OharaYTEmbed::NAME . '.js', ['local' => true, 'force_current' => false, 'defer' => true, 'minimize' => false]);
 
-        addInlineJavaScript($this->tokens(
-            "\n\t\tvar _ohWidth = {width};\n\t\tvar _ohHeight = {height};\n\t\tvar _ohSites = [];",
-           [
-               'width' => $this->getSetting('width', self::DEFAULT_WIDTH),
-               'height' => $this->getSetting('height', self::DEFAULT_HEIGHT)
-           ],
-        ));
-
-        foreach ($this->getSites() as $site) {
-            if (!$this->isEnable('enable_' . $site->getIdentifier())) {
-                continue;
-            }
-
-            $siteData = [
-                'identifier' => $site->getIdentifier(),
-                'embedUrl'   => $site::EMBED_URL,
-            ];
-
-            $jsonSite = json_encode($siteData, JSON_UNESCAPED_SLASHES);
-            addInlineJavaScript("\n\t\t_ohSites.push(" . $jsonSite . ");");
-
-            $site->registerAssets();
-        }
+        addJavaScriptVar('_ohWidth', (int) $this->getSetting('width', self::DEFAULT_WIDTH));
+        addJavaScriptVar('_ohHeight', (int) $this->getSetting('height', self::DEFAULT_HEIGHT));
     }
 
-    // -----------------------------------------------------------------------
-    // Private helpers
-    // -----------------------------------------------------------------------
 
+    /**
+     * Build one SMF BBC code array entry for $site using $tag as the tag name.
+     *
+     * @return array<string, mixed>
+     */
     /**
      * Build one SMF BBC code array entry for $site using $tag as the tag name.
      *
@@ -197,13 +179,12 @@ class OharaYTEmbed
             'tag'              => $tag,
             'type'             => 'unparsed_content',
             'content'          => '$1',
-            'validate'         => static function (mixed &$bbcTag, mixed &$data, array $disabled) use ($site, $tag): void {
+            'validate'         => static function (&$bbcTag, &$data, $disabled) use ($site, $tag): void {
                 if (!empty($disabled[$tag])) {
                     return;
                 }
-                $data = ($data === '' || $data === false || $data === null)
-                    ? $site->invalid()
-                    : $site->content(trim(strtr((string) $data, ['<br />' => ''])));
+
+                $data = $site->content((trim(strtr($data, ['<br />' => '']))));
             },
             'disabled_content' => '$1',
             'block_level'      => true,

@@ -10,13 +10,38 @@ use OharaYTEmbed\Site\VideoProvider;
  * Imgur gifv / webm embed site.
  *
  * Handles BBC tag [gifv]…[/gifv].
- * Accepts either a bare imgur ID (e.g. "joGlU0z") or a full imgur URL
- * (e.g. "http://i.imgur.com/joGlU0z.gifv").
  */
 final class GifvSite extends VideoProvider
 {
-    public const IDENTIFIER   = 'gifv';
-    public const REGEX        = '%(?:https?://)?(?:www\.)?i\.imgur\.com/\K[a-zA-Z0-9]+(?=\.(?:gifv|webm))|^[a-zA-Z0-9]{5,10}$%ix';public const BUTTON_IMAGE = 'data:image/gif;base64,R0lGODlhEAARAOMMAP//////zP//AMz//8wAAMwAAID/AIBAQEBAQAAAAAAAAAAAAAAAAAAAAAAAAAAAACH5BAEAAAwALAAAAAAQABEAAwRFMDlJq70468076F5YgGRAKIIgEMJAuGzrvnBs33it33iu7/zAgHBILBqPyKRyyWw6n9CodEqtWq/YrHbL7XrB4LBIFAIAOw==';
+    public function getIdentifier(): string
+    {
+        return 'gifv';
+    }
+
+    public function getRegex(): string
+    {
+        return '%(?:https?://)?(?:www\.)?i\.imgur\.com/\K[a-zA-Z0-9]+(?=\.(?:gifv|webm))|^[a-zA-Z0-9]{5,10}$%ix';
+    }
+
+    public function getAutoRegex(): string
+    {
+        return '%(?:^|[^\[])\K(?:https?://)?(?:www\.)?i\.imgur\.com/[a-zA-Z0-9]+(?=\.(?:gifv|webm))%ix';
+    }
+
+    public function getEmbedUrl(): string
+    {
+        return '';
+    }
+
+    public function getRequestUrl(): string
+    {
+        return '';
+    }
+
+    public function getOembedUrl(): string
+    {
+        return '';
+    }
 
     public function getTemplate(): string
     {

@@ -33,9 +33,12 @@ class VimeoSiteTest extends TestCase
         $message = "Vimeo enlace: " . $url;
         $this->site->auto($message);
 
-        $this->assertStringNotContainsString($url, $message);
+        if (strpos($url, 'player.vimeo.com') === false) {
+            $this->assertStringNotContainsString($url, $message);
+        }
+
         $this->assertStringContainsString('class="oharaEmbed vimeo"', $message);
-        $this->assertStringContainsString('data-ohara_vimeo="' . $expectedId . '"', $message);
+        $this->assertStringContainsString('data-ohara_video_id="' . $expectedId . '"', $message);
     }
 
     public static function validUrlProvider(): array

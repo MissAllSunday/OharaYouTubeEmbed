@@ -13,12 +13,12 @@ abstract class VideoProvider implements EmbedSiteInterface
 {
     use SettingsTrait;
 
-    public const REGEX = '';
-    public const AUTO_REGEX   = '';
-    public const IDENTIFIER = '';
-    public const EMBED_URL = '';
-    public const REQUEST_URL = '';
-    public const OEMBED_URL = '';
+    abstract public function getIdentifier(): string;
+    abstract public function getRegex(): string;
+    abstract public function getAutoRegex(): string;
+    abstract public function getEmbedUrl(): string;
+    abstract public function getRequestUrl(): string;
+    abstract public function getOembedUrl(): string;
 
     public function getTemplate(): string
     {
@@ -31,19 +31,14 @@ abstract class VideoProvider implements EmbedSiteInterface
             'style="width: {width}px; height: {height}px;"></div>';
     }
 
-    public function getIdentifier(): string
-    {
-        return static::IDENTIFIER;
-    }
-
     public function getDisplayName(): string
     {
-        return ucfirst(static::IDENTIFIER);
+        return ucfirst($this->getIdentifier());
     }
 
     public function getBbcTag(): string
     {
-        return static::IDENTIFIER;
+        return $this->getIdentifier();
     }
 
     public function getExtraBbcTag(): ?string
@@ -53,7 +48,7 @@ abstract class VideoProvider implements EmbedSiteInterface
 
     public function getButtonImage(): string
     {
-        return 'oh_' . static::IDENTIFIER;
+        return 'oh_' . $this->getIdentifier();
     }
 
     public function registerAssets(): void {}
@@ -66,9 +61,9 @@ abstract class VideoProvider implements EmbedSiteInterface
             return $data;
         }
 
-        if (static::OEMBED_URL === '') {
+        if ($this->getOembedUrl() === '') {
             return $this->create(EmbedParams::from([
-                EmbedParams::KEY_IDENTIFIER => static::IDENTIFIER,
+                EmbedParams::KEY_IDENTIFIER => $this->getIdentifier(),
                 EmbedParams::KEY_VIDEO_ID => $videoId
             ]));
         }
@@ -95,11 +90,11 @@ abstract class VideoProvider implements EmbedSiteInterface
 
     public function auto(string &$message): void
     {
-        if (static::AUTO_REGEX === '') {
+        if ($this->getAutoRegex() === '') {
             return;
         }
 
-        if (preg_match_all(static::AUTO_REGEX, $message, $matches)) {
+        if (preg_match_all($this->getAutoRegex(), $message, $matches)) {
             foreach (array_unique($matches[0]) as $urlToReplace) {
                 $embedHtml = $this->content($urlToReplace);
 
@@ -114,11 +109,37 @@ abstract class VideoProvider implements EmbedSiteInterface
     {
         $cleanData = trim($data);
 
-        if (static::REGEX !== '' && preg_match(static::REGEX, $cleanData, $m)) {
+        if ($this->getRegex() !== '' && preg_match($this->getRegex(), $cleanData, $m)) {
             return $m[0];
         }
 
         return '';
+    }
+
+    /**
+     * Purge this provider's vanilla SMF tags from the global BBC codes array by reference.
+     *
+     * @param array $codes The global SMF BBC codes array passed by reference.
+     */
+    public function disableVanillaCode(array &$codes): void
+    {
+        if (empty($codes)) {
+            return;
+        }
+
+
+        $tagsToPurge = [$this->getBbcTag()];
+        if ($this->getExtraBbcTag() !== null) {
+            $tagsToPurge[] = $this->getExtraBbcTag();
+        }
+
+
+        $codes = array_filter($codes, static function (array $code) use ($tagsToPurge): bool {
+            return !in_array($code['tag'], $tagsToPurge, true);
+        });
+
+
+        $codes = array_values($codes);
     }
 
     public function disableVanillaTag(): void
@@ -135,9 +156,8 @@ abstract class VideoProvider implements EmbedSiteInterface
             }
 
             foreach ($row as $buttonIndex => $button) {
-                if (isset($button['code']) && $button['code'] === static::IDENTIFIER) {
+                if (isset($button['code']) && $button['code'] === $this->getIdentifier()) {
                     unset($context['bbc_tags'][$rowIndex][$buttonIndex]);
-
                     break 2;
                 }
             }
@@ -150,9 +170,9 @@ abstract class VideoProvider implements EmbedSiteInterface
             require_once $this->global('sourcedir') . '/Subs-Package.php';
         }
 
-        $videoUrl = $this->tokens(static::REQUEST_URL, [EmbedParams::KEY_VIDEO_ID => $videoId]);
+        $videoUrl = $this->tokens($this->getRequestUrl(), [EmbedParams::KEY_VIDEO_ID => $videoId]);
 
-        $oembedUrl = $this->tokens(static::OEMBED_URL, [
+        $oembedUrl = $this->tokens($this->getOembedUrl(), [
             'url'    => rawurlencode($videoUrl),
             'width'  => $this->getSetting('width', OharaYTEmbed::DEFAULT_WIDTH),
             'height' => $this->getSetting('height', OharaYTEmbed::DEFAULT_HEIGHT),
@@ -175,13 +195,14 @@ abstract class VideoProvider implements EmbedSiteInterface
         }
 
         if (empty($videoData[EmbedParams::KEY_IDENTIFIER])) {
-            $videoData[EmbedParams::KEY_IDENTIFIER] = static::IDENTIFIER;
+            $videoData[EmbedParams::KEY_IDENTIFIER] = $this->getIdentifier();
         }
 
-        $rawEmbedUrl = str_replace('{video_id}', $videoId, static::EMBED_URL);
+        $rawEmbedUrl = str_replace('{video_id}', $videoId, $this->getEmbedUrl());
         $videoData[EmbedParams::KEY_EMBED_URL] = rawurlencode($rawEmbedUrl);
 
-        $videoData[EmbedParams::KEY_THUMBNAIL_URL] = rawurlencode($videoData[EmbedParams::KEY_THUMBNAIL_URL]);
+        $rawThumbnail = $videoData[EmbedParams::KEY_THUMBNAIL_URL] ?? '';
+        $videoData[EmbedParams::KEY_THUMBNAIL_URL] = rawurlencode((string) $rawThumbnail);
 
         return $this->create(EmbedParams::from($videoData));
     }
@@ -190,9 +211,11 @@ abstract class VideoProvider implements EmbedSiteInterface
     {
         return $this->create(EmbedParams::from([
             EmbedParams::KEY_VIDEO_ID => $videoId,
-            EmbedParams::KEY_IDENTIFIER => static::IDENTIFIER,
+            EmbedParams::KEY_IDENTIFIER => $this->getIdentifier(),
             EmbedParams::KEY_TITLE    => $this->getDisplayName(),
-            EmbedParams::KEY_EMBED_URL => str_replace('{video_id}', $videoId, static::EMBED_URL)
+            EmbedParams::KEY_EMBED_URL => str_replace('{video_id}', $videoId, $this->getEmbedUrl()),
+            EmbedParams::KEY_WIDTH      => $this->getSetting('width', OharaYTEmbed::DEFAULT_WIDTH),
+            EmbedParams::KEY_HEIGHT     => $this->getSetting('height', OharaYTEmbed::DEFAULT_HEIGHT),
         ]));
     }
 

@@ -17,10 +17,17 @@ use OharaYTEmbed\Site\VideoProvider;
  */
 final class YouTubeSite extends VideoProvider
 {
-    public const IDENTIFIER = 'youtube';
-    public const REGEX = '%(?:https?://)?(?:www\.|m\.)?youtube(?:-nocookie)?\.com/(?:embed/|v/|watch\?(?:[^&]*&)*?v=)\K[\w-]{11}|(?:https?://)?youtu\.be/\K[\w-]{11}|^[\w-]{11}$%i';
-    public const AUTO_REGEX = '%(?:https?://)?(?:www\.|m\.)?youtube(?:-nocookie)?\.com/(?:embed/|v/|watch\?(?:[^&]*&)*?v=)([\w-]{11})(?:&[^\s<>]*)*|(?:https?://)?youtu\.be/([\w-]{11})(?:\?[^\s<>]*)*%i';
-    public const EMBED_URL = 'https://youtube.com/embed/{video_id}?autoplay=1&autohide=1';
-    public const REQUEST_URL = 'https://youtube.com/watch?v={video_id}';
-    public const OEMBED_URL = 'https://www.youtube.com/oembed?url={url}&format=json';
+    public function getIdentifier(): string { return 'youtube'; }
+    public function getRegex(): string { return '%(?:https?://)?(?:www\.|m\.)?youtube(?:-nocookie)?\.com/(?:embed/|v/|watch\?(?:[^&]*&)*?v=)\K[\w-]{11}|(?:https?://)?youtu\.be/\K[\w-]{11}|^[\w-]{11}$%i'; }
+
+    public function getAutoRegex(): string
+    {
+        return '%(?:^|[^\[])\K(?:https?://)?(?:www\.|m\.)?youtube(?:-nocookie)?\.com/(?:embed/|v/|watch\?(?:[^&]*&)*?v=)([\w-]{11})(?:&[^\[\]\s<>]*)*|(?:^|[^\[])\K(?:https?://)?youtu\.be/([\w-]{11})(?:\?[^\[\]\s<>]*)*%i';
+    }
+
+    public function getEmbedUrl(): string { return 'https://youtube.com/embed/{video_id}?autoplay=1&autohide=1'; }
+
+    public function getRequestUrl(): string { return 'https://youtube.com/watch?v={video_id}'; }
+
+    public function getOembedUrl(): string { return 'https://www.youtube.com/oembed?url={url}&format=json'; }
 }
