@@ -107,7 +107,7 @@ interface EmbedSiteInterface
      * @param string $data The raw content inside the BBC tag (full URL or raw ID).
      * @return string The compiled safe HTML embedding block, or original text on failure.
      */
-    public function content(string $data): string;
+    public function content(string $videoID): string;
 
     /**
      * Scan $message for URLs matching AUTO_REGEX and replace them with embed HTML in-place.

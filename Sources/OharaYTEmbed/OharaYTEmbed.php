@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace OharaYTEmbed;
 
 use OharaYTEmbed\Contracts\EmbedSiteInterface;
+use OharaYTEmbed\Services\BbcPurgeService;
 use OharaYTEmbed\Site\SiteRegistry;
 use OharaYTEmbed\Traits\SettingsTrait;
 use ReflectionException;
@@ -24,6 +25,7 @@ class OharaYTEmbed
     public const DEFAULT_HEIGHT = 270;
 
     private SiteRegistry $registry;
+    private BbcPurgeService $purge;
 
     /**
      * @throws ReflectionException
@@ -33,6 +35,7 @@ class OharaYTEmbed
         $this->registry = $registry ?? new SiteRegistry(
             $this->global('sourcedir') . '/' . self::NAME . '/Sites',
         );
+        $this->purge = new BbcPurgeService();
 
         $this->addAssets();
     }
@@ -77,12 +80,14 @@ class OharaYTEmbed
             return;
         }
 
-        foreach ($this->getSites() as $site) {
+        $allSites = $this->getSites();
+
+        $this->purge->disableVanillaCodes($codes, $allSites);
+
+        foreach ($allSites as $site) {
             if (!$this->isEnable('enable_' . $site->getIdentifier())) {
                 continue;
             }
-
-            $site->disableVanillaCode($codes);
 
             $codes[] = $this->buildBbcEntry($site, $site->getBbcTag());
             $extraBbcTag = $site->getExtraBbcTag();
@@ -96,22 +101,19 @@ class OharaYTEmbed
     /**
      * @throws ReflectionException
      */
-    public function addButtons(array &$dummy): void
+    public function addButtons(array &$buttons): void
     {
-        global $context;
-
         if (!$this->isEnable('enable')) {
             return;
         }
+        $allSites = $this->getSites();
 
-        $buttons = [];
+        $this->purge->disableVanillaTags($buttons, $allSites);
 
         foreach ($this->getSites() as $site) {
             if (!$this->isEnable('enable_' . $site->getIdentifier())) {
                 continue;
             }
-
-            $site->disableVanillaTag();
 
             $buttons[] = [
                 'code'        => $site->getBbcTag(),
@@ -120,11 +122,6 @@ class OharaYTEmbed
                 'after'       => '[/' . $site->getBbcTag() . ']',
                 'image'       => $site->getButtonImage(),
             ];
-        }
-
-        if ($buttons !== []) {
-            $last = count($context['bbc_tags']) - 1;
-            $context['bbc_tags'][$last] = array_merge($context['bbc_tags'][$last], $buttons);
         }
     }
 
