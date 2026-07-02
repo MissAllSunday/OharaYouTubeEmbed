@@ -18,15 +18,31 @@ function loadCSSFile(string $filename, array $params = [], string $id = ''): voi
 function loadJavaScriptFile(string $filename, array $params = [], string $id = ''): void {}
 function addInlineJavaScript(string $js, bool $defer = false): void {}
 
-/**
- * Stub for SMF's fetch_web_data().
- * VimeoSite calls this for oEmbed lookups; returning false causes content()
- * to fall through to invalid() — acceptable for unit tests that do not make
- * live HTTP requests.
- */
 function fetch_web_data(string $url, mixed $post_data = '', bool $keep_alive = false): string|false
 {
-    return false;
+    $providerKey = 'default';
+    foreach (['youtube', 'vimeo', 'oembed.example'] as $key) {
+        if (str_contains(strtolower($url), $key)) {
+            $providerKey = $key;
+            break;
+        }
+    }
+
+    return match ($providerKey) {
+        'oembed.example' => json_encode([
+            'title'         => 'Mock Video Title',
+            'thumbnail_url' => 'https://example.com/thumb.jpg',
+        ]),
+        'youtube' => json_encode([
+            'title'         => 'Youtube Video Title',
+            'thumbnail_url' => 'https://img.youtube.com/vi/MBdfBTXWtFo/hqdefault.jpg',
+        ]),
+        'vimeo' => json_encode([
+            'title'         => 'Vimeo Video Title',
+            'thumbnail_url' => 'https://vsp.vimeocdn.com/images/default.jpg',
+        ]),
+        default => false,
+    };
 }
 
 // ---------------------------------------------------------------------------

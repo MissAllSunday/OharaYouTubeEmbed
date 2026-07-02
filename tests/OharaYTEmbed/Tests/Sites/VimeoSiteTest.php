@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace OharaYTEmbed\Tests\Sources\OharaYTEmbed\Sites;
+namespace OharaYTEmbed\Tests\Sites;
 
 use OharaYTEmbed\Sites\VimeoSite;
 use PHPUnit\Framework\TestCase;
