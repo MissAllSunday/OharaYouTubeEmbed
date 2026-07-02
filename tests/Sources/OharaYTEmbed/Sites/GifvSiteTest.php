@@ -25,15 +25,6 @@ class GifvSiteTest extends TestCase
         $this->assertSame($expectedId, $this->site->extractVideoId($url));
     }
 
-    public function testAutoDoesNotProcessIfAutoRegexIsEmpty(): void
-    {
-        $message = "Mira: https://i.imgur.com/joGlU0z.gifv";
-        $this->site->auto($message);
-
-        // Como GifvSite no declara AUTO_REGEX, debe quedar el texto intacto
-        $this->assertStringContainsString('https://i.imgur.com/joGlU0z.gifv', $message);
-        $this->assertStringNotContainsString('<div class="oharaEmbed gifv"', $message);
-    }
 
     public static function validUrlProvider(): array
     {

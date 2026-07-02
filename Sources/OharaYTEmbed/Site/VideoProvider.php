@@ -36,7 +36,7 @@ abstract class VideoProvider implements EmbedSiteInterface
     public function getTemplate(): string
     {
         return '<div class="oharaEmbed {id}" ' .
-            'title=\"{title}\" ' .
+            'title="{title}" ' .
             'data-ohara_video_id="{video_id}" ' .
             'data-ohara_thumbnail_url="{thumbnail_url}" ' .
             'data-ohara_embed_url="{embed_url}" ' .
@@ -69,17 +69,24 @@ abstract class VideoProvider implements EmbedSiteInterface
         return '';
     }
 
-    public function content(string $videoId): string
+    public function registerAssets(): void {}
+
+    public function content(string $videoIdOrUrl): string
     {
+        $videoId = $this->extractVideoId($videoIdOrUrl);
+        if ($videoId === '') {
+            $videoId = $videoIdOrUrl;
+        }
 
         if ($this->getOembedUrl() === '') {
             return $this->renderer->renderFailure($this, $videoId);
         }
 
-        $url = str_replace('{video_id}', $videoId, $this->getOembedUrl());
+        $requestUrl = str_replace('{video_id}', $videoId, $this->getRequestUrl());
+        $url = str_replace('{url}', urlencode($requestUrl), $this->getOembedUrl());
         $response = fetch_web_data($url);
 
-        $params = (new OembedService())->processResponse((string) $response, $videoId);
+        $params = $this->oembedService->processResponse((string) $response, $videoId);
 
         if ($params === null) {
             return $this->renderer->renderFailure($this, $videoId);
@@ -97,5 +104,48 @@ abstract class VideoProvider implements EmbedSiteInterface
         $videoData[EmbedParams::KEY_THUMBNAIL_URL] = rawurlencode((string) $rawThumbnail);
 
         return $this->renderer->render($this, EmbedParams::from($videoData));
+    }
+
+    public function auto(string &$message): void
+    {
+        if ($this->getAutoRegex() === '') {
+            return;
+        }
+
+        if (preg_match_all($this->getAutoRegex(), $message, $matches)) {
+            foreach (array_unique($matches[0]) as $urlToReplace) {
+                $pos = strpos($message, $urlToReplace);
+                if ($pos !== false) {
+                    $beforeText = substr($message, 0, $pos);
+                    
+                    $openedTags = substr_count(strtolower($beforeText), '[' . strtolower($this->getBbcTag()) . ']');
+                    $closedTags = substr_count(strtolower($beforeText), '[/' . strtolower($this->getBbcTag()) . ']');
+                    
+
+                    if ($openedTags > $closedTags) {
+                        continue;
+                    }
+                }
+
+                $videoId = $this->extractVideoId($urlToReplace);
+                if ($videoId === '') {
+                    continue;
+                }
+
+                $embedHtml = $this->content($videoId);
+
+                if ($embedHtml !== $videoId) {
+                    $message = str_replace($urlToReplace, $embedHtml, $message);
+                }
+            }
+        }
+    }
+
+    public function extractVideoId(string $url): string
+    {
+        if (preg_match($this->getRegex(), $url, $matches)) {
+            return end($matches);
+        }
+        return '';
     }
 }

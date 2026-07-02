@@ -101,14 +101,18 @@ class OharaYTEmbed
     /**
      * @throws ReflectionException
      */
-    public function addButtons(array &$buttons): void
+    public function addButtons(array &$dummy): void
     {
+        global $context;
+
         if (!$this->isEnable('enable')) {
             return;
         }
+        
         $allSites = $this->getSites();
+        $buttons = [];
 
-        $this->purge->disableVanillaTags($buttons, $allSites);
+        $this->purge->disableVanillaTags($allSites);
 
         foreach ($this->getSites() as $site) {
             if (!$this->isEnable('enable_' . $site->getIdentifier())) {
@@ -122,6 +126,11 @@ class OharaYTEmbed
                 'after'       => '[/' . $site->getBbcTag() . ']',
                 'image'       => $site->getButtonImage(),
             ];
+        }
+
+         if ($buttons !== []) {
+            $last = count($context['bbc_tags']) - 1;
+            $context['bbc_tags'][$last] = array_merge($context['bbc_tags'][$last], $buttons);
         }
     }
 

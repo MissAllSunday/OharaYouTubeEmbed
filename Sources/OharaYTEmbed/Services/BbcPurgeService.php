@@ -38,16 +38,18 @@ class BbcPurgeService
         }
     }
 
-    /**
-     * Purge all registered provider tags/buttons from the global BBC tags editor array in a single pass.
-     * Handles the front-end editor buttons.
+/**
+     * Purge all registered provider buttons from the SMF editor toolbar in a single pass.
+     * Works natively with SMF's two-dimensional row/button array structure.
      *
-     * @param array $tags The global SMF BBC tags array (editor buttons) passed by reference.
+     * @param array $tags The global SMF bbc_tags array passed by reference.
      * @param array<EmbedSiteInterface> $sites Array of discoverable video sites.
      */
-    public function disableVanillaTags(array &$tags, array $sites): void
+    public function disableVanillaTags(array $sites): void
     {
-        if (empty($tags) || empty($sites)) {
+        global $context;
+
+        if (empty($sites)) {
             return;
         }
 
@@ -61,11 +63,15 @@ class BbcPurgeService
 
         $purgeMap = array_flip($tagsToPurge);
 
-        foreach ($tags as $index => $tag) {
-            $tagName = is_array($tag) ? ($tag['tag'] ?? $index) : $tag;
+        foreach ($context['bbc_tags'] as $rowIndex => $row) {
+            if (!is_array($row)) {
+                continue;
+            }
 
-            if (isset($purgeMap[$tagName])) {
-                unset($tags[$index]);
+            foreach ($row as $buttonIndex => $button) {
+                if (isset($button['code'], $purgeMap[$button['code']])) {
+                    unset($context['bbc_tags'][$rowIndex][$buttonIndex]);
+                }
             }
         }
     }
