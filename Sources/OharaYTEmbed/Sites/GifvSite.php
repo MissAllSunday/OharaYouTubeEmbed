@@ -52,4 +52,9 @@ final class GifvSite extends VideoProvider
             . '</video>'
             . '</div>';
     }
+
+    public function getDefaultThumbUrl(): string
+    {
+        return 'https://i.imgur.com/' . $this->getIdentifier() . '.jpg';
+    }
 }

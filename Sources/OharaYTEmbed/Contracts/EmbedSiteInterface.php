@@ -133,4 +133,6 @@ interface EmbedSiteInterface
      * @return string The fully localized error message.
      */
     public function invalid(): string;
+
+    public function getDefaultThumbUrl(): string;
 }

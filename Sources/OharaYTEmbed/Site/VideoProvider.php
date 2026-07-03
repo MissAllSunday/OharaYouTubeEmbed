@@ -49,6 +49,11 @@ abstract class VideoProvider implements EmbedSiteInterface
         return ucfirst($this->getIdentifier());
     }
 
+    public function getDefaultThumbUrl(): string
+    {
+        return '';
+    }
+
     public function getBbcTag(): string
     {
         return $this->getIdentifier();
@@ -78,32 +83,55 @@ abstract class VideoProvider implements EmbedSiteInterface
             $videoId = $videoIdOrUrl;
         }
 
-        if ($this->getOembedUrl() === '') {
-            return $this->renderer->renderFailure($this, $videoId);
+        $rawResponse = null;
+        $oembedUrl = $this->getOembedUrl();
+
+        if ($oembedUrl !== '') {
+            $requestUrl = str_replace('{video_id}', $videoId, $this->getRequestUrl());
+            $url = str_replace('{url}', urlencode($requestUrl), $oembedUrl);
+            $rawResponse = fetch_web_data($url);
         }
 
-        $requestUrl = str_replace('{video_id}', $videoId, $this->getRequestUrl());
-        $url = str_replace('{url}', urlencode($requestUrl), $this->getOembedUrl());
-        $response = fetch_web_data($url);
+        $embedParams = $this->hydrateParams($videoId, $rawResponse);
 
-        $params = $this->oembedService->processResponse((string) $response, $videoId);
-
-        if ($params === null) {
-            return $this->renderer->renderFailure($this, $videoId);
+        if ($rawResponse === null || $rawResponse === false) {
+            return $this->renderer->renderFailure($this, $videoId, $embedParams);
         }
 
-        $videoData = $params->toArray();
+        return $this->renderer->render($this, $embedParams);
+    }
+
+    private function hydrateParams(string $videoId, string|false|null $rawResponse): EmbedParams
+    {
+        $videoData = [];
+
+        if (!empty($rawResponse)) {
+            $params = $this->oembedService->processResponse((string) $rawResponse, $videoId);
+            if ($params !== null) {
+                $videoData = $params->toArray();
+            }
+        }
+
+        $videoData[EmbedParams::KEY_VIDEO_ID] = $videoId;
+
         if (empty($videoData[EmbedParams::KEY_IDENTIFIER])) {
             $videoData[EmbedParams::KEY_IDENTIFIER] = $this->getIdentifier();
+        }
+
+        if (empty($videoData[EmbedParams::KEY_TITLE])) {
+            $videoData[EmbedParams::KEY_TITLE] = $this->getDisplayName();
         }
 
         $rawEmbedUrl = str_replace('{video_id}', $videoId, $this->getEmbedUrl());
         $videoData[EmbedParams::KEY_EMBED_URL] = rawurlencode($rawEmbedUrl);
 
         $rawThumbnail = $videoData[EmbedParams::KEY_THUMBNAIL_URL] ?? '';
+        if (empty($rawThumbnail)) {
+            $rawThumbnail = $this->getDefaultThumbUrl($videoId);
+        }
         $videoData[EmbedParams::KEY_THUMBNAIL_URL] = rawurlencode((string) $rawThumbnail);
 
-        return $this->renderer->render($this, EmbedParams::from($videoData));
+        return EmbedParams::from($videoData);
     }
 
     public function auto(string &$message): void

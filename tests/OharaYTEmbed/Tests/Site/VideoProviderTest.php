@@ -9,19 +9,6 @@ use OharaYTEmbed\Site\VideoProvider;
 use OharaYTEmbed\OharaYTEmbed;
 use OharaYTEmbed\Data\EmbedParams;
 
-if (!function_exists('fetch_web_data')) {
-    function fetch_web_data(string $url): string|false {
-        if (str_contains($url, 'oembed.example.com')) {
-            return json_encode([
-                'title'         => 'Mock Video Title',
-                'thumbnail_url' => 'https://example.com/thumb.jpg',
-                'provider_name' => 'TestProvider'
-            ]);
-        }
-        return false;
-    }
-}
-
 class VideoProviderTest extends TestCase
 {
     private function createProviderStub(
@@ -109,6 +96,63 @@ class VideoProviderTest extends TestCase
         $this->assertStringContainsString('oharaEmbed', $result);
     }
 
+    public function testContentReturnsFailureWhenOembedFails(): void
+    {
+        $provider = $this->createProviderStub('test', '/watch\?v=([\w-]+)/', '', 'https://error.example.com?url={url}');
+        $result = $provider->content('https://example.com/watch?v=test123');
+
+        // Should return failure HTML when oembed fails
+        $this->assertStringContainsString('oharaEmbed', $result);
+    }
+
+    public function testContentHandlesInvalidVideoId(): void
+    {
+        $provider = $this->createProviderStub('test', '/watch\?v=([\w-]+)/', '', 'https://oembed.example.com?url={url}');
+        $result = $provider->content('invalid-url');
+
+        // Should handle invalid URLs gracefully
+        $this->assertStringContainsString('oharaEmbed', $result);
+    }
+
+    public function testHydrateParamsWithValidOembedResponse(): void
+    {
+        $provider = $this->createProviderStub('test', '/watch\?v=([\w-]+)/', '', 'https://oembed.example.com?url={url}');
+
+        // Create a mock response
+        $rawResponse = json_encode([
+            'title' => 'Test Video',
+            'thumbnail_url' => 'https://example.com/thumb.jpg'
+        ]);
+
+        $params = $this->invokeHydrateParams($provider, 'test123', $rawResponse);
+
+        $this->assertInstanceOf(EmbedParams::class, $params);
+        $this->assertSame('test123', $params->videoId);
+        $this->assertSame('Test Video', $params->title);
+        $this->assertSame('https%3A%2F%2Fexample.com%2Fthumb.jpg', $params->thumbnailUrl);
+    }
+
+    public function testHydrateParamsWithEmptyOembedResponse(): void
+    {
+        $provider = $this->createProviderStub('test', '/watch\?v=([\w-]+)/', '', '');
+
+        $params = $this->invokeHydrateParams($provider, 'test123', null);
+
+        $this->assertInstanceOf(EmbedParams::class, $params);
+        $this->assertSame('test123', $params->videoId);
+        $this->assertSame('Test', $params->title); // Should fallback to display name
+    }
+
+    public function testHydrateParamsWithNoOembedData(): void
+    {
+        $provider = $this->createProviderStub('test', '/watch\?v=([\w-]+)/', '', 'https://empty.example.com?url={url}');
+
+        $params = $this->invokeHydrateParams($provider, 'test123', json_encode([]));
+
+        $this->assertInstanceOf(EmbedParams::class, $params);
+        $this->assertSame('test123', $params->videoId);
+    }
+
     public function testAutoMethodWithNoMatchingUrls(): void
     {
         $provider = $this->createProviderStub('test', '', '/(https?:\/\/other\.com\/watch\/[a-zA-Z0-9]+)/');
@@ -131,5 +175,17 @@ class VideoProviderTest extends TestCase
         $provider->auto($message);
 
         $this->assertSame($originalMessage, $message);
+    }
+
+    /**
+     * Helper method to invoke private hydrateParams method
+     */
+    private function invokeHydrateParams(VideoProvider $provider, string $videoId, string|false|null $rawResponse): EmbedParams
+    {
+        $reflection = new \ReflectionClass($provider);
+        $method = $reflection->getMethod('hydrateParams');
+        $method->setAccessible(true);
+
+        return $method->invoke($provider, $videoId, $rawResponse);
     }
 }

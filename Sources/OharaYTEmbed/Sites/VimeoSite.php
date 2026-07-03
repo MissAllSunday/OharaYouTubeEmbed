@@ -26,4 +26,9 @@ final class VimeoSite extends VideoProvider
     public function getEmbedUrl(): string { return 'https://player.vimeo.com/video/{video_id}?autoplay=1'; }
     public function getRequestUrl(): string { return 'https://vimeo.com/{video_id}'; }
     public function getOembedUrl(): string { return 'https://vimeo.com/api/oembed.json?url={url}&width={width}&height={height}'; }
+
+    public function getDefaultThumbUrl(): string
+    {
+        return 'https://vjs.zencdn.net/v/oceans.png';
+    }
 }

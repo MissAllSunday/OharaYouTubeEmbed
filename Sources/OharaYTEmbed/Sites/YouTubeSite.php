@@ -30,4 +30,9 @@ final class YouTubeSite extends VideoProvider
     public function getRequestUrl(): string { return 'https://youtube.com/watch?v={video_id}'; }
 
     public function getOembedUrl(): string { return 'https://www.youtube.com/oembed?url={url}&format=json'; }
+
+    public function getDefaultThumbUrl(): string
+    {
+        return 'https://img.youtube.com/vi/' . $this->getIdentifier() . '/hqdefault.jpg';
+    }
 }
