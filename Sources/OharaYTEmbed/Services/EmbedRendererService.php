@@ -19,14 +19,4 @@ class EmbedRendererService
 
         return $site->tokens($site->getTemplate(), $params->toArray());
     }
-
-    public function renderFailure(EmbedSiteInterface $site, string $videoId): string
-    {
-        return $this->render($site, EmbedParams::from([
-            EmbedParams::KEY_VIDEO_ID   => $videoId,
-            EmbedParams::KEY_IDENTIFIER => $site->getIdentifier(),
-            EmbedParams::KEY_TITLE      => $site->getDisplayName(),
-            EmbedParams::KEY_EMBED_URL  => str_replace('{video_id}', $videoId, $site->getEmbedUrl()),
-        ]));
-    }
 }

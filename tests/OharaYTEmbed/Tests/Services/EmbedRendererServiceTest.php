@@ -116,20 +116,4 @@ class EmbedRendererServiceTest extends TestCase
         $this->assertStringContainsString('width="800"', $result);
         $this->assertStringContainsString('height="600"', $result);
     }
-
-    public function testRenderFailure(): void
-    {
-        $site = $this->createVideoProviderStub([
-            'getSetting' => fn($key, $default) => null,
-            'tokens' => function ($template, $params) {
-                return str_replace('{title}', $params['title'], $template);
-            },
-            // Return a callable that yields the template string
-            'getTemplate' => fn() => '<div>{title}</div>',
-        ]);
-
-        $result = $this->service->renderFailure($site, 'invalid123');
-
-        $this->assertStringContainsString('Test Site', $result);
-    }
 }

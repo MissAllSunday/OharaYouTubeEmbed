@@ -94,10 +94,6 @@ abstract class VideoProvider implements EmbedSiteInterface
 
         $embedParams = $this->hydrateParams($videoId, $rawResponse);
 
-        if ($rawResponse === null || $rawResponse === false) {
-            return $this->renderer->renderFailure($this, $videoId, $embedParams);
-        }
-
         return $this->renderer->render($this, $embedParams);
     }
 
