@@ -15,7 +15,8 @@ class OembedService
         }
 
         $data = json_decode($json, true);
-        if (!is_array($data) || empty($data)) {
+
+        if (!is_array($data)) {
             return null;
         }
 

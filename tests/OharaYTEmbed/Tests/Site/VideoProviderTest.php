@@ -8,6 +8,7 @@ use PHPUnit\Framework\TestCase;
 use OharaYTEmbed\Site\VideoProvider;
 use OharaYTEmbed\OharaYTEmbed;
 use OharaYTEmbed\Data\EmbedParams;
+use ReflectionException;
 
 class VideoProviderTest extends TestCase
 {
@@ -126,7 +127,6 @@ class VideoProviderTest extends TestCase
 
         $params = $this->invokeHydrateParams($provider, 'test123', $rawResponse);
 
-        $this->assertInstanceOf(EmbedParams::class, $params);
         $this->assertSame('test123', $params->videoId);
         $this->assertSame('Test Video', $params->title);
         $this->assertSame('https%3A%2F%2Fexample.com%2Fthumb.jpg', $params->thumbnailUrl);
@@ -138,7 +138,7 @@ class VideoProviderTest extends TestCase
 
         $params = $this->invokeHydrateParams($provider, 'test123', null);
 
-        $this->assertInstanceOf(EmbedParams::class, $params);
+
         $this->assertSame('test123', $params->videoId);
         $this->assertSame('Test', $params->title); // Should fallback to display name
     }
@@ -149,7 +149,6 @@ class VideoProviderTest extends TestCase
 
         $params = $this->invokeHydrateParams($provider, 'test123', json_encode([]));
 
-        $this->assertInstanceOf(EmbedParams::class, $params);
         $this->assertSame('test123', $params->videoId);
     }
 
@@ -178,7 +177,8 @@ class VideoProviderTest extends TestCase
     }
 
     /**
-     * Helper method to invoke private hydrateParams method
+     * Helper method to invoke a private hydrateParams method
+     * @throws ReflectionException
      */
     private function invokeHydrateParams(VideoProvider $provider, string $videoId, string|false|null $rawResponse): EmbedParams
     {
