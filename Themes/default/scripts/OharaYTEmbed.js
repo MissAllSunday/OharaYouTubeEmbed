@@ -1,17 +1,11 @@
 (function ($) {
 	'use strict';
 
-	/**
-	 * Class representing an OharaEmbedPlayer.
-	 */
 	const OharaEmbedPlayer = function () {
 		this.masterSelector = '.oharaEmbed';
 		this.init();
 	};
 
-	/**
-	 * Initialize the player by setting up previews and event listeners.
-	 */
 	OharaEmbedPlayer.prototype.init = function () {
 		$(this.masterSelector).each((index, element) => this.setupPreview($(element)));
 
@@ -24,15 +18,21 @@
 		});
 	};
 
-	/**
-	 * Set up the preview for a container.
-	 * @param {jQuery} $container - The jQuery object representing the container.
-	 */
 	OharaEmbedPlayer.prototype.setupPreview = function ($container) {
 		const rawImageUrl = $container.attr('data-ohara_thumbnail_url');
+		const aspectRatio = $container.attr('data-ohara_aspect_ratio') || '16 / 9';
+		const originalWidth = parseInt($container.attr('data-ohara_width')) || 480;
+
+		$container.css({
+			'width': '100%',
+			'max-width': originalWidth + 'px',
+			'height': 'auto',
+			'aspect-ratio': aspectRatio,
+			'box-sizing': 'border-box'
+		});
 
 		if (rawImageUrl) {
-			if (rawImageUrl && rawImageUrl !== '') {
+			if (rawImageUrl !== '') {
 				const imageUrl = decodeURIComponent(rawImageUrl);
 
 				$container.css({
@@ -56,25 +56,28 @@
 		}
 	};
 
-	/**
-	 * Play a video in the specified container.
-	 * @param {jQuery} $container - The jQuery object representing the container.
-	 */
 	OharaEmbedPlayer.prototype.playVideo = function ($container) {
 		const embedUrl = decodeURIComponent($container.attr('data-ohara_embed_url'));
+		const aspectRatio = $container.attr('data-ohara_aspect_ratio') || '16 / 9';
 
 		if (!embedUrl || embedUrl === 'undefined') {
 			return;
 		}
 
+		$container.css({
+			'display': 'block',
+			'position': 'relative',
+			'height': 'auto',
+			'aspect-ratio': aspectRatio
+		});
+
 		const $iframe = $('<iframe/>', {
 			'frameborder': '0',
 			'src': embedUrl,
-			'width': '100%',
-			'height': '100%',
 			'allowfullscreen': '',
 			'allow': 'accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share',
-			'class': 'oharaEmbedIframe'
+			'class': 'oharaEmbedIframe',
+			'style': 'display: block; width: 100%; height: 100%; border-radius: 4px; position: absolute; top: 0; left: 0;'
 		});
 
 		$container.empty().css('background-image', 'none').append($iframe);

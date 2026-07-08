@@ -13,7 +13,7 @@ final class EmbedParams
     public const KEY_EMBED_URL     = 'embed_url';
     public const KEY_WIDTH     = 'width';
     public const KEY_HEIGHT    = 'height';
-    public const KEY_EXTRA     = 'extra';
+    public const KEY_ASPECT_RATIO = 'aspect_ratio';
 
     public function __construct(
         public string $identifier,
@@ -23,7 +23,7 @@ final class EmbedParams
         public string $embedUrl = '',
         public ?int $width = null,
         public ?int $height = null,
-        public array $extra = []
+        public string $aspectRatio = ''
     ) {}
 
     public static function from(array $data): self
@@ -36,7 +36,7 @@ final class EmbedParams
             embedUrl:     (string) ($data[self::KEY_EMBED_URL] ?? ''),
             width:         isset($data[self::KEY_WIDTH]) ? (int) $data[self::KEY_WIDTH] : null,
             height:        isset($data[self::KEY_HEIGHT]) ? (int) $data[self::KEY_HEIGHT] : null,
-            extra:         (array) ($data[self::KEY_EXTRA] ?? [])
+            aspectRatio: (string) ($data[self::KEY_ASPECT_RATIO] ?? '')
         );
     }
 
@@ -59,7 +59,7 @@ final class EmbedParams
             self::KEY_EMBED_URL     => $this->embedUrl,
             self::KEY_WIDTH     => $this->width,
             self::KEY_HEIGHT    => $this->height,
-            self::KEY_EXTRA     => $this->extra,
+            self::KEY_ASPECT_RATIO => $this->aspectRatio,
         ];
     }
 }
