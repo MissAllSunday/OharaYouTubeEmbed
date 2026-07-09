@@ -58,15 +58,29 @@
 
 	OharaEmbedPlayer.prototype.playVideo = function ($container) {
 		const embedUrl = decodeURIComponent($container.attr('data-ohara_embed_url'));
-		const aspectRatio = $container.attr('data-ohara_aspect_ratio') || '16 / 9';
+		let aspectRatio = $container.attr('data-ohara_aspect_ratio') || '16 / 9';
 
 		if (!embedUrl || embedUrl === 'undefined') {
 			return;
 		}
 
+		const parts = aspectRatio.split('/');
+		if (parts.length === 2) {
+			const width = parseFloat(parts[0]);
+			const height = parseFloat(parts[1]);
+			if (!isNaN(width) && !isNaN(height)) {
+				const ratio = width / height;
+				if (ratio < 1.3) {
+					const adjustedHeight = height + (height * 0.25);
+					aspectRatio = width + ' / ' + adjustedHeight;
+				}
+			}
+		}
+
 		$container.css({
 			'display': 'block',
 			'position': 'relative',
+			'width': '100%',
 			'height': 'auto',
 			'aspect-ratio': aspectRatio
 		});
@@ -77,7 +91,7 @@
 			'allowfullscreen': '',
 			'allow': 'accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share',
 			'class': 'oharaEmbedIframe',
-			'style': 'display: block; width: 100%; height: 100%; border-radius: 4px; position: absolute; top: 0; left: 0;'
+			'style': 'display: block; width: 100%; height: 100%; border-radius: 4px; position: absolute; top: 0; left: 0; overflow: hidden;'
 		});
 
 		$container.empty().css('background-image', 'none').append($iframe);

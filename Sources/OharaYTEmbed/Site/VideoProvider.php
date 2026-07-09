@@ -36,6 +36,16 @@ abstract class VideoProvider implements EmbedEngineInterface, EmbedSiteInterface
         return '';
     }
 
+    public function getExtraBbcTag(): ?string
+    {
+        return null;
+    }
+
+    public function getButtonImage(): ?string
+    {
+        return 'oh_' . $this->getIdentifier();
+    }
+
     public function getTemplate(): string
     {
         return '<div class="oharaEmbed {id}" ' .
